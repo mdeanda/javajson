@@ -43,6 +43,7 @@
 	<target name="prepare">
 		<mkdir dir="${src.dir}" />
 		<mkdir dir="${build.dir}" />
+		<mkdir dir="${doc.dir}/api" />
 	</target>
 
 	<target name="javacc" depends="prepare" description="Builds the jjtree">
@@ -85,8 +86,7 @@
 	</target>
 
 	<target name="javadoc" depends="build" description="Builds javadocs">
-		<mkdir dir="${doc.dir}" />
-		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}" author="true" use="true">
+		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}/api" author="true" use="true">
 			<classpath refid="classpath" />
 			<packageset dir="${src.dir}">
 				<include name="net/sourceforge/javajson/**" />
