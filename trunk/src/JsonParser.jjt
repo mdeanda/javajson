@@ -1,0 +1,167 @@
+options {
+   MULTI=true;
+   NODE_EXTENDS="net.sourceforge.javajson.parser.MyNode";
+   STATIC = false;
+}
+
+PARSER_BEGIN(JsonParser)
+package net.sourceforge.javajson.parser;
+
+public class JsonParser {
+  public static void main(String args[]) throws Exception {
+    System.out.println("Reading from standard input...");
+    JsonParser t = new JsonParser(System.in);
+	SimpleNode n = t.parse();
+	n.dump("");
+  }
+}
+
+PARSER_END(JsonParser)
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+| <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL:
+        <DECIMAL_LITERAL>
+      | <HEX_LITERAL>
+      | <OCTAL_LITERAL>
+  >
+|
+  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+|
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+|
+  < FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)?
+      | "." (["0"-"9"])+ (<EXPONENT>)?
+      | (["0"-"9"])+ <EXPONENT>
+  >
+|
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < CHARACTER_LITERAL:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'"
+  >
+|
+  < STRING_LITERAL:
+      ("\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\"") |
+     ("'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "'")
+  >
+|
+  < TRUE_LITERAL:
+     "true"
+  >
+|
+  < FALSE_LITERAL:
+     "false"
+  >
+|
+  < NULL_LITERAL:
+     "null"
+  >
+}
+
+
+
+
+
+
+
+SimpleNode parse() : {}
+{
+  object() <EOF>
+  { return jjtThis; }
+}
+
+void object() : {}
+{
+	"{" (members())? "}"
+}
+
+void array() : {}
+{
+	"[" elements() "]"
+}
+
+void members() : {}
+{
+	string() ":" value() ( "," members() )?
+}
+
+void elements() : {}
+{
+	value() ( "," elements() )?
+}
+
+void value() : 
+{
+  Token t;
+}
+{
+  string() | number() | object() | array() 
+  | t=<TRUE_LITERAL> { jjtThis.val = t.image; } 
+  | t=<FALSE_LITERAL> { jjtThis.val = t.image; } 
+  | t=<NULL_LITERAL> { jjtThis.val = t.image; } 
+}
+
+void string() : 
+{
+  Token t;
+}
+{
+  (
+  t=<STRING_LITERAL>
+  { jjtThis.val = t.image; }
+  )
+}
+
+void number() :
+{
+  Token t;
+}
+{
+  (
+  t=<INTEGER_LITERAL> { jjtThis.val = t.image; } 
+  | t=<FLOATING_POINT_LITERAL> { jjtThis.val = t.image; }
+  )
+}
