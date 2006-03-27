@@ -60,7 +60,9 @@ public class JsonValue {
 	}
 
 	public JsonValue(Object val) {
-		if (val instanceof Float)
+		if (val == null) 
+			setString(null);
+		else if (val instanceof Float)
 			setFloat(((Float) val).floatValue());
 		else if (val instanceof Double)
 			setDouble(((Double) val).doubleValue());
