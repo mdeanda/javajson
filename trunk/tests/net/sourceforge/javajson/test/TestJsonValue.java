@@ -39,6 +39,15 @@ public class TestJsonValue extends TestCase {
 
 		v = new JsonValue((Object) null);
 		assertEquals("null", v.toString());
+		
+		v = new JsonValue("not null");
+		v.setJsonArray(null);
+		assertEquals("null", v.toString());
+		
+		v = new JsonValue("not null");
+		v.setJsonObject(null);
+		assertEquals("null", v.toString());
+		
 			
 	}
 }

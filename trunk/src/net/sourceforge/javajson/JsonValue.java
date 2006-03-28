@@ -24,7 +24,7 @@ public class JsonValue {
 	Type actualType = Type.NULL;
 
 	public JsonValue() {
-		this((String) null);
+		setNull();
 	}
 
 	public JsonValue(boolean val) {
@@ -60,8 +60,8 @@ public class JsonValue {
 	}
 
 	public JsonValue(Object val) {
-		if (val == null) 
-			setString(null);
+		if (val == null)
+			setNull();
 		else if (val instanceof Float)
 			setFloat(((Float) val).floatValue());
 		else if (val instanceof Double)
@@ -231,15 +231,23 @@ public class JsonValue {
 	}
 
 	public void setJsonArray(JsonArray a) {
-		setString(null);
-		jsonArray = a;
-		actualType = Type.ARRAY;
+		if (a != null) {
+			setString(null);
+			jsonArray = a;
+			actualType = Type.ARRAY;
+		} else {
+			setNull();
+		}
 	}
 
 	public void setJsonObject(JsonObject o) {
-		setString(null);
-		jsonObject = o;
-		actualType = Type.OBJECT;
+		if (o != null) {
+			setString(null);
+			jsonObject = o;
+			actualType = Type.OBJECT;
+		} else {
+			setNull();
+		}
 	}
 
 	public void setLong(long l) {
@@ -247,10 +255,16 @@ public class JsonValue {
 		actualType = Type.LONG;
 	}
 
+	/** Just sets the value to null */
+	protected void setNull() {
+		setString(null);
+		actualType = Type.NULL;
+	}
+
 	public void setString(String s) {
 		stringVal = s;
-		initValues();
 		actualType = Type.STRING;
+		initValues();
 	}
 
 	@Override

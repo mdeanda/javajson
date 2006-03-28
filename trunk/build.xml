@@ -64,7 +64,7 @@
 	</target>
 
 	<target name="build" depends="prepare, javacc" description="Compile main source tree java files">
-		<javac destdir="${build.dir}" debug="false"
+		<javac destdir="${build.dir}" debug="true"
 				deprecation="false"
 				optimize="true"
 				failonerror="true">
