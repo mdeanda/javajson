@@ -77,7 +77,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, double val) {
+	public JsonObject accumulate(String key, double val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -87,6 +87,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, float val) {
+	public JsonObject accumulate(String key, float val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -108,6 +109,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, int val) {
+	public JsonObject accumulate(String key, int val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -129,6 +131,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
@@ -140,7 +143,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, JsonArray val) {
+	public JsonObject accumulate(String key, JsonArray val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -150,6 +153,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
@@ -161,7 +165,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, JsonObject val) {
+	public JsonObject accumulate(String key, JsonObject val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -171,6 +175,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
@@ -182,7 +187,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, String val) {
+	public JsonObject accumulate(String key, String val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -192,6 +197,7 @@ public class JsonObject implements Iterable<String> {
 		}
 		
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	public boolean getBoolean(String key) {
@@ -373,36 +379,44 @@ public class JsonObject implements Iterable<String> {
 			throw new ClassCastException("Unrecognized class");
 	}
 
-	public void put(String key, boolean value) {
+	public JsonObject put(String key, boolean value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, double value) {
+	public JsonObject put(String key, double value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, float value) {
+	public JsonObject put(String key, float value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, int value) {
+	public JsonObject put(String key, int value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, JsonArray value) {
+	public JsonObject put(String key, JsonArray value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, JsonObject value) {
+	public JsonObject put(String key, JsonObject value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, long value) {
+	public JsonObject put(String key, long value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
-	public void put(String key, String value) {
+	public JsonObject put(String key, String value) {
 		map.put(key, new JsonValue(value));
+		return this;
 	}
 
 	public int size() {
