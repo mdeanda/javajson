@@ -52,24 +52,24 @@ public class TestBasicProperties extends TestCase {
 	}
 
 	public void testParserSimple() throws Exception {
-		String input = "{\"key\":\"value\",\"key2\":23,\"key3\":3.1415,\"key4\":true}";
+		String input = "{\"key\":\"value\",\"key2\":23,key3:3.1415,\"key4\":true}";
 		JsonObject json = JsonObject.parse(input);
 
 		// System.out.println(json);
 
-		assertTrue("Expected key not found", json.hasKey("key"));
+		assertTrue("Expected key 'key' not found", json.hasKey("key"));
 		assertEquals("value", json.getString("key"));
 
-		assertTrue("Expected key not found", json.hasKey("key2"));
+		assertTrue("Expected key 'key2' not found", json.hasKey("key2"));
 		assertEquals(23, json.getInt("key2"));
 
-		assertTrue("Expected key not found", json.hasKey("key3"));
+		assertTrue("Expected key 'key3' not found", json.hasKey("key3"));
 		assertTrue(3.141499f < json.getFloat("key3"));
 		assertTrue(3.141501f > json.getFloat("key3"));
 		assertTrue(3.141499 < json.getDouble("key3"));
 		assertTrue(3.141501 > json.getDouble("key3"));
 
-		assertTrue("Expected key not found", json.hasKey("key4"));
+		assertTrue("Expected key 'key4' not found", json.hasKey("key4"));
 		assertTrue(json.getBoolean("key4"));
 	}
 }

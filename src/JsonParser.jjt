@@ -52,6 +52,18 @@ TOKEN : /* LITERALS */
 |
   < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
 |
+  < TRUE_LITERAL:
+     "true"
+  >
+|
+  < FALSE_LITERAL:
+     "false"
+  >
+|
+  < NULL_LITERAL:
+     "null"
+  >
+|
   < CHARACTER_LITERAL:
       "'"
       (   (~["'","\\","\n","\r"])
@@ -64,6 +76,8 @@ TOKEN : /* LITERALS */
       )
       "'"
   >
+|
+  < KEY_LITERAL: (["a"-"z","A"-"Z"])(["a"-"z","A"-"Z","0"-"9","_"])* >
 |
   < STRING_LITERAL:
       ("\""
@@ -86,18 +100,6 @@ TOKEN : /* LITERALS */
           )
       )*
       "'")
-  >
-|
-  < TRUE_LITERAL:
-     "true"
-  >
-|
-  < FALSE_LITERAL:
-     "false"
-  >
-|
-  < NULL_LITERAL:
-     "null"
   >
 }
 
@@ -125,7 +127,7 @@ void array() : {}
 
 void members() : {}
 {
-	string() ":" value() ( "," members() )?
+	key() ":" value() ( "," members() )?
 }
 
 void elements() : {}
@@ -142,6 +144,17 @@ void value() :
   | t=<TRUE_LITERAL> { jjtThis.val = t.image; } 
   | t=<FALSE_LITERAL> { jjtThis.val = t.image; } 
   | t=<NULL_LITERAL> { jjtThis.val = t.image; } 
+}
+
+void key() :
+{
+  Token t;
+}
+{
+  (
+  t=<STRING_LITERAL> { jjtThis.val = t.image; }
+  | t = <KEY_LITERAL> { jjtThis.val = t.image; }
+  )
 }
 
 void string() : 
