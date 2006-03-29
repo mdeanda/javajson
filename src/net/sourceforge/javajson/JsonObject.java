@@ -13,6 +13,7 @@ import net.sourceforge.javajson.parser.ASTparse;
 
 import net.sourceforge.javajson.parser.JsonParser;
 import net.sourceforge.javajson.parser.ParseException;
+import net.sourceforge.javajson.parser.TokenMgrError;
 
 /**
  * Simpler implementation of Json that throws less exceptions. For all the
@@ -25,22 +26,34 @@ public class JsonObject implements Iterable<String> {
 	private Map<String, JsonValue> map;
 
 	/** Parses a string to a json object. */
-	public static JsonObject parse(String input) throws ParseException {
+	public static JsonObject parse(String input) throws JsonException {
 		return parse(new StringReader(input));
 	}
 
 	/** Parses a string to a json object. */
-	public static JsonObject parse(Reader reader) throws ParseException {
-		JsonParser parser = new JsonParser(reader);
-		ASTparse root = (ASTparse) parser.parse();
-		return root.getJsonObject();
+	public static JsonObject parse(Reader reader) throws JsonException {
+		try {
+			JsonParser parser = new JsonParser(reader);
+			ASTparse root = (ASTparse) parser.parse();
+			return root.getJsonObject();
+		} catch (ParseException pe) {
+			throw new JsonException(pe);
+		} catch (TokenMgrError error) {
+			throw new JsonException(error);
+		}
 	}
 
 	/** Parses a string to a json object. */
-	public static JsonObject parse(InputStream is) throws ParseException {
-		JsonParser parser = new JsonParser(is);
-		ASTparse root = (ASTparse) parser.parse();
-		return root.getJsonObject();
+	public static JsonObject parse(InputStream is) throws JsonException {
+		try {
+			JsonParser parser = new JsonParser(is);
+			ASTparse root = (ASTparse) parser.parse();
+			return root.getJsonObject();
+		} catch (ParseException pe) {
+			throw new JsonException(pe);
+		} catch (TokenMgrError error) {
+			throw new JsonException(error);
+		}
 	}
 
 	public JsonObject() {
@@ -64,7 +77,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 	}
 
@@ -85,7 +98,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
@@ -107,7 +120,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
@@ -129,7 +142,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
@@ -151,7 +164,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
@@ -173,7 +186,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
@@ -195,7 +208,7 @@ public class JsonObject implements Iterable<String> {
 			put(key, new JsonArray());
 			getJsonArray(key).add(old);
 		}
-		
+
 		getJsonArray(key).add(val);
 		return this;
 	}
