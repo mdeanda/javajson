@@ -1,7 +1,7 @@
 package net.sourceforge.javajson.test;
 
+import net.sourceforge.javajson.JsonException;
 import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.parser.ParseException;
 
 import junit.framework.TestCase;
 
@@ -98,7 +98,7 @@ public class TestParser extends TestCase {
 
 	}
 
-	public void testParseKeys() throws ParseException {
+	public void testParseKeys() throws JsonException {
 		//simple keys, different quotes
 		assertTrue(JsonObject.parse("{\"key\": 1}").hasKey("key"));
 		assertTrue(JsonObject.parse("{'key': 1}").hasKey("key"));
@@ -110,25 +110,25 @@ public class TestParser extends TestCase {
 		try {
 			JsonObject.parse("{ke y: 1}");
 			fail("invalid key not caught");
-		} catch (Exception ex) {
+		} catch (JsonException ex) {
 		}
 		
 		try {
 			JsonObject.parse("{'key: 1}");
 			fail("invalid key not caught");
-		} catch (Exception ex) {
+		} catch (JsonException ex) {
 		}
 		
 		try {
 			JsonObject.parse("{key': 1}");
 			fail("invalid key not caught");
-		} catch (Exception ex) {
+		} catch (JsonException ex) {
 		}
 		
 		try {
 			JsonObject.parse("{0key: 1}");
 			fail("invalid key not caught");
-		} catch (Exception ex) {
+		} catch (JsonException ex) {
 		}
 		
 	}
