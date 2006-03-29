@@ -11,39 +11,47 @@ public class JsonArray implements Iterable<JsonValue> {
 		list = new ArrayList<JsonValue>();
 	}
 
-	public void add(boolean value) {
+	public JsonArray add(boolean value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(double value) {
+	public JsonArray add(double value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(float value) {
+	public JsonArray add(float value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(int value) {
+	public JsonArray add(int value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(long value) {
+	public JsonArray add(long value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(JsonArray value) {
+	public JsonArray add(JsonArray value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(JsonObject value) {
+	public JsonArray add(JsonObject value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(String value) {
+	public JsonArray add(String value) {
 		list.add(new JsonValue(value));
+		return this;
 	}
 
-	public void add(Object value) {
+	public JsonArray add(Object value) {
 		if (value instanceof Boolean)
 			add(((Boolean) value).booleanValue());
 		else if (value instanceof Double)
@@ -66,6 +74,7 @@ public class JsonArray implements Iterable<JsonValue> {
 			add((String) null);
 		else
 			throw new ClassCastException("Unrecognized class");
+		return this;
 	}
 
 	/**
