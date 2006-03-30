@@ -2,10 +2,12 @@
 
 package net.sourceforge.javajson.parser;
 
+import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 
 public class ASTparse extends SimpleNode {
 	JsonObject val;
+	JsonArray arr;
 
 	public ASTparse(int id) {
 		super(id);
@@ -19,6 +21,11 @@ public class ASTparse extends SimpleNode {
 		interpret();
 		return val;
 	}
+	
+	public JsonArray getJsonArray() {
+		interpret();
+		return arr;
+	}
 
 	@Override
 	protected void interpret() {
@@ -31,6 +38,9 @@ public class ASTparse extends SimpleNode {
 
 	@Override
 	protected void push(Object o) {
-		val = (JsonObject) o;
+		if (o instanceof JsonObject)
+			val = (JsonObject) o;
+		else if (o instanceof JsonArray)
+			arr = (JsonArray) o;
 	}
 }

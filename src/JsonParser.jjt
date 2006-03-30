@@ -111,8 +111,8 @@ TOKEN : /* LITERALS */
 
 SimpleNode parse() : {}
 {
-  object() <EOF>
-  { return jjtThis; }
+  object() <EOF> { return jjtThis; }
+  | array() <EOF> { return jjtThis; }
 }
 
 void object() : {}

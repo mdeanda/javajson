@@ -1,5 +1,6 @@
 package net.sourceforge.javajson.test;
 
+import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonException;
 import net.sourceforge.javajson.JsonObject;
 
@@ -132,5 +133,10 @@ public class TestParser extends TestCase {
 		}
 		
 	}
-	
+
+	public void testParseArrayAsRoot() throws JsonException {
+		assertTrue(JsonArray.parse("[\"key\", 1]").size() == 2);
+		assertEquals("key", JsonArray.parse("[\"key\", 1]").getString(0));
+		assertEquals(1, JsonArray.parse("[\"key\", 1]").getInt(1));
+	}
 }
