@@ -1,11 +1,50 @@
 package net.sourceforge.javajson;
 
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sourceforge.javajson.parser.ASTparse;
+import net.sourceforge.javajson.parser.JsonParser;
+import net.sourceforge.javajson.parser.ParseException;
+import net.sourceforge.javajson.parser.TokenMgrError;
+
 public class JsonArray implements Iterable<JsonValue> {
 	private List<JsonValue> list;
+
+	/** Parses a string to a json object. */
+	public static JsonArray parse(String input) throws JsonException {
+		return parse(new StringReader(input));
+	}
+
+	/** Parses a string to a json object. */
+	public static JsonArray parse(Reader reader) throws JsonException {
+		try {
+			JsonParser parser = new JsonParser(reader);
+			ASTparse root = (ASTparse) parser.parse();
+			return root.getJsonArray();
+		} catch (ParseException pe) {
+			throw new JsonException(pe);
+		} catch (TokenMgrError error) {
+			throw new JsonException(error);
+		}
+	}
+
+	/** Parses a string to a json object. */
+	public static JsonArray parse(InputStream is) throws JsonException {
+		try {
+			JsonParser parser = new JsonParser(is);
+			ASTparse root = (ASTparse) parser.parse();
+			return root.getJsonArray();
+		} catch (ParseException pe) {
+			throw new JsonException(pe);
+		} catch (TokenMgrError error) {
+			throw new JsonException(error);
+		}
+	}
 
 	public JsonArray() {
 		list = new ArrayList<JsonValue>();
