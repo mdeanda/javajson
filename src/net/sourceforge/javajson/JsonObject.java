@@ -454,4 +454,54 @@ public class JsonObject implements Iterable<String> {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns a nicely formatted string
+	 * 
+	 * @param spacing
+	 * @return
+	 */
+	public String toString(int spacing) {
+		return toString(spacing, 0);
+	}
+
+	/**
+	 * Called by toString(int) to keep track of the spacing
+	 * 
+	 * @param spacing
+	 * @param margin
+	 * @return
+	 */
+	protected String toString(int spacing, int margin) {
+		if (map.isEmpty())
+			return "{}";
+		else {
+			StringBuffer sb = new StringBuffer();
+			boolean hadSome = false;
+			//sb.append(getSpaces(margin));
+			sb.append("{\n");
+			for (String key : map.keySet()) {
+				JsonValue val = map.get(key);
+				if (hadSome)
+					sb.append(",\n");
+
+				sb.append(getSpaces(spacing + margin));
+				sb.append("\"" + key + "\":");
+				sb.append(val.toString(spacing, margin + spacing));
+				hadSome = true;
+			}
+			sb.append("\n");
+			sb.append(getSpaces(margin));
+			sb.append("}");
+
+			return sb.toString();
+		}
+	}
+
+	private String getSpaces(int spaces) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < spaces; i++)
+			sb.append(" ");
+		return sb.toString();
+	}
+
 }

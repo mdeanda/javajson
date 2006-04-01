@@ -288,4 +288,15 @@ public class JsonValue {
 		else
 			return "null";
 	}
+
+	protected String toString(int spacing, int margin) {
+		StringBuffer sb = new StringBuffer();
+		if (this.isJsonObject())
+			sb.append(jsonObject.toString(spacing, margin));
+		else if (this.isJsonArray())
+			sb.append(jsonArray.toString(spacing, margin));
+		else
+			sb.append(toString());
+		return sb.toString();
+	}
 }

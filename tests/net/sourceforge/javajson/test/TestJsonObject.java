@@ -4,7 +4,6 @@ import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 import junit.framework.TestCase;
 
-
 public class TestJsonObject extends TestCase {
 
 	JsonObject json;
@@ -60,7 +59,7 @@ public class TestJsonObject extends TestCase {
 	}
 
 	public void testObject() throws Exception {
-		JsonObject obj1= new JsonObject();
+		JsonObject obj1 = new JsonObject();
 		JsonObject obj2 = new JsonObject();
 		json.put("key1", obj1);
 		json.put("key2", obj2);
@@ -107,13 +106,13 @@ public class TestJsonObject extends TestCase {
 
 		}
 	}
-	
+
 	public void testSimilar() throws Exception {
 		JsonObject simObj = new JsonObject();
-		
+
 		assertTrue(simObj.isSimilar(json));
 		assertTrue(json.isSimilar(simObj));
-		
+
 		json.put("key1", 5);
 		assertFalse(simObj.isSimilar(json));
 		assertFalse(json.isSimilar(simObj));
@@ -180,4 +179,31 @@ public class TestJsonObject extends TestCase {
 		assertTrue(json.isSimilar(simObj));
 	}
 
+	public void testToString() throws Exception {
+		json.put("key", "value");
+		assertEquals("{\n  \"key\":\"value\"\n}", json.toString(2));
+
+		json = new JsonObject();
+		JsonObject json2 = new JsonObject();
+		json.put("key3", json2);
+		// System.out.println(json.toString(2));
+		assertEquals("{\n  \"key3\":{}\n}", json.toString(2));
+
+		json2.put("key4", "value4");
+		// System.out.println(json.toString(2));
+		assertEquals("{\n  \"key3\":{\n    \"key4\":\"value4\"\n  }\n}", json
+				.toString(2));
+
+		// Test for 2 different strings since output can be a little bit
+		// different because internally it uses a set
+		json2.put("key5", "value5");
+		//System.out.println(json.toString(2));
+		String s = json.toString(2);
+		String s1 = "{\n  \"key3\":{\n    \"key5\":\"value5\",\n    \"key4\":\"value4\"\n  }\n}";
+		String s2 = "{\n  \"key3\":{\n    \"key4\":\"value4\",\n    \"key5\":\"value5\"\n  }\n}";
+		if (s1.equals(s))
+			assertEquals(s1, s);
+		else
+			assertEquals(s2, s);
+	}
 }
