@@ -1,6 +1,7 @@
 package net.sourceforge.javajson.test;
 
 import net.sourceforge.javajson.JsonArray;
+import net.sourceforge.javajson.JsonObject;
 
 import junit.framework.TestCase;
 
@@ -43,8 +44,45 @@ public class TestJsonArray extends TestCase {
 		assertTrue(array.isNumber(2));
 		assertTrue(array.isString(2));
 		assertEquals("[true,\"string\",3.1415]", array.toString());
-		
-		
-		
 	}
+	
+	public void testToString() throws Exception {
+		assertEquals("[]", array.toString(2));
+
+		array.add(2);
+		//System.out.println(array);
+		assertEquals("[\n  2\n]", array.toString(2));
+
+		array.add(false);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false\n]", array.toString(2));
+
+		JsonObject json = new JsonObject();
+		array.add(json);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false,\n  {}\n]", array.toString(2));
+
+		JsonArray ar2 = new JsonArray();
+		array.add(ar2);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false,\n  {},\n  []\n]", array.toString(2));
+
+		ar2.add(3);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false,\n  {},\n  [\n    3\n  ]\n]", array.toString(2));
+
+		json.put("key", 3);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3\n  ]\n]", array.toString(2));
+
+		json = new JsonObject();
+		ar2.add(json);
+		//System.out.println(array);
+		assertEquals("[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3,\n    {}\n  ]\n]", array.toString(2));
+
+		json.put("test", "ok");
+		assertEquals("[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3,\n    {\n      \"test\":\"ok\"\n    }\n  ]\n]", array.toString(2));
+	}
+
+
 }
