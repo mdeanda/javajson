@@ -18,7 +18,7 @@ public class ASTnumber extends SimpleNode {
 		Object o;
 		if (val.contains("."))
 			o = new Double(val);
-		else o = new Integer(val);
+		else o = new Long(val);
 		
 		((SimpleNode) parent).push(o);
 	}
