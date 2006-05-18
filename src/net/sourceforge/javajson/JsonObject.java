@@ -69,7 +69,7 @@ public class JsonObject implements Iterable<String> {
 	 * @param key
 	 * @param val
 	 */
-	public void accumulate(String key, boolean val) {
+	public JsonObject accumulate(String key, boolean val) {
 		if (!map.containsKey(key)) {
 			put(key, new JsonArray());
 		} else if (!map.get(key).isJsonArray()) {
@@ -79,6 +79,7 @@ public class JsonObject implements Iterable<String> {
 		}
 
 		getJsonArray(key).add(val);
+		return this;
 	}
 
 	/**
