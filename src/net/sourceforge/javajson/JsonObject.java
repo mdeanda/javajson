@@ -281,6 +281,58 @@ public class JsonObject implements Iterable<String> {
 	}
 
 	/**
+	 * Checks if the item at a key is a double. See {@link JsonValue#isDouble()}
+	 * for more information
+	 * 
+	 * @param key
+	 */
+	public boolean isDouble(String key) {
+		if (map.containsKey(key))
+			return map.get(key).isDouble();
+		else
+			return false;
+	}
+
+	/**
+	 * Checks if the item at a key is a float. See {@link JsonValue#isFloat()}
+	 * for more information
+	 * 
+	 * @param key
+	 */
+	public boolean isFloat(String key) {
+		if (map.containsKey(key))
+			return map.get(key).isFloat();
+		else
+			return false;
+	}
+
+	/**
+	 * Checks if the item at a key is a int. See {@link JsonValue#isInt()} for
+	 * more information
+	 * 
+	 * @param key
+	 */
+	public boolean isInt(String key) {
+		if (map.containsKey(key))
+			return map.get(key).isInt();
+		else
+			return false;
+	}
+
+	/**
+	 * Checks if the item at a key is a long. See {@link JsonValue#isLong()} for
+	 * more information
+	 * 
+	 * @param key
+	 */
+	public boolean isLong(String key) {
+		if (map.containsKey(key))
+			return map.get(key).isLong();
+		else
+			return false;
+	}
+
+	/**
 	 * Checks if the item at a key is an array. See
 	 * {@link JsonValue#isJsonArray()} for more information
 	 * 
@@ -478,7 +530,7 @@ public class JsonObject implements Iterable<String> {
 		else {
 			StringBuffer sb = new StringBuffer();
 			boolean hadSome = false;
-			//sb.append(getSpaces(margin));
+			// sb.append(getSpaces(margin));
 			sb.append("{\n");
 			for (String key : map.keySet()) {
 				JsonValue val = map.get(key);
