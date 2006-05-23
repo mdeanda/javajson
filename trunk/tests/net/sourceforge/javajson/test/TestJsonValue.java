@@ -25,6 +25,9 @@ public class TestJsonValue extends TestCase {
 		v = new JsonValue("simple string");
 		assertEquals("\"simple string\"", v.toString());
 		
+		v = new JsonValue("simple \"quote\"");
+		assertEquals("\"simple &quot;quote&quot;\"", v.toString());
+		
 		v = new JsonValue(15.3f);
 		assertEquals("15.3", v.toString());
 		

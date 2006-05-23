@@ -43,6 +43,10 @@ public class TestJsonObject extends TestCase {
 		assertFalse(json.isJsonArray("pi"));
 		assertFalse(json.isJsonObject("pi"));
 		assertTrue(json.isString("pi"));
+		assertTrue(json.isDouble("pi"));
+		assertTrue(json.isFloat("pi"));
+		assertFalse(json.isInt("pi"));
+		assertFalse(json.isLong("pi"));
 		assertTrue(3.14149 < json.getDouble("pi"));
 		assertTrue(3.14151 > json.getDouble("pi"));
 		assertTrue(3.14149f < json.getFloat("pi"));
@@ -52,6 +56,10 @@ public class TestJsonObject extends TestCase {
 		assertTrue(json.isNumber("six"));
 		assertFalse(json.isJsonArray("six"));
 		assertFalse(json.isJsonObject("six"));
+		assertTrue(json.isDouble("six"));
+		assertTrue(json.isFloat("six"));
+		assertTrue(json.isInt("six"));
+		assertTrue(json.isLong("six"));
 		assertTrue(json.isString("six"));
 		assertEquals(6l, json.getLong("six"));
 		assertEquals(6, json.getInt("six"));

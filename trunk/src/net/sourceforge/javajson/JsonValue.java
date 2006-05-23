@@ -18,7 +18,7 @@ public class JsonValue {
 	String stringVal;
 
 	enum Type {
-		STRING, BOOLEAN, DOUBLE, FLOAT, INT, LONG, OBJECT, ARRAY, NULL
+		STRING, BOOLEAN, DOUBLE, LONG, OBJECT, ARRAY, NULL
 	};
 
 	Type actualType = Type.NULL;
@@ -144,12 +144,18 @@ public class JsonValue {
 
 			try {
 				doubleVal = new Double(stringVal);
-				floatVal = doubleVal.floatValue();
-				intVal = doubleVal.intValue();
-				longVal = doubleVal.longValue();
+				if (doubleVal < Float.MAX_VALUE && doubleVal > Float.MIN_VALUE)
+					floatVal = doubleVal.floatValue();
 			} catch (NumberFormatException nfe) {
 				doubleVal = null;
 				floatVal = null;
+			}
+			try {
+				longVal = new Long(stringVal);
+				// if long is in int range
+				if (longVal < Integer.MAX_VALUE && longVal > Integer.MIN_VALUE)
+					intVal = longVal.intValue();
+			} catch (NumberFormatException nfe) {
 				intVal = null;
 				longVal = null;
 			}
@@ -157,7 +163,19 @@ public class JsonValue {
 	}
 
 	public boolean isBoolean() {
-		return boolVal != null;
+		return (actualType == Type.BOOLEAN);
+	}
+
+	public boolean isDouble() {
+		return (actualType == Type.DOUBLE);
+	}
+
+	public boolean isFloat() {
+		return (actualType == Type.DOUBLE && floatVal != null);
+	}
+
+	public boolean isInt() {
+		return (actualType == Type.LONG && intVal != null);
 	}
 
 	public boolean isJsonArray() {
@@ -166,6 +184,10 @@ public class JsonValue {
 
 	public boolean isJsonObject() {
 		return (actualType == Type.OBJECT);
+	}
+
+	public boolean isLong() {
+		return (actualType == Type.LONG);
 	}
 
 	/**
@@ -221,13 +243,11 @@ public class JsonValue {
 	}
 
 	public void setFloat(float f) {
-		setString(Float.toString(f));
-		actualType = Type.FLOAT;
+		setDouble(f);
 	}
 
 	public void setInt(int i) {
-		setString(Integer.toString(i));
-		actualType = Type.INT;
+		setInt(i);
 	}
 
 	public void setJsonArray(JsonArray a) {
@@ -267,16 +287,26 @@ public class JsonValue {
 		initValues();
 	}
 
+	/**
+	 * Escapes strings for toString
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String escape(String str) {
+		return str.replaceAll("\"", "&quot;");
+	}
+
 	@Override
 	public String toString() {
 		if (actualType == Type.BOOLEAN)
 			return boolVal ? "true" : "false";
 		else if (actualType == Type.DOUBLE)
 			return Double.toString(doubleVal);
-		else if (actualType == Type.FLOAT)
-			return Float.toString(floatVal);
-		else if (actualType == Type.INT)
-			return Integer.toString(intVal);
+		// else if (actualType == Type.FLOAT)
+		// return Float.toString(floatVal);
+		// else if (actualType == Type.INT)
+		// return Integer.toString(intVal);
 		else if (actualType == Type.LONG)
 			return Long.toString(longVal);
 		else if (actualType == Type.OBJECT)
@@ -284,7 +314,7 @@ public class JsonValue {
 		else if (actualType == Type.ARRAY)
 			return jsonArray.toString();
 		if (actualType == Type.STRING && stringVal != null)
-			return "\"" + stringVal + "\"";
+			return "\"" + escape(stringVal) + "\"";
 		else
 			return "null";
 	}

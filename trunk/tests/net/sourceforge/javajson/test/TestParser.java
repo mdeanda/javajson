@@ -162,15 +162,16 @@ public class TestParser extends TestCase {
 		assertEquals("key", JsonArray.parse("[\"key\", 1]").getString(0));
 		assertEquals(1, JsonArray.parse("[\"key\", 1]").getInt(1));
 	}
-	
+
 	public void testParseTypes() throws JsonException {
 		JsonObject json = JsonObject.parse("{key:1146206482115}");
 		assertEquals(1146206482115l, json.getLong("key"));
-		
-		//this should be some kind of error? possibly number of range (if its out of range)
-		assertEquals(1146206482115l, json.getInt("key"));
 
-		//make sure strings can parse to longs properly
+		assertTrue(json.isLong("key"));
+		assertFalse(json.isInt("key"));
+		assertEquals(new Long(1146206482115l).intValue(), json.getInt("key"));
+
+		// make sure strings can parse to longs properly
 		json = JsonObject.parse("{key:\"1146206482115\"}");
 		assertEquals(1146206482115l, json.getLong("key"));
 
