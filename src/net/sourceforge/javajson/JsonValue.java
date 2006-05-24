@@ -97,7 +97,7 @@ public class JsonValue {
 	public float getFloat() {
 		if (floatVal != null)
 			return floatVal.floatValue();
-		throw new ClassCastException("Not a valid float");
+		else return 0;
 	}
 
 	public int getInt() {
@@ -247,7 +247,7 @@ public class JsonValue {
 	}
 
 	public void setInt(int i) {
-		setInt(i);
+		setLong(i);
 	}
 
 	public void setJsonArray(JsonArray a) {
