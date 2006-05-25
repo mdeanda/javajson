@@ -361,20 +361,6 @@ public class JsonObject implements Iterable<String> {
 	}
 
 	/**
-	 * Checks if the item at a key is an number. See
-	 * {@link JsonValue#isNumber()} for more information
-	 * 
-	 * @param key
-	 * @return True if the object contains the item and is a number
-	 */
-	public boolean isNumber(String key) {
-		if (map.containsKey(key))
-			return map.get(key).isNumber();
-		else
-			return false;
-	}
-
-	/**
 	 * Checks if the structure of this json object is similar to that of another
 	 * object. It simply checks that each field exists in both objects and that
 	 * subobjects (json object or json array) are also similar.

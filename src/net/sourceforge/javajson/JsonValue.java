@@ -17,12 +17,6 @@ public class JsonValue {
 
 	String stringVal;
 
-	enum Type {
-		STRING, BOOLEAN, DOUBLE, LONG, OBJECT, ARRAY, NULL
-	};
-
-	Type actualType = Type.NULL;
-
 	public JsonValue() {
 		setNull();
 	}
@@ -97,7 +91,8 @@ public class JsonValue {
 	public float getFloat() {
 		if (floatVal != null)
 			return floatVal.floatValue();
-		else return 0;
+		else
+			return 0;
 	}
 
 	public int getInt() {
@@ -135,21 +130,12 @@ public class JsonValue {
 			floatVal = null;
 			intVal = null;
 			longVal = null;
-			actualType = Type.NULL;
 		} else {
 			if ("true".equals(stringVal) || "false".equals(stringVal))
 				boolVal = new Boolean(stringVal);
 			else
 				boolVal = null;
 
-			try {
-				doubleVal = new Double(stringVal);
-				if (doubleVal < Float.MAX_VALUE && doubleVal > Float.MIN_VALUE)
-					floatVal = doubleVal.floatValue();
-			} catch (NumberFormatException nfe) {
-				doubleVal = null;
-				floatVal = null;
-			}
 			try {
 				longVal = new Long(stringVal);
 				// if long is in int range
@@ -159,43 +145,49 @@ public class JsonValue {
 				intVal = null;
 				longVal = null;
 			}
+			try {
+				doubleVal = new Double(stringVal);
+				if (doubleVal < Float.MAX_VALUE && doubleVal > Float.MIN_VALUE)
+					floatVal = doubleVal.floatValue();
+			} catch (NumberFormatException nfe) {
+				if (longVal != null)
+					doubleVal = new Double(longVal.doubleValue());
+				else
+					doubleVal = null;
+				if (doubleVal != null)
+					floatVal = doubleVal.floatValue();
+				else
+					floatVal = null;
+			}
 		}
 	}
 
 	public boolean isBoolean() {
-		return (actualType == Type.BOOLEAN);
+		return (boolVal != null);
 	}
 
 	public boolean isDouble() {
-		return (actualType == Type.DOUBLE);
+		return (doubleVal != null);
 	}
 
 	public boolean isFloat() {
-		return (actualType == Type.DOUBLE && floatVal != null);
+		return (floatVal != null);
 	}
 
 	public boolean isInt() {
-		return (actualType == Type.LONG && intVal != null);
+		return (intVal != null);
 	}
 
 	public boolean isJsonArray() {
-		return (actualType == Type.ARRAY);
+		return (jsonArray != null);
 	}
 
 	public boolean isJsonObject() {
-		return (actualType == Type.OBJECT);
+		return (jsonObject != null);
 	}
 
 	public boolean isLong() {
-		return (actualType == Type.LONG);
-	}
-
-	/**
-	 * Returns true if the value contained is a number. If the value is set as a
-	 * string that can parse as a valid number, then true is still returned
-	 */
-	public boolean isNumber() {
-		return (doubleVal != null);
+		return (longVal != null);
 	}
 
 	/**
@@ -205,6 +197,7 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isSimilar(JsonValue obj) {
+		/*
 		if (actualType != obj.actualType) {
 			// only a few exceptions...
 			// both are numbers
@@ -219,7 +212,7 @@ public class JsonValue {
 			return jsonArray.isSimilar(obj.jsonArray);
 		else if (actualType == Type.OBJECT)
 			return jsonObject.isSimilar(obj.jsonObject);
-		else
+		else */
 			return true;
 	}
 
@@ -234,12 +227,17 @@ public class JsonValue {
 
 	public void setBoolean(boolean b) {
 		setString(Boolean.toString(b));
-		actualType = Type.BOOLEAN;
 	}
 
 	public void setDouble(double d) {
-		setString(Double.toString(d));
-		actualType = Type.DOUBLE;
+		boolVal = null;
+		doubleVal = new Double(d);
+		floatVal = doubleVal.floatValue();
+		longVal = doubleVal.longValue();
+		intVal = longVal.intValue();
+		stringVal = doubleVal.toString();
+		jsonArray = null;
+		jsonObject = null;
 	}
 
 	public void setFloat(float f) {
@@ -252,9 +250,8 @@ public class JsonValue {
 
 	public void setJsonArray(JsonArray a) {
 		if (a != null) {
-			setString(null);
+			setNull();
 			jsonArray = a;
-			actualType = Type.ARRAY;
 		} else {
 			setNull();
 		}
@@ -262,28 +259,31 @@ public class JsonValue {
 
 	public void setJsonObject(JsonObject o) {
 		if (o != null) {
-			setString(null);
+			setNull();
 			jsonObject = o;
-			actualType = Type.OBJECT;
 		} else {
 			setNull();
 		}
 	}
 
 	public void setLong(long l) {
-		setString(Long.toString(l));
-		actualType = Type.LONG;
+		boolVal = null;
+		longVal = new Long(l);
+		intVal = longVal.intValue();
+		doubleVal = longVal.doubleValue();
+		floatVal = doubleVal.floatValue();
+		stringVal = longVal.toString();
+		jsonArray = null;
+		jsonObject = null;
 	}
 
 	/** Just sets the value to null */
 	protected void setNull() {
 		setString(null);
-		actualType = Type.NULL;
 	}
 
 	public void setString(String s) {
 		stringVal = s;
-		actualType = Type.STRING;
 		initValues();
 	}
 
@@ -299,21 +299,21 @@ public class JsonValue {
 
 	@Override
 	public String toString() {
-		if (actualType == Type.BOOLEAN)
+		if (boolVal != null)
 			return boolVal ? "true" : "false";
-		else if (actualType == Type.DOUBLE)
-			return Double.toString(doubleVal);
-		// else if (actualType == Type.FLOAT)
-		// return Float.toString(floatVal);
-		// else if (actualType == Type.INT)
-		// return Integer.toString(intVal);
-		else if (actualType == Type.LONG)
-			return Long.toString(longVal);
-		else if (actualType == Type.OBJECT)
+		else if (doubleVal != null)
+			return doubleVal.toString();
+		else if (floatVal != null)
+			return floatVal.toString();
+		else if (intVal != null)
+			return intVal.toString();
+		else if (longVal != null)
+			return longVal.toString();
+		else if (jsonObject != null)
 			return jsonObject.toString();
-		else if (actualType == Type.ARRAY)
+		else if (jsonArray != null)
 			return jsonArray.toString();
-		if (actualType == Type.STRING && stringVal != null)
+		if (stringVal != null)
 			return "\"" + escape(stringVal) + "\"";
 		else
 			return "null";

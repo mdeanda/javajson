@@ -234,6 +234,54 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
+	
+	/**
+	 * Checks if the item at an index is a double. See
+	 * {@link JsonValue#isLong()} for more information
+	 * 
+	 * @param index
+	 *            The index of the array to check
+	 * @return True if the object contains the item and is a double
+	 * @throws IndexOutOfBoundsException
+	 */
+	public boolean isDouble(int index) {
+		if (index >= 0 && index < list.size())
+			return list.get(index).isDouble();
+		else
+			throw new IndexOutOfBoundsException();
+	}
+	
+	/**
+	 * Checks if the item at an index is a float. See
+	 * {@link JsonValue#isLong()} for more information
+	 * 
+	 * @param index
+	 *            The index of the array to check
+	 * @return True if the object contains the item and is a float
+	 * @throws IndexOutOfBoundsException
+	 */
+	public boolean isFloat(int index) {
+		if (index >= 0 && index < list.size())
+			return list.get(index).isFloat();
+		else
+			throw new IndexOutOfBoundsException();
+	}
+	
+	/**
+	 * Checks if the item at an index is a int. See
+	 * {@link JsonValue#isLong()} for more information
+	 * 
+	 * @param index
+	 *            The index of the array to check
+	 * @return True if the object contains the item and is a int
+	 * @throws IndexOutOfBoundsException
+	 */
+	public boolean isInt(int index) {
+		if (index >= 0 && index < list.size())
+			return list.get(index).isInt();
+		else
+			throw new IndexOutOfBoundsException();
+	}
 
 	/**
 	 * Checks if the item at an index is an array. See
@@ -266,19 +314,19 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
-
+	
 	/**
-	 * Checks if the item at an index is an number. See
-	 * {@link JsonValue#isNumber()} for more information
+	 * Checks if the item at an index is a long. See
+	 * {@link JsonValue#isLong()} for more information
 	 * 
 	 * @param index
 	 *            The index of the array to check
-	 * @return True if the object contains the item and is a json number
+	 * @return True if the object contains the item and is a long
 	 * @throws IndexOutOfBoundsException
 	 */
-	public boolean isNumber(int index) {
+	public boolean isLong(int index) {
 		if (index >= 0 && index < list.size())
-			return list.get(index).isNumber();
+			return list.get(index).isLong();
 		else
 			throw new IndexOutOfBoundsException();
 	}
