@@ -93,26 +93,8 @@ public class TestJsonObject extends TestCase {
 		assertFalse(json.isJsonArray("key1"));
 		assertFalse(json.isJsonObject("key1"));
 
-		try {
-			json.getBoolean("key1");
-			fail("Expected fail on getBool for string");
-		} catch (ClassCastException cce) {
-
-		}
-
-		try {
-			json.getInt("key1");
-			fail("Expected fail on getInt for string");
-		} catch (ClassCastException cce) {
-
-		}
-
-		try {
-			json.getDouble("key1");
-			fail("Expected fail on getDouble for string");
-		} catch (ClassCastException cce) {
-
-		}
+		assertFalse(json.getBoolean("key1"));
+		assertEquals(0, json.getInt("key1"));
 	}
 
 	public void testSimilar() throws Exception {

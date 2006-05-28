@@ -1,9 +1,13 @@
 package net.sourceforge.javajson;
 
+import java.util.regex.Pattern;
+
 public class JsonValue {
 	private Boolean boolVal;
 
 	private Double doubleVal;
+
+	private Float floatVal;
 
 	private JsonArray jsonArray;
 
@@ -84,6 +88,8 @@ public class JsonValue {
 	public double getDouble() {
 		if (doubleVal != null)
 			return doubleVal.doubleValue();
+		else if (floatVal != null)
+			return floatVal.doubleValue();
 		else if (longVal != null)
 			return longVal.doubleValue();
 		else if (stringVal != null)
@@ -93,7 +99,9 @@ public class JsonValue {
 	}
 
 	public float getFloat() {
-		if (doubleVal != null)
+		if (floatVal != null)
+			return floatVal.floatValue();
+		else if (doubleVal != null)
 			return doubleVal.floatValue();
 		else if (longVal != null)
 			return longVal.floatValue();
@@ -104,14 +112,7 @@ public class JsonValue {
 	}
 
 	public int getInt() {
-		if (doubleVal != null)
-			return doubleVal.intValue();
-		else if (longVal != null)
-			return longVal.intValue();
-		else if (stringVal != null)
-			return Integer.parseInt(stringVal);
-		else
-			return 0;
+		return (int) getLong();
 	}
 
 	public JsonArray getJsonArray() {
@@ -131,10 +132,12 @@ public class JsonValue {
 	public long getLong() {
 		if (doubleVal != null)
 			return doubleVal.longValue();
+		else if (floatVal != null)
+			return floatVal.longValue();
 		else if (longVal != null)
 			return longVal.longValue();
-		else if (stringVal != null)
-			return Long.parseLong(stringVal);
+		// else if (stringVal != null)
+		// return Long.parseLong(stringVal);
 		else
 			return 0;
 	}
@@ -142,6 +145,8 @@ public class JsonValue {
 	public String getString() {
 		if (doubleVal != null)
 			return doubleVal.toString();
+		else if (floatVal != null)
+			return floatVal.toString();
 		else if (longVal != null)
 			return longVal.toString();
 		else if (stringVal != null)
@@ -166,7 +171,7 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isDouble() {
-		return (doubleVal != null || longVal != null);
+		return (doubleVal != null || floatVal != null || longVal != null);
 	}
 
 	/**
@@ -176,21 +181,8 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isFloat() {
-		if (isDouble()) {
-			if (doubleVal != null) {
-				//convert to float, then back to double, compare with original
-				float f1 = (float)doubleVal.doubleValue();
-				float f2 = doubleVal.floatValue();
-				System.out.println(f1 + "\n" + f2 + "\n" + (f1 == f2));
-				return f1 == f2;
-			} else if (longVal != null) {
-				// convert to float, then back to long, compare with original
-				// long
-				return (new Float(longVal.floatValue()).longValue() == longVal
-						.longValue());
-			}
-			//TODO: consider converting strings
-		}
+		if (floatVal != null || doubleVal != null || longVal != null)
+			return true;
 
 		return false;
 	}
@@ -204,7 +196,7 @@ public class JsonValue {
 	 */
 	public boolean isInt() {
 		if (isLong()) {
-			return new Long(longVal.intValue()).equals(longVal);
+			return getLong() == getInt();
 		} else
 			return false;
 	}
@@ -224,10 +216,16 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isLong() {
+		// TODO: clean this one up, use getXXX to verify instead
 		if (longVal == null) {
 			if (doubleVal != null) {
 				longVal = new Long(doubleVal.longValue());
 				if (longVal.doubleValue() != doubleVal.doubleValue()) {
+					longVal = null;
+				}
+			} else if (floatVal != null) {
+				longVal = new Long(floatVal.longValue());
+				if (longVal.floatValue() != floatVal.floatValue()) {
 					longVal = null;
 				}
 			}
@@ -244,22 +242,25 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isSimilar(JsonValue obj) {
-		/*
-		 * if (actualType != obj.actualType) { // only a few exceptions... //
-		 * both are numbers if (doubleVal != null && obj.doubleVal != null)
-		 * return true; return false; } // if its a json object or array, do a
-		 * deep test if (actualType == Type.ARRAY) return
-		 * jsonArray.isSimilar(obj.jsonArray); else if (actualType ==
-		 * Type.OBJECT) return jsonObject.isSimilar(obj.jsonObject); else
-		 */
-		return true;
+
+		if (jsonObject != null && obj.jsonObject != null)
+			return jsonObject.isSimilar(obj.jsonObject);
+		if (jsonArray != null && obj.jsonArray != null)
+			return jsonArray.isSimilar(obj.jsonArray);
+		else if (doubleVal != null || floatVal != null || longVal != null)
+			return (obj.doubleVal != null || obj.floatVal != null || obj.longVal != null);
+		else if (stringVal != null && obj.stringVal != null)
+			return true;
+		else
+			return false;
 	}
 
 	/**
 	 * Returns true if the value is a number, boolean or string
 	 */
 	public boolean isString() {
-		return (boolVal != null || doubleVal != null || longVal != null || stringVal != null);
+		return (boolVal != null || doubleVal != null || floatVal != null
+				|| longVal != null || stringVal != null);
 	}
 
 	public void setBoolean(boolean b) {
@@ -273,7 +274,8 @@ public class JsonValue {
 	}
 
 	public void setFloat(float f) {
-		setDouble(f);
+		setNull();
+		floatVal = new Float(f);
 	}
 
 	public void setInt(int i) {
@@ -299,6 +301,7 @@ public class JsonValue {
 	protected void setNull() {
 		boolVal = null;
 		doubleVal = null;
+		floatVal = null;
 		longVal = null;
 		jsonArray = null;
 		jsonObject = null;
@@ -308,6 +311,14 @@ public class JsonValue {
 	public void setString(String s) {
 		setNull();
 		stringVal = s;
+
+		if (s != null) {
+			// check if its a long or double
+			if (Pattern.matches("-?\\d+", s))
+				setLong(Long.parseLong(s));
+			else if (Pattern.matches("-?\\d*\\.\\d*", s))
+				setDouble(Double.parseDouble(s));
+		}
 	}
 
 	/**
@@ -328,6 +339,8 @@ public class JsonValue {
 			return longVal.toString();
 		else if (doubleVal != null)
 			return doubleVal.toString();
+		else if (floatVal != null)
+			return floatVal.toString();
 		else if (jsonObject != null)
 			return jsonObject.toString();
 		else if (jsonArray != null)
