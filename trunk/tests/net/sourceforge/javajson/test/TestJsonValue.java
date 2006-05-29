@@ -82,6 +82,24 @@ public class TestJsonValue extends TestCase {
 		
 	}
 
+	public void testEquals() throws Exception {
+		JsonValue v;
+		
+		v = new JsonValue(3.167f);
+		assertEquals(3.167f, v.getFloat());
+
+		v = new JsonValue(3.1670);
+		assertEquals(3.1670, v.getDouble());
+		
+		v = new JsonValue(36);
+		assertEquals(36, v.getLong());
+		assertEquals(36, v.getInt());
+
+		v = new JsonValue(true);
+		assertEquals(true, v.getBoolean());
+
+	}
+	
 	public void testToString() throws Exception {
 		JsonValue v = new JsonValue();
 		assertEquals("null", v.toString());
@@ -102,7 +120,6 @@ public class TestJsonValue extends TestCase {
 		v = new JsonValue("simple \"quote\"");
 		assertEquals("\"simple &quot;quote&quot;\"", v.toString());
 		
-		//TODO: revisit this, as floats are converted to doubles internally...
 		v = new JsonValue(15.3f);
 		assertEquals(Float.toString(15.3f), v.toString());
 		
