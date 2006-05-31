@@ -120,6 +120,12 @@ public class TestJsonValue extends TestCase {
 		v = new JsonValue("simple \"quote\"");
 		assertEquals("\"simple &quot;quote&quot;\"", v.toString());
 		
+		v = new JsonValue("line\nbreak");
+		assertEquals("unecoded line break", "\"line\\nbreak\"", v.toString());
+		
+		v = new JsonValue("tab\tspace");
+		assertEquals("unecoded tab", "\"tab\\tspace\"", v.toString());
+		
 		v = new JsonValue(15.3f);
 		assertEquals(Float.toString(15.3f), v.toString());
 		
@@ -142,7 +148,6 @@ public class TestJsonValue extends TestCase {
 		v = new JsonValue("not null");
 		v.setJsonObject(null);
 		assertEquals("null", v.toString());
-		
-			
 	}
+	
 }
