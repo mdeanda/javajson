@@ -328,7 +328,8 @@ public class JsonValue {
 	 * @return
 	 */
 	public String escape(String str) {
-		return str.replaceAll("\"", "&quot;");
+		return str.replaceAll("\"", "&quot;").replaceAll("\n", "\\\\n")
+				.replaceAll("\t", "\\\\t");
 	}
 
 	@Override

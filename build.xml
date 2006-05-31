@@ -110,7 +110,7 @@
 
 	<target name="dist" depends="clean" description="Builds jar files for distribution">
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/json-src-${build.date}.jar">
+		<jar destfile="${dist.dir}/javajson-src-${build.date}.jar">
 			<fileset dir=".">
 				  <exclude name="build/**"/>
 				  <exclude name="dist/**"/>
@@ -119,7 +119,7 @@
 
 		<antcall target="build" />
 
-		<jar destfile="${dist.dir}/json-${build.date}.jar" basedir="${build.dir}" />
+		<jar destfile="${dist.dir}/javajson-${build.date}.jar" basedir="${build.dir}" />
 	</target>
 
 </project>
