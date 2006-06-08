@@ -12,7 +12,7 @@ public class TestUnicode extends TestCase {
 
 	private static final String PATH = "tests/net/sourceforge/javajson/test/";
 
-	private static final String[] files = { "chinese_gb2312", "japanese_1" };
+	private static final String[] files = { "chinese_gb2312", "japanese_eucjp" };
 
 	public TestUnicode() {
 		super();
