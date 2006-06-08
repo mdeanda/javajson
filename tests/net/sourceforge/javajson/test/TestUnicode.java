@@ -1,5 +1,8 @@
 package net.sourceforge.javajson.test;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 
 import net.sourceforge.javajson.JsonObject;
@@ -7,8 +10,9 @@ import junit.framework.TestCase;
 
 public class TestUnicode extends TestCase {
 
-	private static final String PATH = "net/sourceforge/javajson/test/";
-	private static final String[] files = { "chinese_1", "japanese_1" };
+	private static final String PATH = "tests/net/sourceforge/javajson/test/";
+
+	private static final String[] files = { "chinese_gb2312", "japanese_1" };
 
 	public TestUnicode() {
 		super();
@@ -17,12 +21,14 @@ public class TestUnicode extends TestCase {
 
 	public void testUnicode() throws Exception {
 		for (int i = 0; i < files.length; i++) {
-			try {
-				InputStream is = TestUnicode.class.getResourceAsStream(PATH + files[i] + ".json");
+				BufferedReader br = new BufferedReader(new FileReader(PATH
+						+ files[i] + ".txt"));
+				String expected = br.readLine();
+
+				InputStream is = new FileInputStream(PATH + files[i] + ".json");
 				JsonObject obj = JsonObject.parse(is);
-			} catch (Exception e) {
-				throw e;
-			}
+				System.out.println(expected);
+				assertEquals(expected, obj.getString("text"));
 		}
 	}
 }
