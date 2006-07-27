@@ -176,4 +176,32 @@ public class TestParser extends TestCase {
 		assertEquals(1146206482115l, json.getLong("key"));
 
 	}
+
+	public void testParseSpacePadded() throws JsonException {
+		JsonObject json = JsonObject.parse("\n\n  \t    {key:1} ");
+		assertEquals(1, json.getInt("key"));
+
+		JsonArray arr = JsonArray.parse("\n\n \t   [1] ");
+		assertEquals(1, arr.getInt(0));
+	}
+
+	public void testParseEmpty() throws JsonException {
+		JsonObject json = JsonObject.parse("{}");
+		assertNotNull(json);
+
+		json = JsonObject.parse("{ }");
+		assertNotNull(json);
+
+		json = JsonObject.parse("{\n\n}");
+		assertNotNull(json);
+
+		JsonArray arr = JsonArray.parse("[]");
+		assertNotNull(arr);
+
+		arr = JsonArray.parse("[ ]");
+		assertNotNull(arr);
+
+		arr = JsonArray.parse("[\n\n]");
+		assertNotNull(arr);
+	}
 }

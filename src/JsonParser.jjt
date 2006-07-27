@@ -123,8 +123,7 @@ void object() : {}
 
 void array() : {}
 {
-	"[]" 
-	| "[" elements() "]"
+	"[" (elements())? "]"
 }
 
 void members() : {}
