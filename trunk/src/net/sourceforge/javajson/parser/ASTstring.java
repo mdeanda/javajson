@@ -21,7 +21,7 @@ public class ASTstring extends SimpleNode {
 	/** Removes escapes from string and returns normal string */
 	private String fixString(String s) {
 		String ret = s.substring(1, s.length()-1);
-		String t = ret;
+		//String t = ret;
 		ret = ret.replaceAll("\\\\\"", "\"");
 		ret = ret.replaceAll("\\\\'", "'");
 		
