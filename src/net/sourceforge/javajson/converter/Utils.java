@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
@@ -22,13 +21,12 @@ public class Utils {
 	 * 
 	 * @param cls
 	 * @param obj
-	 * @param locale
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public static JsonObject toJson(Class cls, Object obj, Locale locale)
+	public static JsonObject toJson(Class cls, Object obj)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		JsonObject ret = null;
@@ -41,7 +39,7 @@ public class Utils {
 				Method m = it.next();
 				String fld = Reflection.getFieldName(m.getName());
 				Object o = m.invoke(obj, ARGS);
-				objectIntoJsonObject(ret, fld, o, locale);
+				objectIntoJsonObject(ret, fld, o);
 			}
 		}
 		
@@ -57,7 +55,7 @@ public class Utils {
 	 * @return True if the object as of a simple type
 	 */
 	public static boolean objectIntoJsonObject(JsonObject obj, String key,
-			Object o, Locale locale) {
+			Object o) {
 		if (o instanceof Long) {
 			obj.put(key, ((Long) o).longValue());
 		} else if (o instanceof Integer) {
@@ -87,8 +85,7 @@ public class Utils {
 	 * @param o
 	 * @return True if the object as of a simple type
 	 */
-	public static boolean objectIntoJsonArray(JsonArray arr, Object o,
-			Locale locale) {
+	public static boolean objectIntoJsonArray(JsonArray arr, Object o) {
 		if (o instanceof Long) {
 			arr.add(((Long) o).longValue());
 		} else if (o instanceof Integer) {

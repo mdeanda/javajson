@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -43,6 +42,12 @@ public class Mapper {
 		this.cls = cls;
 	}
 
+	/**
+	 * Creates a mapper for a class via the classname
+	 * 
+	 * @param cls The name of the class, Class.forName(cls) must not fail
+	 * @throws ClassNotFoundException
+	 */
 	public Mapper(String cls) throws ClassNotFoundException {
 		map = new HashMap<String, MapperStruct>();
 		this.cls = Class.forName(cls);
@@ -67,7 +72,7 @@ public class Mapper {
 	 * using the default mapper and is meant to be called via convenience method
 	 * on Converter.
 	 * 
-	 * @param obj
+	 * @param obj The object to convert to json
 	 * @param cls
 	 * @param locale
 	 * @return
@@ -75,18 +80,18 @@ public class Mapper {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 */
-	protected JsonObject toJson(Object obj, Class cls, Locale locale)
+	protected JsonObject toJson(Object obj, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		JsonObject ret = null;
 		if (this.cls == null) {
 			// default mapper
-			ret = Utils.toJson(cls, obj, locale);
+			ret = Utils.toJson(cls, obj);
 		}
 		return ret;
 	}
 
-	public JsonObject toJson(Object obj, Locale locale)
+	public JsonObject toJson(Object obj)
 			throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
@@ -96,7 +101,7 @@ public class Mapper {
 			// return null
 		} else if (cls == null) {
 			// default mapper
-			ret = Utils.toJson(obj.getClass(), obj, locale);
+			ret = Utils.toJson(obj.getClass(), obj);
 
 			// TODO: go through each field.. if not simple type, bust a toJson
 			// on it (or toArray)
@@ -109,14 +114,14 @@ public class Mapper {
 					// non basic types...
 					String jsonKey = Reflection.getFieldName(key);
 					if (val instanceof Collection) {
-						ret.put(jsonKey, toJsonArray((Collection) val, locale));
+						ret.put(jsonKey, toJsonArray((Collection) val));
 					} else if (!(val instanceof Class)) {
-						ret.put(jsonKey, toJson(val, locale));
+						ret.put(jsonKey, toJson(val));
 					}
 				}
 			}
 		} else {
-			ret = Utils.toJson(cls, obj, locale);
+			ret = Utils.toJson(cls, obj);
 
 			for (Iterator<String> keysIt = map.keySet().iterator(); keysIt
 					.hasNext();) {
@@ -132,12 +137,12 @@ public class Mapper {
 								.hasNext();) {
 							Object o2 = it.next();
 							JsonObject tmp = map.get(key).getMapper(converter)
-									.toJson(o2, locale);
+									.toJson(o2);
 							arr.add(tmp);
 						}
 					} else {
 						JsonObject tmp = map.get(key).getMapper(converter)
-								.toJson(o, locale);
+								.toJson(o);
 						ret.put(key, tmp);
 					}
 				}
@@ -153,7 +158,6 @@ public class Mapper {
 	 * 
 	 * @param col
 	 * @param cls
-	 * @param locale
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -161,7 +165,7 @@ public class Mapper {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected JsonArray toJsonArray(Collection col, Class cls, Locale locale)
+	protected JsonArray toJsonArray(Collection col, Class cls)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException {
@@ -169,23 +173,23 @@ public class Mapper {
 
 		if (this.cls == null) {
 			for (Object o : col) {
-				if (!Utils.objectIntoJsonArray(arr, o, locale))
-					arr.add(toJson(o, cls, locale));
+				if (!Utils.objectIntoJsonArray(arr, o))
+					arr.add(toJson(o, cls));
 			}
 		}
 
 		return arr;
 	}
 
-	public JsonArray toJsonArray(Collection col, Locale locale)
+	public JsonArray toJsonArray(Collection col)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException {
 		JsonArray arr = new JsonArray();
 
 		for (Object o : col) {
-			if (!Utils.objectIntoJsonArray(arr, o, locale))
-				arr.add(toJson(o, locale));
+			if (!Utils.objectIntoJsonArray(arr, o))
+				arr.add(toJson(o));
 		}
 
 		return arr;

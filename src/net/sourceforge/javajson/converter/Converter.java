@@ -56,7 +56,7 @@ public class Converter {
 	public JsonObject toJson(Object o, Locale locale) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJson(o, locale);
+		return Mapper.DefaultMapper.toJson(o);
 	}
 
 	/**
@@ -75,10 +75,10 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public JsonObject toJson(Object o, Class cls, Locale locale) throws SecurityException,
+	public JsonObject toJson(Object o, Class cls) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJson(o, cls, locale);
+		return Mapper.DefaultMapper.toJson(o, cls);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class Converter {
 	public JsonArray toJsonArray(Collection c, Locale locale) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c, locale);
+		return Mapper.DefaultMapper.toJsonArray(c);
 	}
 
 	/**
@@ -120,10 +120,10 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public JsonArray toJsonArray(Collection c, Class cls, Locale locale) throws SecurityException,
+	public JsonArray toJsonArray(Collection c, Class cls) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c, cls, locale);
+		return Mapper.DefaultMapper.toJsonArray(c, cls);
 	}
 
 	/**
@@ -138,24 +138,24 @@ public class Converter {
 	 * @throws IllegalArgumentException
 	 * @throws SecurityException
 	 */
-	public JsonObject toJson(String alias, Object o, Locale locale)
+	public JsonObject toJson(String alias, Object o)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException {
 		if (mappers.containsKey(alias))
-			return mappers.get(alias).toJson(o, locale);
+			return mappers.get(alias).toJson(o);
 		else {
 			log.warn("alias key not found:" + alias);
 			return null;
 		}
 	}
 
-	public JsonArray toJsonArray(String alias, Collection o, Locale locale)
+	public JsonArray toJsonArray(String alias, Collection o)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
 			InvocationTargetException {
 		if (mappers.containsKey(alias))
-			return mappers.get(alias).toJsonArray(o, locale);
+			return mappers.get(alias).toJsonArray(o);
 		else {
 			log.warn("alias key not found:" + alias);
 			return null;

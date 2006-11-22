@@ -60,12 +60,10 @@ public class ConverterTest extends TestCase {
 		for (JsonValue val : array) {
 			assertTrue(val.isFloat());
 		}
-
 	}
 
 	public void testComplexObjectWithNull() throws Exception {
 		JsonObject json;
-		JsonArray array;
 		Converter c = new Converter();
 		ComplexObject co = new ComplexObject();
 		co.setSimpleObject(null);
