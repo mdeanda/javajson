@@ -1,7 +1,5 @@
 package net.sourceforge.javajson.converter.test;
 
-import java.util.Locale;
-
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 import net.sourceforge.javajson.JsonValue;
