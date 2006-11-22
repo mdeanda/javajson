@@ -21,7 +21,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		SimpleObject si = new SimpleObject();
 	
-		json = c.toJson(si, Locale.US);
+		json = c.toJson(si);
 		testSimpleObject(json);
 	}
 
@@ -40,7 +40,7 @@ public class ConverterTest extends TestCase {
 		Converter c = new Converter();
 		ComplexObject co = new ComplexObject();
 
-		json = c.toJson(co, Locale.US);
+		json = c.toJson(co);
 //		System.out.println(json.toString(2));
 
 		assertTrue(json.hasKey("simpleObject"));
@@ -68,7 +68,7 @@ public class ConverterTest extends TestCase {
 		ComplexObject co = new ComplexObject();
 		co.setSimpleObject(null);
 		
-		json = c.toJson(co, Locale.US);
+		json = c.toJson(co);
 
 		assertNotNull(json);
 		assertFalse(json.hasKey("simpleObject"));
