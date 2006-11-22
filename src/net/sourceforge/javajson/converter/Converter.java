@@ -45,7 +45,6 @@ public class Converter {
 	 * a Collection, it will be converted to a JsonArray
 	 * 
 	 * @param o
-	 * @param locale
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -53,7 +52,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public JsonObject toJson(Object o, Locale locale) throws SecurityException,
+	public JsonObject toJson(Object o) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
 		return Mapper.DefaultMapper.toJson(o);
@@ -67,7 +66,6 @@ public class Converter {
 	 * 
 	 * @param o
 	 * @param cls The class to read the fields from
-	 * @param locale
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -90,7 +88,6 @@ public class Converter {
 	 * a Collection, it will be converted to a JsonArray
 	 * 
 	 * @param o
-	 * @param locale
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -98,7 +95,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public JsonArray toJsonArray(Collection c, Locale locale) throws SecurityException,
+	public JsonArray toJsonArray(Collection c) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
 		return Mapper.DefaultMapper.toJsonArray(c);
@@ -112,7 +109,6 @@ public class Converter {
 	 * 
 	 * @param o
 	 * @param cls The class to read the fields from
-	 * @param locale
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
