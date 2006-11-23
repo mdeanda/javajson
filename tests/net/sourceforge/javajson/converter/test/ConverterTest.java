@@ -1,5 +1,7 @@
 package net.sourceforge.javajson.converter.test;
 
+import java.util.Calendar;
+
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 import net.sourceforge.javajson.JsonValue;
@@ -21,6 +23,28 @@ public class ConverterTest extends TestCase {
 	
 		json = c.toJson(si);
 		testSimpleObject(json);
+	}
+	
+	public void testSimpleObjectValues() throws Exception {
+		JsonObject json;
+		Converter c = new Converter();
+		SimpleObject si = new SimpleObject();
+
+		si.setField1("s1");
+		si.setField2(3);
+		si.setFloatField(3.14f);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2006, 10, 22); //this is actually november, month starts from 0.
+		si.setToday(cal.getTime());
+		
+		json = c.toJson(si);
+		testSimpleObject(json);
+		
+		assertEquals("s1", json.getString("field1"));
+		assertEquals(3, json.getInt("field2"));
+		assertEquals(3.14f, json.getFloat("floatField"));
+		assertEquals("2006/11/22", json.getString("today"));
+		assertEquals("net.sourceforge.javajson.converter.test.SimpleObject", json.getString("class"));
 	}
 
 	private void testSimpleObject(JsonObject json) {
@@ -47,7 +71,10 @@ public class ConverterTest extends TestCase {
 		assertTrue(json.hasKey("simpleList"));
 		assertTrue(json.isJsonArray("simpleList"));
 		array = json.getJsonArray("simpleList");
+		assertEquals("size of simplelist", 2, array.size());
 		for (JsonValue val : array) {
+			//System.out.println("value of val:" + val);
+			assertNotNull("val shouldn't be null" + val);
 			assertTrue(val.isJsonObject());
 			testSimpleObject(val.getJsonObject());
 		}
@@ -69,7 +96,8 @@ public class ConverterTest extends TestCase {
 		json = c.toJson(co);
 
 		assertNotNull(json);
-		assertFalse(json.hasKey("simpleObject"));
+		assertTrue(json.hasKey("simpleObject"));
+		assertNull(json.getString("simpleObject"));
 	}
 
 }

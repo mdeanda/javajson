@@ -26,7 +26,8 @@ public class Utils {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public static JsonObject toJson(Class cls, Object obj)
+	@SuppressWarnings("unchecked")
+	public static JsonObject toJson(Object obj, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		JsonObject ret = null;
@@ -34,15 +35,22 @@ public class Utils {
 			ret = new JsonObject();
 			List<Method> methods = Reflection.getGetterFieldMethods(cls);
 			Object[] ARGS = new Object[0];
-	
+
 			for (Iterator<Method> it = methods.iterator(); it.hasNext();) {
 				Method m = it.next();
 				String fld = Reflection.getFieldName(m.getName());
 				Object o = m.invoke(obj, ARGS);
 				objectIntoJsonObject(ret, fld, o);
 			}
+		} else if (!cls.isAssignableFrom(obj.getClass())) {
+			
+			System.out.println("\n\noops!\n\n");
+			
+			System.out.println(cls.getName());
+			System.out.println(obj.getClass().getName());
+			
 		}
-		
+
 		return ret;
 	}
 
@@ -70,6 +78,10 @@ public class Utils {
 			obj.put(key, dateFormat.format((Date) o));
 		} else if (o instanceof String) {
 			obj.put(key, (String) o);
+		} else if (o instanceof Class) {
+			obj.put(key, ((Class) o).getName());
+		} else if (o == null) {
+			obj.put(key, (String) null);
 		} else {
 			return false;
 		}
@@ -100,6 +112,10 @@ public class Utils {
 			arr.add(dateFormat.format((Date) o));
 		} else if (o instanceof String) {
 			arr.add((String) o);
+		} else if (o instanceof Class) {
+			arr.add(((Class) o).getName());
+		} else if (o == null) {
+			arr.add((String) null);
 		} else {
 			return false;
 		}

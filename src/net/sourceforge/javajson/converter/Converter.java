@@ -2,9 +2,6 @@ package net.sourceforge.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -20,20 +17,8 @@ import net.sourceforge.javajson.JsonObject;
 public class Converter {
 	protected final Logger log = Logger.getLogger(getClass());
 
-	/** Mappers to use for mapping objects */
-	private Map<String, Mapper> mappers;
-
 	public Converter() {
-		mappers = new HashMap<String, Mapper>();
-	}
 
-	public void addMapper(String alias, Mapper mapper) {
-		mappers.put(alias, mapper);
-		mapper.setConverter(this);
-	}
-
-	public Mapper getMapper(String alias) {
-		return mappers.get(alias);
 	}
 
 	/**
@@ -120,41 +105,5 @@ public class Converter {
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
 		return Mapper.DefaultMapper.toJsonArray(c, cls);
-	}
-
-	/**
-	 * Maps an object to json using the mapper's alias
-	 * 
-	 * @param alias
-	 * @return The JsonObject
-	 * @throws JSONException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 */
-	public JsonObject toJson(String alias, Object o)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		if (mappers.containsKey(alias))
-			return mappers.get(alias).toJson(o);
-		else {
-			log.warn("alias key not found:" + alias);
-			return null;
-		}
-	}
-
-	public JsonArray toJsonArray(String alias, Collection o)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		if (mappers.containsKey(alias))
-			return mappers.get(alias).toJsonArray(o);
-		else {
-			log.warn("alias key not found:" + alias);
-			return null;
-		}
 	}
 }

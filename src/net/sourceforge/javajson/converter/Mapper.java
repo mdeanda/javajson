@@ -1,11 +1,8 @@
 package net.sourceforge.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -21,50 +18,12 @@ import net.sourceforge.javajson.JsonObject;
 public class Mapper {
 	protected final Logger log = Logger.getLogger(getClass());
 
-	private Map<String, MapperStruct> map;
-
-	private Class cls;
-
-	private Converter converter;
-
 	/**
 	 * Default mapper that can be used to map object all the way down the tree.
 	 */
 	public static Mapper DefaultMapper = new Mapper();
 
 	private Mapper() {
-		cls = null;
-	}
-
-	public Mapper(Class cls) {
-		log.debug("mapper for class:" + cls);
-		map = new HashMap<String, MapperStruct>();
-		this.cls = cls;
-	}
-
-	/**
-	 * Creates a mapper for a class via the classname
-	 * 
-	 * @param cls The name of the class, Class.forName(cls) must not fail
-	 * @throws ClassNotFoundException
-	 */
-	public Mapper(String cls) throws ClassNotFoundException {
-		map = new HashMap<String, MapperStruct>();
-		this.cls = Class.forName(cls);
-	}
-
-	public void addMapper(String field, Mapper mapper) {
-		map.put(field, new MapperStruct(mapper));
-		if (converter != null)
-			mapper.setConverter(converter);
-	}
-
-	public void addMapper(String field, String alias) {
-		map.put(field, new MapperStruct(alias));
-	}
-
-	protected Converter getConverter() {
-		return converter;
 	}
 
 	/**
@@ -72,10 +31,14 @@ public class Mapper {
 	 * using the default mapper and is meant to be called via convenience method
 	 * on Converter.
 	 * 
-	 * @param obj The object to convert to json
+	 * @param obj
+	 *            The object to convert to json
 	 * @param cls
 	 * @param locale
 	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -84,24 +47,10 @@ public class Mapper {
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		JsonObject ret = null;
-		if (this.cls == null) {
-			// default mapper
-			ret = Utils.toJson(cls, obj);
-		}
-		return ret;
-	}
-
-	public JsonObject toJson(Object obj)
-			throws SecurityException, NoSuchMethodException,
-			IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
-
-		JsonObject ret = null;
-		if (obj == null) {
-			// return null
-		} else if (cls == null) {
-			// default mapper
-			ret = Utils.toJson(obj.getClass(), obj);
+		if (obj != null) {
+			if (cls == null)
+				ret = Utils.toJson(obj, obj.getClass());
+			else ret = Utils.toJson(obj, cls);
 
 			// TODO: go through each field.. if not simple type, bust a toJson
 			// on it (or toArray)
@@ -114,41 +63,23 @@ public class Mapper {
 					// non basic types...
 					String jsonKey = Reflection.getFieldName(key);
 					if (val instanceof Collection) {
-						ret.put(jsonKey, toJsonArray((Collection) val));
+						JsonArray array = toJsonArray((Collection) val);
+						ret.put(jsonKey, array);
 					} else if (!(val instanceof Class)) {
 						ret.put(jsonKey, toJson(val));
 					}
 				}
 			}
-		} else {
-			ret = Utils.toJson(cls, obj);
-
-			for (Iterator<String> keysIt = map.keySet().iterator(); keysIt
-					.hasNext();) {
-				String key = keysIt.next();
-
-				Method method = cls.getMethod(fieldToMethodName(key, "get"));
-				if (method != null) {
-					Object o = method.invoke(obj);
-					if (o instanceof Collection) {
-						JsonArray arr = new JsonArray();
-						ret.put(key, arr);
-						for (Iterator it = ((Collection) o).iterator(); it
-								.hasNext();) {
-							Object o2 = it.next();
-							JsonObject tmp = map.get(key).getMapper(converter)
-									.toJson(o2);
-							arr.add(tmp);
-						}
-					} else {
-						JsonObject tmp = map.get(key).getMapper(converter)
-								.toJson(o);
-						ret.put(key, tmp);
-					}
-				}
-			}
 		}
 		return ret;
+	}
+
+	public JsonObject toJson(Object obj) throws IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException {
+
+		if (obj != null)
+			return toJson(obj, obj.getClass());
+		else return toJson(obj, null);
 	}
 
 	/**
@@ -159,6 +90,9 @@ public class Mapper {
 	 * @param col
 	 * @param cls
 	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
 	 * @throws NoSuchMethodException
@@ -166,15 +100,18 @@ public class Mapper {
 	 * @throws InvocationTargetException
 	 */
 	protected JsonArray toJsonArray(Collection col, Class cls)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
+			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		JsonArray arr = new JsonArray();
 
-		if (this.cls == null) {
+		if (col != null) {
 			for (Object o : col) {
-				if (!Utils.objectIntoJsonArray(arr, o))
-					arr.add(toJson(o, cls));
+				Class cls2 = cls;
+				if (cls2 == null) cls2 = o.getClass();
+				if (!Utils.objectIntoJsonArray(arr, o)) {
+					JsonObject json = toJson(o, cls2);					
+					arr.add(json);
+				}
 			}
 		}
 
@@ -182,32 +119,9 @@ public class Mapper {
 	}
 
 	public JsonArray toJsonArray(Collection col)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
+			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		JsonArray arr = new JsonArray();
-
-		for (Object o : col) {
-			if (!Utils.objectIntoJsonArray(arr, o))
-				arr.add(toJson(o));
-		}
-
-		return arr;
-	}
-
-	private String fieldToMethodName(String fld, String mode) {
-		String ret = mode + Character.toString(fld.charAt(0)).toUpperCase()
-				+ fld.substring(1);
-		// System.out.println("fld:" + fld + ", method:" + ret);
-		return ret;
-	}
-
-	protected void setConverter(Converter converter) {
-		this.converter = converter;
-
-		for (MapperStruct mapper : map.values()) {
-			mapper.setConverter(converter);
-		}
+		return toJsonArray(col, null);
 	}
 }
 
@@ -222,17 +136,5 @@ class MapperStruct {
 
 	public MapperStruct(Mapper mapper) {
 		this.mapper = mapper;
-	}
-
-	public Mapper getMapper(Converter converter) {
-		if (mapper != null)
-			return mapper;
-		else
-			return converter.getMapper(alias);
-	}
-
-	public void setConverter(Converter converter) {
-		if (mapper != null)
-			mapper.setConverter(converter);
 	}
 }
