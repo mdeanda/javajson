@@ -50,7 +50,8 @@ public class Mapper {
 		if (obj != null) {
 			if (cls == null)
 				ret = Utils.toJson(obj, obj.getClass());
-			else ret = Utils.toJson(obj, cls);
+			else
+				ret = Utils.toJson(obj, cls);
 
 			// TODO: go through each field.. if not simple type, bust a toJson
 			// on it (or toArray)
@@ -58,14 +59,14 @@ public class Mapper {
 			for (String key : fields.keySet()) {
 				Object val = fields.get(key);
 				if (!(val instanceof Number || val instanceof Date
-						|| val instanceof String || val instanceof Boolean)
+						|| val instanceof String || val instanceof Boolean || val instanceof Class)
 						&& val != null) {
 					// non basic types...
 					String jsonKey = Reflection.getFieldName(key);
 					if (val instanceof Collection) {
 						JsonArray array = toJsonArray((Collection) val);
 						ret.put(jsonKey, array);
-					} else if (!(val instanceof Class)) {
+					} else {
 						ret.put(jsonKey, toJson(val));
 					}
 				}
@@ -79,7 +80,8 @@ public class Mapper {
 
 		if (obj != null)
 			return toJson(obj, obj.getClass());
-		else return toJson(obj, null);
+		else
+			return toJson(obj, null);
 	}
 
 	/**
@@ -107,9 +109,10 @@ public class Mapper {
 		if (col != null) {
 			for (Object o : col) {
 				Class cls2 = cls;
-				if (cls2 == null) cls2 = o.getClass();
+				if (cls2 == null)
+					cls2 = o.getClass();
 				if (!Utils.objectIntoJsonArray(arr, o)) {
-					JsonObject json = toJson(o, cls2);					
+					JsonObject json = toJson(o, cls2);
 					arr.add(json);
 				}
 			}
