@@ -43,4 +43,25 @@ public class ComplexObject {
 	public void setSimpleObject(SimpleObject simpleObject) {
 		this.simpleObject = simpleObject;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("simpleObject: " + simpleObject);
+		sb.append("\n");
+		sb.append("intList: [");
+		for (Integer i : intList) {
+			sb.append(i);
+			sb.append(" ");
+		}
+		sb.append("]");
+		sb.append("\n");
+		sb.append("simpleList: [");
+		for (SimpleObject i : simpleList) {
+			sb.append(i);
+			sb.append(" ");
+		}
+		sb.append("]");
+		
+		return sb.toString();
+	}
 }

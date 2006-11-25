@@ -359,6 +359,18 @@ public class JsonObject implements Iterable<String> {
 		else
 			return false;
 	}
+	
+	/**
+	 * Checks if the field contains a null value (different than hasKey because it can have the key but be null)
+	 */
+	public boolean isNull(String key) {
+		if (map.containsKey(key)) {
+			JsonValue jv = map.get(key);
+			return jv.isNull();
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Checks if the structure of this json object is similar to that of another

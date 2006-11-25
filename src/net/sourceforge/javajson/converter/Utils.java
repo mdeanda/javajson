@@ -3,6 +3,7 @@ package net.sourceforge.javajson.converter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,7 +14,87 @@ import net.sourceforge.javajson.JsonObject;
 
 public class Utils {
 
-	public static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	public static DateFormat dateFormat = new SimpleDateFormat(
+			"yyyy/MM/dd HH:mm:ss");
+
+	public static void fromJson(Object obj, JsonObject json)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException, InstantiationException {
+		System.out.println("from json:" + json);
+
+		if (obj != null && json != null) {
+			List<Method> methods = Reflection.getSetterFieldMethods(obj
+					.getClass());
+			for (Method method : methods) {
+				apply(obj, json, method);
+			}
+		}
+	}
+
+	/**
+	 * Applies a method on an object
+	 * 
+	 * @param obj
+	 * @param json
+	 * @param method
+	 * @return false if the method couldn't be applied
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InstantiationException
+	 */
+	private static boolean apply(Object obj, JsonObject json, Method method)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException, InstantiationException {
+		String fieldName = Reflection.getFieldName(method.getName());
+		if (json.hasKey(fieldName) && !json.isNull(fieldName)) {
+			Object[] args = prepareParameter(json, method, fieldName);
+			if (args[0] != null)
+				method.invoke(obj, args);
+		} else if (json.hasKey(fieldName)) {
+			System.out.println("null field:" + fieldName + ", " + json.getString(fieldName));
+		}
+
+		return true;
+	}
+
+	private static Object[] prepareParameter(JsonObject json, Method method,
+			String fieldName) throws IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException,
+			InstantiationException {
+		Object[] ret = new Object[1];
+		Class[] params = method.getParameterTypes();
+		Class param = params[0];
+
+		if (param == String.class) {
+			ret[0] = json.getString(fieldName);
+		} else if (param == Integer.class || param == int.class) {
+			ret[0] = new Integer(json.getInt(fieldName));
+		} else if (param == Long.class || param == long.class) {
+			ret[0] = new Long(json.getLong(fieldName));
+		} else if (param == Float.class || param == float.class) {
+			ret[0] = new Float(json.getFloat(fieldName));
+		} else if (param == Double.class || param == double.class) {
+			ret[0] = new Double(json.getDouble(fieldName));
+		} else if (param == Date.class) {
+			try {
+				//System.out.println("todate: " + json.getString(fieldName) + " " + json.isNull(fieldName));
+				ret[0] = dateFormat.parse(json.getString(fieldName));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("date, fieldname:" + fieldName + ", " + ret[0]);
+		} else {
+			System.out.println("** object:" + fieldName + ", "
+					+ param.getName());
+			Object o = param.newInstance();
+			Utils.fromJson(o, json.getJsonObject(fieldName));
+			ret[0] = o;
+		}
+
+		return ret;
+	}
 
 	/**
 	 * Convers an object to a simple (flat) json object. For depth, use the
@@ -43,12 +124,12 @@ public class Utils {
 				objectIntoJsonObject(ret, fld, o);
 			}
 		} else if (!cls.isAssignableFrom(obj.getClass())) {
-			
+
 			System.out.println("\n\noops!\n\n");
-			
+
 			System.out.println(cls.getName());
 			System.out.println(obj.getClass().getName());
-			
+
 		}
 
 		return ret;

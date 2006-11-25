@@ -3,13 +3,13 @@ package net.sourceforge.javajson.converter.test;
 import java.util.Date;
 
 public class SimpleObject {
-	private String field1 = "field 1";
+	private String field1;
 
-	private int field2 = 234;
+	private int field2;
 
-	private float floatField = 3.14f;
+	private float floatField;
 	
-	private Date today = new Date();
+	private Date today;
 
 	public String getField1() {
 		return field1;
@@ -43,4 +43,15 @@ public class SimpleObject {
 		this.floatField = floatField;
 	}
 
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("field1: " + field1);
+		sb.append("\n");
+		sb.append("field2: " + field2);
+		sb.append("\n");
+		sb.append("floatField: " + floatField);
+		sb.append("\n");
+		sb.append("today: " + today);
+		return sb.toString();
+	}
 }
