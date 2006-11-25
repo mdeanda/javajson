@@ -6,12 +6,34 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A set of utility functions for reflection related things used in this json
  * package
  */
 public class Reflection {
+
+	private static Pattern setterPattern = Pattern.compile("^set[A-Z].*");
+
+	private static Pattern getterPattern = Pattern.compile("^(is|get)[A-Z].*");
+
+	public static List<Method> getSetterFieldMethods(Class cls) {
+		List<Method> methods = new LinkedList<Method>();
+
+		Method[] a = cls.getMethods();
+		for (int i = 0; i < a.length; i++) {
+
+			if (a[i].getParameterTypes().length == 1
+					&& isSetterMethod(a[i].getName())) {
+				// TODO: make sure method isn't static or protected/private
+				methods.add(a[i]);
+			}
+		}
+
+		return methods;
+	}
 
 	/**
 	 * Returns the public getter methods that are normal getters, this includes
@@ -26,7 +48,8 @@ public class Reflection {
 		Method[] a = cls.getMethods();
 		for (int i = 0; i < a.length; i++) {
 
-			if (a[i].getParameterTypes().length == 0 && isGetterMethod(a[i].getName())) {
+			if (a[i].getParameterTypes().length == 0
+					&& isGetterMethod(a[i].getName())) {
 				// TODO: check that 'is' methods are boolean
 				// TODO: make sure method isn't static or protected/private
 				methods.add(a[i]);
@@ -82,19 +105,12 @@ public class Reflection {
 	 * letter
 	 */
 	private static boolean isGetterMethod(String name) {
-		//TODO: use a single regexp to check
-		int l = name.length();
-		if (l > 2 && Character.isUpperCase(name.charAt(2))) {
-			if (name.startsWith("is")) {
-				return true;
-			}
-		}
-		if (l > 3 && Character.isUpperCase(name.charAt(3))) {
-			if (name.startsWith("get")) {
-				return true;
-			}
-		}
+		Matcher m = getterPattern.matcher(name);
+		return m.matches();
+	}
 
-		return false;
+	private static boolean isSetterMethod(String name) {
+		Matcher m = setterPattern.matcher(name);
+		return m.matches();
 	}
 }

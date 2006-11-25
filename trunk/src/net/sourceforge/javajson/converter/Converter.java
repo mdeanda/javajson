@@ -21,6 +21,16 @@ public class Converter {
 
 	}
 
+	public Object fromJson(JsonObject json) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
+		Object o = null;
+		Class cls = Class.forName(json.getString("class"));
+		o = cls.newInstance();
+		Utils.fromJson(o, json);
+		return o;
+	}
+
 	/**
 	 * Convenience method for converting objects without a predefined
 	 * mapper. This method does not allow objects to be filtered in any

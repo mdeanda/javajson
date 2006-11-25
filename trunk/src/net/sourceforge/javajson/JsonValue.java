@@ -235,6 +235,12 @@ public class JsonValue {
 		return (longVal != null);
 	}
 
+	public boolean isNull() {
+		return (boolVal == null && doubleVal == null && floatVal == null
+				&& jsonArray == null && jsonObject == null && longVal == null 
+				&& stringVal == null);
+	}
+
 	/**
 	 * Checks if the type of this value is similar to that of another value.
 	 * 
