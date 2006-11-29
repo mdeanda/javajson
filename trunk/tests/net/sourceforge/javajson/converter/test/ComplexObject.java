@@ -9,6 +9,8 @@ public class ComplexObject {
 	private List<Integer> intList = new LinkedList<Integer>();
 
 	private List<SimpleObject> simpleList = new LinkedList<SimpleObject>();
+	
+	private List objectList = new LinkedList();
 
 	public ComplexObject() {
 		intList.add(5);
@@ -61,7 +63,22 @@ public class ComplexObject {
 			sb.append(" ");
 		}
 		sb.append("]");
+		sb.append("\n");
+		sb.append("objectList: [");
+		for (Object i : objectList) {
+			sb.append(i);
+			sb.append(" ");
+		}
+		sb.append("]");
 		
 		return sb.toString();
+	}
+
+	public List getObjectList() {
+		return objectList;
+	}
+
+	public void setObjectList(List objectList) {
+		this.objectList = objectList;
 	}
 }

@@ -2,15 +2,22 @@ package net.sourceforge.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
+import net.sourceforge.javajson.JsonValue;
 
 public class Utils {
 
@@ -19,9 +26,8 @@ public class Utils {
 
 	public static void fromJson(Object obj, JsonObject json)
 			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException, InstantiationException {
-		System.out.println("from json:" + json);
-
+			InvocationTargetException, InstantiationException,
+			ClassNotFoundException {
 		if (obj != null && json != null) {
 			List<Method> methods = Reflection.getSetterFieldMethods(obj
 					.getClass());
@@ -42,26 +48,30 @@ public class Utils {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
 	 */
 	private static boolean apply(Object obj, JsonObject json, Method method)
 			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException, InstantiationException {
+			InvocationTargetException, InstantiationException,
+			ClassNotFoundException {
 		String fieldName = Reflection.getFieldName(method.getName());
 		if (json.hasKey(fieldName) && !json.isNull(fieldName)) {
 			Object[] args = prepareParameter(json, method, fieldName);
 			if (args[0] != null)
 				method.invoke(obj, args);
 		} else if (json.hasKey(fieldName)) {
-			System.out.println("null field:" + fieldName + ", " + json.getString(fieldName));
+			System.out.println("null field:" + fieldName + ", "
+					+ json.getString(fieldName));
 		}
 
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static Object[] prepareParameter(JsonObject json, Method method,
 			String fieldName) throws IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException,
-			InstantiationException {
+			InstantiationException, ClassNotFoundException {
 		Object[] ret = new Object[1];
 		Class[] params = method.getParameterTypes();
 		Class param = params[0];
@@ -78,13 +88,57 @@ public class Utils {
 			ret[0] = new Double(json.getDouble(fieldName));
 		} else if (param == Date.class) {
 			try {
-				//System.out.println("todate: " + json.getString(fieldName) + " " + json.isNull(fieldName));
+				// System.out.println("todate: " + json.getString(fieldName) + "
+				// " + json.isNull(fieldName));
 				ret[0] = dateFormat.parse(json.getString(fieldName));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("date, fieldname:" + fieldName + ", " + ret[0]);
+			// System.out.println("date, fieldname:" + fieldName + ", " +
+			// ret[0]);
+		} else if (Collection.class.isAssignableFrom(param)) {
+			Type genericType = method.getGenericParameterTypes()[0];
+			Matcher m = Pattern.compile(".*<(.+)>.*").matcher(genericType.toString());
+			String typeName = null;
+			if (m.matches())
+				typeName = m.group(1);
+			Collection c;
+			if (List.class.isAssignableFrom(param)) {
+				c = new ArrayList();
+			} else {
+				c = new HashSet();
+			}
+			ret[0] = c;
+			if (json.isJsonArray(fieldName)) {
+				for (JsonValue value : json.getJsonArray(fieldName)) {
+					
+					System.out.println("gt/int:" + genericType.toString() + " " + Integer.class.getName() + "\n");
+					
+					if (value.isJsonObject()) {
+						Object o = Converter.getInstance().fromJson(
+								value.getJsonObject());
+						c.add(o);
+					} else if (value.isJsonArray()) {
+						//TODO: do something about nested arrays
+					} else if (value.isBoolean() && (typeName == null || Boolean.class.getName().equals(typeName))) {
+						c.add(value.getBoolean());
+					} else if (value.isFloat() && (typeName == null || Float.class.getName().equals(typeName))) {
+						c.add(value.getFloat());
+					} else if (value.isDouble() && (typeName == null || Double.class.getName().equals(typeName))) {
+						c.add(value.getDouble());
+					} else if (value.isInt() && (typeName == null || Integer.class.getName().equals(typeName))) {
+						c.add(value.getInt());
+					} else if (value.isLong() && (typeName == null || Long.class.getName().equals(typeName))) {
+						c.add(value.getLong());
+					} else if (value.isString()) {
+						c.add(value.getString());
+					}
+				}
+			} else {
+				// throw some kind of exception or something
+			}
+			// System.out.println("do something with a list");
 		} else {
 			System.out.println("** object:" + fieldName + ", "
 					+ param.getName());

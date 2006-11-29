@@ -17,8 +17,13 @@ import net.sourceforge.javajson.JsonObject;
 public class Converter {
 	protected final Logger log = Logger.getLogger(getClass());
 
-	public Converter() {
-
+	public static final Converter instance = new Converter();
+	
+	private Converter() {
+	}
+	
+	public static Converter getInstance() {
+		return instance;
 	}
 
 	public Object fromJson(JsonObject json) throws ClassNotFoundException,
