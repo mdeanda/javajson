@@ -128,16 +128,3 @@ public class Mapper {
 	}
 }
 
-class MapperStruct {
-	Mapper mapper;
-
-	String alias;
-
-	public MapperStruct(String alias) {
-		this.alias = alias;
-	}
-
-	public MapperStruct(Mapper mapper) {
-		this.mapper = mapper;
-	}
-}

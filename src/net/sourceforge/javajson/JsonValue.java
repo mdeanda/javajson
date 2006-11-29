@@ -156,6 +156,25 @@ public class JsonValue {
 	}
 
 	/**
+	 * Returns the class of the value being used. For example, if setFloat or
+	 * setDouble were used, Double.class is returned. If setInt or setLong is
+	 * used, Long.class is returned.
+	 */
+	public Class getValueClass() {
+		if (doubleVal != null)
+			return Double.class;
+		else if (floatVal != null)
+			return Float.class;
+		else if (longVal != null)
+			return Long.class;
+		else if (jsonArray != null)
+			return JsonArray.class;
+		else if (jsonObject != null)
+			return JsonObject.class;
+		else return null;
+	}
+
+	/**
 	 * Checks if the value is a boolean
 	 * 
 	 * @return
@@ -237,8 +256,7 @@ public class JsonValue {
 
 	public boolean isNull() {
 		return (boolVal == null && doubleVal == null && floatVal == null
-				&& jsonArray == null && jsonObject == null && longVal == null 
-				&& stringVal == null);
+				&& jsonArray == null && jsonObject == null && longVal == null && stringVal == null);
 	}
 
 	/**

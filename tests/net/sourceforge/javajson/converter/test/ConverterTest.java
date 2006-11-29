@@ -19,7 +19,7 @@ public class ConverterTest extends TestCase {
 
 	public void testSimpleObject() throws Exception {
 		JsonObject json;
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		SimpleObject si = new SimpleObject();
 	
 		json = c.toJson(si);
@@ -28,7 +28,7 @@ public class ConverterTest extends TestCase {
 	
 	public void testSimpleObjectValues() throws Exception {
 		JsonObject json;
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		SimpleObject si = new SimpleObject();
 
 		si.setField1("s1");
@@ -51,7 +51,7 @@ public class ConverterTest extends TestCase {
 	public void testComplexObject() throws Exception {
 		JsonObject json;
 		JsonArray array;
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		ComplexObject co = new ComplexObject();
 
 		json = c.toJson(co);
@@ -81,7 +81,7 @@ public class ConverterTest extends TestCase {
 
 	public void testComplexObjectWithNull() throws Exception {
 		JsonObject json;
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		ComplexObject co = new ComplexObject();
 		co.setSimpleObject(null);
 
@@ -93,7 +93,7 @@ public class ConverterTest extends TestCase {
 	}
 
 	public void testToJsonAndBackSimple() throws Exception {
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		JsonObject json;
 		SimpleObject so; 
 		String so1, so2, so3;
@@ -115,7 +115,7 @@ public class ConverterTest extends TestCase {
 	}
 	
 	public void testToJsonAndBackComplex() throws Exception {
-		Converter c = new Converter();
+		Converter c = Converter.getInstance();
 		JsonObject json;
 		ComplexObject co1 = new ComplexObject();
 		prepComplex(co1);
@@ -128,14 +128,21 @@ public class ConverterTest extends TestCase {
 		assertEquals(co1.toString(), co2.toString());
 		
 		ComplexObject co3 = (ComplexObject) c.fromJson(json);
+		assertEquals("simple object list length", co1.getSimpleList().size(), co3.getSimpleList().size());
+		assertEquals("int list length", co1.getIntList().size(), co3.getIntList().size());
+		assertEquals("int in object list", co1.getObjectList().get(1), co3.getObjectList().get(1));
 		assertEquals(co1.toString(), co3.toString());
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void prepComplex(ComplexObject co) {
 		SimpleObject so = co.getSimpleObject();
 		so.setField1("value of field 1");
 		so.setField2(3243);
 		so.setFloatField(2.5f);
+		
+		co.getObjectList().add("test");
+		co.getObjectList().add(new Integer(23423));
 	}
 	
 	private void prepSimple(SimpleObject so) {
