@@ -130,6 +130,8 @@ public class ConverterTest extends TestCase {
 		ComplexObject co3 = (ComplexObject) c.fromJson(json);
 		assertEquals("simple object list length", co1.getSimpleList().size(), co3.getSimpleList().size());
 		assertEquals("int list length", co1.getIntList().size(), co3.getIntList().size());
+		
+		//NOTE: this test may never pass because json looses information about a number's type
 		assertEquals("int in object list", co1.getObjectList().get(1), co3.getObjectList().get(1));
 		assertEquals(co1.toString(), co3.toString());
 	}
