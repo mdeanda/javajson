@@ -2,6 +2,7 @@
 
 <project basedir="." default="build">
 	<property file="build.properties" />
+	<property file="${user.home}/.ant/build.properties" />
 
 	<property name="dist.dir" value="dist" />
 	<property name="doc.dir" value="doc" />

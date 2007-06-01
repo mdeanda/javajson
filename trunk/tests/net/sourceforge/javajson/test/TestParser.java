@@ -8,6 +8,19 @@ import junit.framework.TestCase;
 
 public class TestParser extends TestCase {
 
+	public void testParseNumbers() throws Exception {
+		String input;
+		JsonObject json;
+		
+		input = "{\"a\":3}";
+		json = JsonObject.parse(input);
+		assertEquals(3, json.getInt("a"));
+
+		input = "{\"a\":-1}";
+		json = JsonObject.parse(input);
+		assertEquals(-1, json.getInt("a"));
+	}
+	
 	public void testParseArray() throws Exception {
 		String input = "{\"array\":[1, 2, 3]}";
 		JsonObject json = JsonObject.parse(input);
