@@ -11,7 +11,7 @@ public class TestParser extends TestCase {
 	public void testParseNumbers() throws Exception {
 		String input;
 		JsonObject json;
-		
+
 		input = "{\"a\":3}";
 		json = JsonObject.parse(input);
 		assertEquals(3, json.getInt("a"));
@@ -19,8 +19,35 @@ public class TestParser extends TestCase {
 		input = "{\"a\":-1}";
 		json = JsonObject.parse(input);
 		assertEquals(-1, json.getInt("a"));
+		assertEquals(-1, json.getLong("a"));
+
+		input = "{\"a\":-1.4}";
+		json = JsonObject.parse(input);
+		assertEquals(-1.4f, json.getFloat("a"));
+		assertEquals(-1.4, json.getDouble("a"));
 	}
-	
+
+	public void testParseNulls() throws Exception {
+		String input;
+		JsonObject json;
+
+		input = "{\"a\": null}";
+		json = JsonObject.parse(input);
+		assertTrue(json.hasKey("a"));
+		assertFalse(json.hasKey("b"));
+		assertNull(json.getJsonObject("a"));
+		assertNull(json.getString("a"));
+
+		input = "{null: null}";
+		try {
+			json = JsonObject.parse(input);
+			fail("missed null key");
+		} catch (JsonException ex) {
+
+		}
+
+	}
+
 	public void testParseArray() throws Exception {
 		String input = "{\"array\":[1, 2, 3]}";
 		JsonObject json = JsonObject.parse(input);
