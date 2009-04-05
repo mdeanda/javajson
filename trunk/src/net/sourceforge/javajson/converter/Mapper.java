@@ -46,6 +46,12 @@ public class Mapper {
 	protected JsonObject toJson(Object obj, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
+		return toJson(obj, cls, false);
+	}
+
+	protected JsonObject toJson(Object obj, Class cls, boolean flat)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
 		JsonObject ret = null;
 		if (obj != null) {
 			if (cls == null)
@@ -53,26 +59,35 @@ public class Mapper {
 			else
 				ret = Utils.toJson(obj, cls);
 
-			// TODO: go through each field.. if not simple type, bust a toJson
-			// on it (or toArray)
-			Map<String, Object> fields = Reflection.getFields(obj);
-			for (String key : fields.keySet()) {
-				Object val = fields.get(key);
-				if (!(val instanceof Number || val instanceof Date
-						|| val instanceof String || val instanceof Boolean || val instanceof Class)
-						&& val != null) {
-					// non basic types...
-					String jsonKey = Reflection.getFieldName(key);
-					if (val instanceof Collection) {
-						JsonArray array = toJsonArray((Collection) val);
-						ret.put(jsonKey, array);
-					} else {
-						ret.put(jsonKey, toJson(val));
+			if (!flat) {
+				Map<String, Object> fields = Reflection.getFields(obj);
+				for (String key : fields.keySet()) {
+					Object val = fields.get(key);
+					if (!(val instanceof Number || val instanceof Date
+							|| val instanceof String || val instanceof Boolean || val instanceof Class)
+							&& val != null) {
+						// non basic types...
+						String jsonKey = Reflection.getFieldName(key);
+						if (val instanceof Collection) {
+							JsonArray array = toJsonArray((Collection) val);
+							ret.put(jsonKey, array);
+						} else {
+							ret.put(jsonKey, toJson(val));
+						}
 					}
 				}
 			}
 		}
 		return ret;
+	}
+
+	public JsonObject toJson(Object obj, boolean flat)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		if (obj != null)
+			return toJson(obj, obj.getClass(), flat);
+		else
+			return toJson(obj, null, flat);
 	}
 
 	public JsonObject toJson(Object obj) throws IllegalArgumentException,
@@ -83,7 +98,6 @@ public class Mapper {
 		else
 			return toJson(obj, null);
 	}
-
 	/**
 	 * Maps a collection to jsonarray based on a class, this method only works
 	 * when using the default mapper and is meant to be called via convenience
@@ -104,6 +118,28 @@ public class Mapper {
 	protected JsonArray toJsonArray(Collection col, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
+		return toJsonArray(col, cls, false);
+	}
+	/**
+	 * Maps a collection to jsonarray based on a class, this method only works
+	 * when using the default mapper and is meant to be called via convenience
+	 * method on Converter.
+	 * 
+	 * @param col
+	 * @param cls
+	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	protected JsonArray toJsonArray(Collection col, Class cls, boolean flat)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
 		JsonArray arr = new JsonArray();
 
 		if (col != null) {
@@ -112,7 +148,7 @@ public class Mapper {
 				if (cls2 == null)
 					cls2 = o.getClass();
 				if (!Utils.objectIntoJsonArray(arr, o)) {
-					JsonObject json = toJson(o, cls2);
+					JsonObject json = toJson(o, cls2, flat);
 					arr.add(json);
 				}
 			}
@@ -126,5 +162,10 @@ public class Mapper {
 			InvocationTargetException {
 		return toJsonArray(col, null);
 	}
-}
 
+	public JsonArray toJsonArray(Collection col, boolean flat)
+			throws IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		return toJsonArray(col, null, flat);
+	}
+}
