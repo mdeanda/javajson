@@ -84,23 +84,24 @@ TOKEN : /* LITERALS */
       ("\""
       (   (~["\"","\\","\n","\r"])
         | ("\\"
-            ( ["n","t","b","r","f","\\","'","\""]
-            | ["0"-"7"] ( ["0"-"7"] )?
-            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            (
+              ["n","t","b","r","f","\\","\'","\"","/"]
             )
           )
       )*
-      "\"") |
-     ("'"
-      (   (~["'","\\","\n","\r"])
+      "\"") 
+   >
+|
+  < STRING_LITERAL_SINGLE_QUOTES:
+      ("\'"
+      (   (~["\'","\\","\n","\r"])
         | ("\\"
-            ( ["n","t","b","r","f","\\","'","\""]
-            | ["0"-"7"] ( ["0"-"7"] )?
-            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            (
+              ["n","t","b","r","f","\\","\'","\"","/"]
             )
           )
       )*
-      "'")
+      "\'") 
   >
 }
 
@@ -112,28 +113,31 @@ TOKEN : /* LITERALS */
 
 SimpleNode parse() : {}
 {
-  object() <EOF> { return jjtThis; }
-  | array() <EOF> { return jjtThis; }
+  (
+    object() <EOF> { return jjtThis; }
+  |
+    array() <EOF> { return jjtThis; }
+  )
 }
 
 void object() : {}
 {
-	"{" (members())? "}"
+  "{" (members())? "}"
 }
 
 void array() : {}
 {
-	"[" (elements())? "]"
+  "[" (elements())? "]"
 }
 
 void members() : {}
 {
-	key() ":" value() ( "," members() )?
+  key() ":" value() ( "," members() )?
 }
 
 void elements() : {}
 {
-	value() ( "," elements() )?
+  value() ( "," elements() )?
 }
 
 void value() : 
@@ -141,10 +145,15 @@ void value() :
   Token t;
 }
 {
-  string() | number() | object() | array() 
-  | t=<TRUE_LITERAL> { jjtThis.val = t.image; } 
-  | t=<FALSE_LITERAL> { jjtThis.val = t.image; } 
-  | t=<NULL_LITERAL> { jjtThis.val = t.image; } 
+  (
+    string() | number() | object() | array() 
+  |
+    t=<TRUE_LITERAL> { jjtThis.val = t.image; } 
+  |
+    t=<FALSE_LITERAL> { jjtThis.val = t.image; } 
+  |
+    t=<NULL_LITERAL> { jjtThis.val = t.image; }
+  ) 
 }
 
 void key() :
@@ -153,8 +162,11 @@ void key() :
 }
 {
   (
-  t=<STRING_LITERAL> { jjtThis.val = t.image; }
-  | t = <KEY_LITERAL> { jjtThis.val = t.image; }
+    t=<KEY_LITERAL> { jjtThis.val = t.image; }
+  |
+    t=<STRING_LITERAL> { jjtThis.val = t.image; }
+  |
+    t=<STRING_LITERAL_SINGLE_QUOTES> { jjtThis.val = t.image; }
   )
 }
 
@@ -164,8 +176,9 @@ void string() :
 }
 {
   (
-  t=<STRING_LITERAL>
-  { jjtThis.val = t.image; }
+    t=<STRING_LITERAL> { jjtThis.val = t.image; }
+  |
+    t=<STRING_LITERAL_SINGLE_QUOTES> { jjtThis.val = t.image; }
   )
 }
 
@@ -175,7 +188,8 @@ void number() :
 }
 {
   (
-  t=<INTEGER_LITERAL> { jjtThis.val = t.image; } 
-  | t=<FLOATING_POINT_LITERAL> { jjtThis.val = t.image; }
+    t=<INTEGER_LITERAL> { jjtThis.val = t.image; } 
+  |
+    t=<FLOATING_POINT_LITERAL> { jjtThis.val = t.image; }
   )
 }
