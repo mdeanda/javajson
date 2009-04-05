@@ -15,23 +15,25 @@ public class ASTstring extends SimpleNode {
 
 	@Override
 	protected void interpret() {
-		((SimpleNode) parent).push(fixString(val));
+		((SimpleNode) parent).push(ASTstring.fixString(val));
 	}
 	
 	/** Removes escapes from string and returns normal string */
-	private String fixString(String s) {
+	protected static String fixString(String s) {
 		String ret = s.substring(1, s.length()-1);
 		//String t = ret;
-		ret = ret.replaceAll("\\\\\"", "\"");
-		ret = ret.replaceAll("\\\\'", "'");
+		ret = ret.replace("\\\"", "\"");
+		ret = ret.replace("\\'", "'");
 		
-		ret = ret.replaceAll("\\\\b", "\b");
-		ret = ret.replaceAll("\\\\f", "\f");
-		ret = ret.replaceAll("\\\\n", "\n");
-		ret = ret.replaceAll("\\\\r", "\r");
-		ret = ret.replaceAll("\\\\t", "\t");
+		ret = ret.replace("\\b", "\b");
+		ret = ret.replace("\\f", "\f");
+		ret = ret.replace("\\n", "\n");
+		ret = ret.replace("\\r", "\r");
+		ret = ret.replace("\\t", "\t");
+		ret = ret.replace("\\/", "/");
+		ret = ret.replace("\\\\", "\\");
 		
-		//System.out.println(t + " " + ret);
+		//System.out.println(s + " " + ret);
 		return ret;
 	}
 }
