@@ -1,8 +1,5 @@
 package net.sourceforge.javajson.test;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonObject;
 

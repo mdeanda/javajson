@@ -1,8 +1,22 @@
 package net.sourceforge.javajson;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class JsonValue {
+	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
+	static {
+		escapeMap.put('\\', "\\\\");
+		escapeMap.put('\b', "\\b");
+		escapeMap.put('\f', "\\f");
+		escapeMap.put('\n', "\\n");
+		escapeMap.put('\r', "\\r");
+		escapeMap.put('\t', "\\t");
+		escapeMap.put('\"', "\\\"");
+		escapeMap.put('\'', "\\\'");
+	}
+
 	private Boolean boolVal;
 
 	private Double doubleVal;
@@ -74,6 +88,22 @@ public class JsonValue {
 			setJsonArray((JsonArray) val);
 		else
 			throw new ClassCastException("Unrecognized class");
+	}
+
+	static public String byteToHex(byte b) {
+		char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'a', 'b', 'c', 'd', 'e', 'f' };
+		char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
+		return new String(array);
+	}
+
+	static public String charToEscaped(char c) {
+		byte hiByte = (byte) (c >>> 8);
+		byte loByte = (byte) (c & 0xff);
+		if (hiByte == 0) //if hi byte is 0, then assume not unicode
+			return String.valueOf(c);
+		else
+			return "\\u" + byteToHex(hiByte) + byteToHex(loByte);
 	}
 
 	public boolean getBoolean() {
@@ -353,8 +383,17 @@ public class JsonValue {
 	 * @return
 	 */
 	public static String escape(String str) {
-		return str.replaceAll("\"", "&quot;").replace("\n", "\\n")
-				.replace("\t", "\\t").replace("\r", "\\r");
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (escapeMap.containsKey(c)) {
+				sb.append(escapeMap.get(c));
+			} else {
+				// sb.append(c);
+				sb.append(charToEscaped(c));
+			}
+		}
+		return sb.toString();
 	}
 
 	@Override
