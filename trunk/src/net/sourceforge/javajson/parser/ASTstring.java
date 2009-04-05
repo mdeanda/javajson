@@ -2,7 +2,23 @@
 
 package net.sourceforge.javajson.parser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ASTstring extends SimpleNode {
+	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
+	static {
+		escapeMap.put('\\', "\\");
+		escapeMap.put('b', "\b");
+		escapeMap.put('f', "\f");
+		escapeMap.put('n', "\n");
+		escapeMap.put('r', "\r");
+		escapeMap.put('t', "\t");
+		escapeMap.put('/', "/");
+		escapeMap.put('\"', "\"");
+		escapeMap.put('\'', "\'");
+	}
+
 	String val;
 
 	public ASTstring(int id) {
@@ -17,14 +33,40 @@ public class ASTstring extends SimpleNode {
 	protected void interpret() {
 		((SimpleNode) parent).push(ASTstring.fixString(val));
 	}
-	
+
 	/** Removes escapes from string and returns normal string */
 	protected static String fixString(String s) {
-		String ret = s.substring(1, s.length()-1);
-		//String t = ret;
+		s = s.substring(1, s.length() - 1);
+		StringBuffer ret = new StringBuffer();
+		boolean escape = false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (!escape) {
+				if (c == '\\')
+					escape = true;
+				else
+					ret.append(c);
+			} else {
+				if (escapeMap.containsKey(c))
+					ret.append(escapeMap.get(c));
+				else {
+					// put escape back in, error, but parser missed it(?)
+					// unicode may come as numbers here...
+					ret.append("\\");
+					ret.append(c);
+				}
+				escape = false;
+			}
+		}
+		return ret.toString();
+	}
+
+	protected static String fixString_(String s) {
+		String ret = s.substring(1, s.length() - 1);
+		// String t = ret;
 		ret = ret.replace("\\\"", "\"");
 		ret = ret.replace("\\'", "'");
-		
+
 		ret = ret.replace("\\b", "\b");
 		ret = ret.replace("\\f", "\f");
 		ret = ret.replace("\\n", "\n");
@@ -32,8 +74,8 @@ public class ASTstring extends SimpleNode {
 		ret = ret.replace("\\t", "\t");
 		ret = ret.replace("\\/", "/");
 		ret = ret.replace("\\\\", "\\");
-		
-		//System.out.println(s + " " + ret);
+
+		// System.out.println(s + " " + ret);
 		return ret;
 	}
 }
