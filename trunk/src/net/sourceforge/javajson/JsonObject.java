@@ -497,7 +497,7 @@ public class JsonObject implements Iterable<String> {
 			if (hadSome)
 				sb.append(",");
 			// TODO: escape keys
-			sb.append("\"" + key + "\":");
+			sb.append("\"" + JsonValue.escape(key) + "\":");
 			sb.append(val);
 			hadSome = true;
 		}
@@ -536,7 +536,7 @@ public class JsonObject implements Iterable<String> {
 					sb.append(",\n");
 
 				sb.append(getSpaces(spacing + margin));
-				sb.append("\"" + key + "\":");
+				sb.append("\"" + JsonValue.escape(key) + "\":");
 				sb.append(val.toString(spacing, margin + spacing));
 				hadSome = true;
 			}
