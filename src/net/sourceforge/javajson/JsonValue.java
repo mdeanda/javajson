@@ -171,7 +171,8 @@ public class JsonValue {
 			return JsonArray.class;
 		else if (jsonObject != null)
 			return JsonObject.class;
-		else return null;
+		else
+			return null;
 	}
 
 	/**
@@ -351,9 +352,9 @@ public class JsonValue {
 	 * @param str
 	 * @return
 	 */
-	public String escape(String str) {
-		return str.replaceAll("\"", "&quot;").replaceAll("\n", "\\\\n")
-				.replaceAll("\t", "\\\\t");
+	public static String escape(String str) {
+		return str.replaceAll("\"", "&quot;").replace("\n", "\\n")
+				.replace("\t", "\\t").replace("\r", "\\r");
 	}
 
 	@Override
@@ -371,7 +372,7 @@ public class JsonValue {
 		else if (jsonArray != null)
 			return jsonArray.toString();
 		if (stringVal != null)
-			return "\"" + escape(stringVal) + "\"";
+			return "\"" + JsonValue.escape(stringVal) + "\"";
 		else
 			return "null";
 	}
@@ -386,4 +387,5 @@ public class JsonValue {
 			sb.append(toString());
 		return sb.toString();
 	}
+
 }
