@@ -25,14 +25,20 @@ public class TestSpecialChars extends TestCase {
 						"unicode in \\u#### form"));
 	}
 
-	public void testParseValueDoubleQuotesToStringAndBack() throws Exception {
-		String input;
-		JsonObject json;
-
+	public void testToStringThenParse() throws Exception {
 		for (TestValue value : tests) {
-			input = "{\"a\":\"" + value.json + "\"}";
+			JsonObject json = new JsonObject();
+			json.put("a", value.java);
+			json = JsonObject.parse(json.toString());
+			assertEquals(value.message, value.java, json.getString("a"));
+		}
+	}
+
+	public void testParseValueDoubleQuotesToStringAndBack() throws Exception {
+		for (TestValue value : tests) {
+			String input = "{\"a\":\"" + value.json + "\"}";
 			System.out.println("before:" + input);
-			json = JsonObject.parse(input);
+			JsonObject json = JsonObject.parse(input);
 			System.out.println("after: " + json.toString());
 			json = JsonObject.parse(json.toString());
 			assertEquals(value.message, value.java, json.getString("a"));
