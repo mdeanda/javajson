@@ -2,7 +2,6 @@ options {
    MULTI=true;
    NODE_EXTENDS="net.sourceforge.javajson.parser.MyNode";
    STATIC = false;
-   JAVA_UNICODE_ESCAPE = true;
 }
 
 PARSER_BEGIN(JsonParser)
@@ -41,6 +40,8 @@ TOKEN : /* LITERALS */
 |
   < #DECIMAL_LITERAL: (["-"])? ["1"-"9"] (["0"-"9"])* >
 |
+  < #HEX_DIGIT: ["0"-"9","a"-"f","A"-"F"] >
+|
   < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
 |
   < #OCTAL_LITERAL: "0" (["0"-"7"])* >
@@ -65,19 +66,6 @@ TOKEN : /* LITERALS */
      "null"
   >
 |
-  < CHARACTER_LITERAL:
-      "'"
-      (   (~["'","\\","\n","\r"])
-        | ("\\"
-            ( ["n","t","b","r","f","\\","'","\""]
-            | ["0"-"7"] ( ["0"-"7"] )?
-            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
-            )
-          )
-      )
-      "'"
-  >
-|
   < KEY_LITERAL: (["a"-"z","A"-"Z"])(["a"-"z","A"-"Z","0"-"9","_"])* >
 |
   < STRING_LITERAL:
@@ -85,7 +73,7 @@ TOKEN : /* LITERALS */
       (   (~["\"","\\","\n","\r"])
         | ("\\"
             (
-              ["n","t","b","r","f","\\","\'","\"","/"]
+              ["n","t","b","r","f","\\","\'","\"","/","u"]
             )
           )
       )*
@@ -97,7 +85,7 @@ TOKEN : /* LITERALS */
       (   (~["\'","\\","\n","\r"])
         | ("\\"
             (
-              ["n","t","b","r","f","\\","\'","\"","/"]
+              ["n","t","b","r","f","\\","\'","\"","/","u"]
             )
           )
       )*
