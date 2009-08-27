@@ -49,9 +49,15 @@ public class ASTstring extends SimpleNode {
 			} else {
 				if (escapeMap.containsKey(c))
 					ret.append(escapeMap.get(c));
-				else {
+				else if (c == 'u' && s.length() >= i + 4) {
+					// handle unicode numbers... read 4 more chars (number)
+					String ucode = s.substring(i + 1, i + 5);
+					int ucoden = Integer.parseInt(ucode, 16);
+					char uc = (char) ucoden;
+					i += 4;
+					ret.append(uc);
+				} else {
 					// put escape back in, error, but parser missed it(?)
-					// unicode may come as numbers here...
 					ret.append("\\");
 					ret.append(c);
 				}
