@@ -185,7 +185,9 @@ public class JsonValue {
 	 * Returns the class of the value being used. For example, if setFloat or
 	 * setDouble were used, Double.class is returned. If setInt or setLong is
 	 * used, Long.class is returned.
+	 * @deprecated User getNativeType instead
 	 */
+	@SuppressWarnings("unchecked")
 	public Class getValueClass() {
 		if (doubleVal != null)
 			return Double.class;
@@ -197,6 +199,10 @@ public class JsonValue {
 			return JsonObject.class;
 		else
 			return null;
+	}
+	
+	public JsonNativeType getNativeType() {
+		return this.nativeType;
 	}
 
 	/**
