@@ -80,6 +80,16 @@ public class TestJsonValue extends TestCase {
 		assertTrue(v.isLong());
 		assertTrue(v.isString());
 		
+		v = new JsonValue(2532263343453345289l);
+		assertFalse(v.isBoolean());
+		assertTrue(v.isDouble());
+		assertTrue(v.isFloat());
+		assertFalse(v.isInt());
+		assertFalse(v.isJsonArray());
+		assertFalse(v.isJsonObject());
+		assertTrue(v.isLong());
+		assertTrue(v.isString());
+		
 	}
 
 	public void testEquals() throws Exception {
@@ -127,6 +137,7 @@ public class TestJsonValue extends TestCase {
 		assertEquals("unecoded tab", "\"tab\\tspace\"", v.toString());
 		
 		v = new JsonValue(15.3f);
+		System.out.println(Float.toString(15.3f));
 		assertEquals(Float.toString(15.3f), v.toString());
 		
 		v = new JsonValue(new JsonArray());

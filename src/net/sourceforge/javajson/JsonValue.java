@@ -17,6 +17,8 @@ public class JsonValue {
 		escapeMap.put('\'', "\\\'");
 	}
 
+	private JsonNativeType nativeType;
+
 	private Boolean boolVal;
 
 	private Double doubleVal;
@@ -100,7 +102,7 @@ public class JsonValue {
 	static public String charToEscaped(char c) {
 		byte hiByte = (byte) (c >>> 8);
 		byte loByte = (byte) (c & 0xff);
-		if (hiByte == 0) //if hi byte is 0, then assume not unicode
+		if (hiByte == 0) // if hi byte is 0, then assume not unicode
 			return String.valueOf(c);
 		else
 			return "\\u" + byteToHex(hiByte) + byteToHex(loByte);
@@ -118,8 +120,6 @@ public class JsonValue {
 	public double getDouble() {
 		if (doubleVal != null)
 			return doubleVal.doubleValue();
-		else if (floatVal != null)
-			return floatVal.doubleValue();
 		else if (longVal != null)
 			return longVal.doubleValue();
 		else if (stringVal != null)
@@ -162,8 +162,6 @@ public class JsonValue {
 	public long getLong() {
 		if (doubleVal != null)
 			return doubleVal.longValue();
-		else if (floatVal != null)
-			return floatVal.longValue();
 		else if (longVal != null)
 			return longVal.longValue();
 		// else if (stringVal != null)
@@ -175,8 +173,6 @@ public class JsonValue {
 	public String getString() {
 		if (doubleVal != null)
 			return doubleVal.toString();
-		else if (floatVal != null)
-			return floatVal.toString();
 		else if (longVal != null)
 			return longVal.toString();
 		else if (stringVal != null)
@@ -193,8 +189,6 @@ public class JsonValue {
 	public Class getValueClass() {
 		if (doubleVal != null)
 			return Double.class;
-		else if (floatVal != null)
-			return Float.class;
 		else if (longVal != null)
 			return Long.class;
 		else if (jsonArray != null)
@@ -211,7 +205,7 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isBoolean() {
-		return (boolVal != null);
+		return nativeType == JsonNativeType.BOOLEAN;
 	}
 
 	/**
@@ -221,34 +215,39 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isDouble() {
-		return (doubleVal != null || floatVal != null || longVal != null);
+		return nativeType == JsonNativeType.LONG
+				|| nativeType == JsonNativeType.INTEGER
+				|| nativeType == JsonNativeType.FLOAT
+				|| nativeType == JsonNativeType.DOUBLE;
 	}
 
 	/**
 	 * Checks if the value can be safely converted to this type without losing.
 	 * It returns the same as isDouble as long as the value is not out of range
+	 * TODO: check out of range errors
 	 * 
 	 * @return
 	 */
 	public boolean isFloat() {
-		if (floatVal != null || doubleVal != null || longVal != null)
-			return true;
-
-		return false;
+		return isDouble();
 	}
 
 	/**
 	 * Checks if the value can be safely converted to this type without losing
 	 * data. It returns the same as isLong as long as the value is not out of
-	 * range
+	 * range TODO: check out of range errors
 	 * 
 	 * @return
 	 */
 	public boolean isInt() {
-		if (isLong()) {
-			return getLong() == getInt();
-		} else
-			return false;
+		boolean ret = isLong();
+		if (ret) {
+			// check if in range
+			long l = getLong();
+			if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE)
+				ret = false;
+		}
+		return ret;
 	}
 
 	public boolean isJsonArray() {
@@ -266,28 +265,12 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isLong() {
-		// TODO: clean this one up, use getXXX to verify instead
-		if (longVal == null) {
-			if (doubleVal != null) {
-				longVal = new Long(doubleVal.longValue());
-				if (longVal.doubleValue() != doubleVal.doubleValue()) {
-					longVal = null;
-				}
-			} else if (floatVal != null) {
-				longVal = new Long(floatVal.longValue());
-				if (longVal.floatValue() != floatVal.floatValue()) {
-					longVal = null;
-				}
-			}
-			// TODO: consider converting strings
-		}
-
-		return (longVal != null);
+		return nativeType == JsonNativeType.LONG
+				|| nativeType == JsonNativeType.INTEGER;
 	}
 
 	public boolean isNull() {
-		return (boolVal == null && doubleVal == null && floatVal == null
-				&& jsonArray == null && jsonObject == null && longVal == null && stringVal == null);
+		return nativeType == JsonNativeType.NULL;
 	}
 
 	/**
@@ -297,63 +280,71 @@ public class JsonValue {
 	 * @return
 	 */
 	public boolean isSimilar(JsonValue obj) {
-
-		if (jsonObject != null && obj.jsonObject != null)
-			return jsonObject.isSimilar(obj.jsonObject);
-		if (jsonArray != null && obj.jsonArray != null)
-			return jsonArray.isSimilar(obj.jsonArray);
-		else if (doubleVal != null || floatVal != null || longVal != null)
-			return (obj.doubleVal != null || obj.floatVal != null || obj.longVal != null);
-		else if (stringVal != null && obj.stringVal != null)
-			return true;
-		else
+		if (obj.nativeType != nativeType)
 			return false;
+		if (nativeType == JsonNativeType.JSON_OBJECT)
+			return jsonObject.isSimilar(obj.jsonObject);
+		else if (nativeType == JsonNativeType.JSON_ARRAY)
+			return jsonArray.isSimilar(obj.jsonArray);
+		else
+			return true;
 	}
 
 	/**
 	 * Returns true if the value is a number, boolean or string
 	 */
 	public boolean isString() {
-		return (boolVal != null || doubleVal != null || floatVal != null
-				|| longVal != null || stringVal != null);
+		return !isNull() && !isJsonArray() && !isJsonObject();
 	}
 
 	public void setBoolean(boolean b) {
 		setNull();
+		nativeType = JsonNativeType.BOOLEAN;
 		boolVal = b ? Boolean.TRUE : Boolean.FALSE;
 	}
 
 	public void setDouble(double d) {
 		setNull();
+		nativeType = JsonNativeType.DOUBLE;
 		doubleVal = new Double(d);
 	}
 
 	public void setFloat(float f) {
 		setNull();
 		floatVal = new Float(f);
+		nativeType = JsonNativeType.FLOAT;
 	}
 
 	public void setInt(int i) {
 		setLong(i);
+		nativeType = JsonNativeType.INTEGER;
 	}
 
 	public void setJsonArray(JsonArray array) {
 		setNull();
-		jsonArray = array;
+		if (array != null) {
+			nativeType = JsonNativeType.JSON_ARRAY;
+			jsonArray = array;
+		}
 	}
 
 	public void setJsonObject(JsonObject object) {
 		setNull();
-		jsonObject = object;
+		if (object != null) {
+			nativeType = JsonNativeType.JSON_OBJECT;
+			jsonObject = object;
+		}
 	}
 
 	public void setLong(long l) {
 		setNull();
+		nativeType = JsonNativeType.LONG;
 		longVal = new Long(l);
 	}
 
 	/** Just sets the value to null */
 	protected void setNull() {
+		nativeType = JsonNativeType.NULL;
 		boolVal = null;
 		doubleVal = null;
 		floatVal = null;
@@ -365,7 +356,6 @@ public class JsonValue {
 
 	public void setString(String s) {
 		setNull();
-		stringVal = s;
 
 		if (s != null) {
 			// check if its a long or double
@@ -373,6 +363,8 @@ public class JsonValue {
 				setLong(Long.parseLong(s));
 			else if (Pattern.matches("-?\\d*\\.\\d*", s))
 				setDouble(Double.parseDouble(s));
+			stringVal = s;
+			nativeType = JsonNativeType.STRING;
 		}
 	}
 
@@ -398,19 +390,20 @@ public class JsonValue {
 
 	@Override
 	public String toString() {
-		if (boolVal != null)
+		if (nativeType == JsonNativeType.BOOLEAN)
 			return boolVal ? "true" : "false";
-		else if (longVal != null)
+		else if (nativeType == JsonNativeType.LONG
+				|| nativeType == JsonNativeType.INTEGER)
 			return longVal.toString();
-		else if (doubleVal != null)
+		else if (nativeType == JsonNativeType.DOUBLE)
 			return doubleVal.toString();
-		else if (floatVal != null)
+		else if (nativeType == JsonNativeType.FLOAT)
 			return floatVal.toString();
-		else if (jsonObject != null)
+		else if (nativeType == JsonNativeType.JSON_OBJECT)
 			return jsonObject.toString();
-		else if (jsonArray != null)
+		else if (nativeType == JsonNativeType.JSON_ARRAY)
 			return jsonArray.toString();
-		if (stringVal != null)
+		if (nativeType == JsonNativeType.STRING)
 			return "\"" + JsonValue.escape(stringVal) + "\"";
 		else
 			return "null";
