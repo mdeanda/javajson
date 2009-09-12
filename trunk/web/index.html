@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>JavaJson</title>
+<style>
+code {
+	display: block;
+	background-color: beige;
+	padding: 1em;
+	max-width: 50em;
+}
+</style>
+</head>
+<body>
+	<h3>JavaJson</h3>
+
+	<div>
+JavaJson is an alternate implementation of JavaScript Object Notation (json) to that at
+<a href="http://json.org">json.org</a>. The library uses a JavaCC based parser and is
+fairly small and is simple to use.
+	</div>
+
+	<div>
+		<h4>Examples</h4>
+		<div>
+			<p>To parse a document from a string to a JsonObject:</p>
+			<code>JsonObject json = JsonObject.parse("{a:3, b:'hello world'}");</code>
+
+			<p>To generate a json string from a JsonObject:</p>
+			<code>System.out.println(json.toString);</code>
+
+			<p>To generate a json string from a JsonObject - pretty print with 2 spaces for tabs:</p>
+			<code>System.out.println(json.toString(2));</code>
+
+			<p>To read ints/strings, etc:</p>
+			<code>
+			String b = json.getString("b");<br/>
+			int a = json.getInt("a");
+			</code>
+
+			<p>JsonObjects rarely need exception handling, instead of throwing an exception if
+			fields aren't set, nulls or 0's are returned, but if you care to check, you can:</p>
+			<code>
+			String b = "...";<br/>
+			if (json.isString("b")) b = json.getString("b");<br/>
+			</code>
+		</div>
+	</div>
+
+	<div>
+		<h4>Links</h4>
+		<a href="http://sourceforge.net/projects/javajson" title="JavaJson project page">JavaJson at SourceForge.net</a><br/>
+		<a href="doc/api" title="Javadoc">View the Javadocs</a><br/>
+		<a href="http://sourceforge.net/projects/javajson/files/">Download</a>
+	</div>
+
+</body>
+</html>
