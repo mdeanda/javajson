@@ -87,7 +87,8 @@
 	</target>
 
 	<target name="javadoc" depends="build" description="Builds javadocs">
-		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}/api" author="true" use="true">
+		<javadoc sourcepath="${src.dir}" destdir="${doc.dir}/api"
+				author="true" use="true" linksource="true">
 			<classpath refid="classpath" />
 			<packageset dir="${src.dir}">
 				<include name="net/sourceforge/javajson/**" />
