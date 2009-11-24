@@ -14,7 +14,7 @@ public class JsonValue {
 		escapeMap.put('\r', "\\r");
 		escapeMap.put('\t', "\\t");
 		escapeMap.put('\"', "\\\"");
-		escapeMap.put('\'', "\\\'");
+	//	escapeMap.put('\'', "\\\'");
 	}
 
 	private JsonNativeType nativeType;
