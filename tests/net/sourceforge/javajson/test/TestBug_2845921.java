@@ -3,6 +3,16 @@ package net.sourceforge.javajson.test;
 import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonObject;
 
+/**
+ * for example: json.put("foo", "007") is a string and toString should output
+ * "007" instead of 7 (without quotes even)
+ * 
+ * same for parsing: {foo: "007"} should act the same but {foo: 007} should be
+ * treated as a number and trailing zeros can go away
+ * 
+ * @author mdeanda
+ * 
+ */
 public class TestBug_2845921 extends TestCase {
 
 	public void testParseAsString() throws Exception {
