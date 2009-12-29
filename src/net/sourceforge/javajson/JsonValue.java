@@ -14,7 +14,7 @@ public class JsonValue {
 		escapeMap.put('\r', "\\r");
 		escapeMap.put('\t', "\\t");
 		escapeMap.put('\"', "\\\"");
-	//	escapeMap.put('\'', "\\\'");
+		// escapeMap.put('\'', "\\\'");
 	}
 
 	private JsonNativeType nativeType;
@@ -185,6 +185,7 @@ public class JsonValue {
 	 * Returns the class of the value being used. For example, if setFloat or
 	 * setDouble were used, Double.class is returned. If setInt or setLong is
 	 * used, Long.class is returned.
+	 * 
 	 * @deprecated User getNativeType instead
 	 */
 	@SuppressWarnings("unchecked")
@@ -200,7 +201,7 @@ public class JsonValue {
 		else
 			return null;
 	}
-	
+
 	public JsonNativeType getNativeType() {
 		return this.nativeType;
 	}
@@ -367,7 +368,7 @@ public class JsonValue {
 			// check if its a long or double
 			if (Pattern.matches("-?\\d+", s))
 				setLong(Long.parseLong(s));
-			else if (Pattern.matches("-?\\d*\\.\\d*", s))
+			else if (Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))
 				setDouble(Double.parseDouble(s));
 			stringVal = s;
 			nativeType = JsonNativeType.STRING;
