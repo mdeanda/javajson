@@ -19,6 +19,7 @@ public class Reflection {
 
 	private static Pattern getterPattern = Pattern.compile("^(is|get)[A-Z].*");
 
+	@SuppressWarnings("unchecked")
 	public static List<Method> getSetterFieldMethods(Class cls) {
 		List<Method> methods = new LinkedList<Method>();
 
@@ -42,6 +43,7 @@ public class Reflection {
 	 * @param cls
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	static List<Method> getGetterFieldMethods(Class cls) {
 		List<Method> methods = new LinkedList<Method>();
 

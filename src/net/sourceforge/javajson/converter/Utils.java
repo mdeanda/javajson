@@ -99,7 +99,8 @@ public class Utils {
 			// ret[0]);
 		} else if (Collection.class.isAssignableFrom(param)) {
 			Type genericType = method.getGenericParameterTypes()[0];
-			Matcher m = Pattern.compile(".*<(.+)>.*").matcher(genericType.toString());
+			Matcher m = Pattern.compile(".*<(.+)>.*").matcher(
+					genericType.toString());
 			String typeName = null;
 			if (m.matches())
 				typeName = m.group(1);
@@ -112,24 +113,35 @@ public class Utils {
 			ret[0] = c;
 			if (json.isJsonArray(fieldName)) {
 				for (JsonValue value : json.getJsonArray(fieldName)) {
-					
-					System.out.println("gt/int:" + genericType.toString() + " " + Integer.class.getName() + "\n");
-					
+
+					System.out.println("gt/int:" + genericType.toString() + " "
+							+ Integer.class.getName() + "\n");
+
 					if (value.isJsonObject()) {
 						Object o = Converter.getInstance().fromJson(
 								value.getJsonObject());
 						c.add(o);
 					} else if (value.isJsonArray()) {
-						//TODO: do something about nested arrays
-					} else if (value.isBoolean() && (typeName == null || Boolean.class.getName().equals(typeName))) {
+						// TODO: do something about nested arrays
+					} else if (value.isBoolean()
+							&& (typeName == null || Boolean.class.getName()
+									.equals(typeName))) {
 						c.add(value.getBoolean());
-					} else if (value.isFloat() && (typeName == null || Float.class.getName().equals(typeName))) {
+					} else if (value.isFloat()
+							&& (typeName == null || Float.class.getName()
+									.equals(typeName))) {
 						c.add(value.getFloat());
-					} else if (value.isDouble() && (typeName == null || Double.class.getName().equals(typeName))) {
+					} else if (value.isDouble()
+							&& (typeName == null || Double.class.getName()
+									.equals(typeName))) {
 						c.add(value.getDouble());
-					} else if (value.isInt() && (typeName == null || Integer.class.getName().equals(typeName))) {
+					} else if (value.isInt()
+							&& (typeName == null || Integer.class.getName()
+									.equals(typeName))) {
 						c.add(value.getInt());
-					} else if (value.isLong() && (typeName == null || Long.class.getName().equals(typeName))) {
+					} else if (value.isLong()
+							&& (typeName == null || Long.class.getName()
+									.equals(typeName))) {
 						c.add(value.getLong());
 					} else if (value.isString()) {
 						c.add(value.getString());
@@ -197,6 +209,7 @@ public class Utils {
 	 * @param o
 	 * @return True if the object as of a simple type
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean objectIntoJsonObject(JsonObject obj, String key,
 			Object o) {
 		if (o instanceof Long) {
@@ -232,6 +245,7 @@ public class Utils {
 	 * @param o
 	 * @return True if the object as of a simple type
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean objectIntoJsonArray(JsonArray arr, Object o) {
 		if (o instanceof Long) {
 			arr.add(((Long) o).longValue());
