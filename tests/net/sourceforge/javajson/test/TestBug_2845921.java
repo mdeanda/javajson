@@ -3,7 +3,7 @@ package net.sourceforge.javajson.test;
 import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonObject;
 
-public class TestNumbersAsStringOrNumber extends TestCase {
+public class TestBug_2845921 extends TestCase {
 
 	public void testParseAsString() throws Exception {
 		JsonObject json = JsonObject.parse("{a:'32'}");
