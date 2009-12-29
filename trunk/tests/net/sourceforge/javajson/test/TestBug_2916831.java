@@ -3,6 +3,21 @@ package net.sourceforge.javajson.test;
 import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonObject;
 
+/**
+ * 
+ number format exception:
+ * 
+ * at sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1224)
+ * at java.lang.Double.parseDouble(Double.java:510) at
+ * net.sourceforge.javajson.JsonValue.setString(JsonValue.java:371) at
+ * net.sourceforge.javajson.JsonValue.<init>(JsonValue.java:69) at
+ * net.sourceforge.javajson.JsonObject.put(JsonObject.java:510) at
+ * net.sourceforge.javajson.JsonObject.put(JsonObject.java:467) at
+ * net.sourceforge.javajson.parser.ASTobject.push(ASTobject.java:41)
+ * 
+ * @author mdeanda
+ * 
+ */
 public class TestBug_2916831 extends TestCase {
 
 	/**

@@ -3,6 +3,12 @@ package net.sourceforge.javajson.test;
 import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonObject;
 
+/**
+ * { a: 'a' } doesn't parse but { a: "a" } does.
+ * 
+ * @author mdeanda
+ * 
+ */
 public class TestBug_2733371 extends TestCase {
 
 	public void testSingleQuoteSingleLetterValue() throws Exception {
