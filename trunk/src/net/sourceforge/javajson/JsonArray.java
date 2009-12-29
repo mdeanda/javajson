@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -75,6 +76,11 @@ public class JsonArray implements Iterable<JsonValue> {
 		return this;
 	}
 
+	public JsonArray add(Date value) {
+		list.add(new JsonValue(value));
+		return this;
+	}
+
 	public JsonArray add(JsonArray value) {
 		list.add(new JsonValue(value));
 		return this;
@@ -109,6 +115,8 @@ public class JsonArray implements Iterable<JsonValue> {
 			list.add((JsonValue) value);
 		else if (value instanceof String)
 			add((String) value);
+		else if (value instanceof Date)
+			add((Date) value);
 		else if (value == null)
 			add((String) null);
 		else
@@ -234,7 +242,7 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
-	
+
 	/**
 	 * Checks if the item at an index is a double. See
 	 * {@link JsonValue#isLong()} for more information
@@ -250,10 +258,10 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
-	
+
 	/**
-	 * Checks if the item at an index is a float. See
-	 * {@link JsonValue#isLong()} for more information
+	 * Checks if the item at an index is a float. See {@link JsonValue#isLong()}
+	 * for more information
 	 * 
 	 * @param index
 	 *            The index of the array to check
@@ -266,10 +274,10 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
-	
+
 	/**
-	 * Checks if the item at an index is a int. See
-	 * {@link JsonValue#isLong()} for more information
+	 * Checks if the item at an index is a int. See {@link JsonValue#isLong()}
+	 * for more information
 	 * 
 	 * @param index
 	 *            The index of the array to check
@@ -314,10 +322,10 @@ public class JsonArray implements Iterable<JsonValue> {
 		else
 			throw new IndexOutOfBoundsException();
 	}
-	
+
 	/**
-	 * Checks if the item at an index is a long. See
-	 * {@link JsonValue#isLong()} for more information
+	 * Checks if the item at an index is a long. See {@link JsonValue#isLong()}
+	 * for more information
 	 * 
 	 * @param index
 	 *            The index of the array to check
@@ -417,7 +425,7 @@ public class JsonArray implements Iterable<JsonValue> {
 		else {
 			StringBuffer sb = new StringBuffer();
 			boolean hadSome = false;
-			sb.append("[\n");		
+			sb.append("[\n");
 			for (JsonValue val : list) {
 				if (hadSome)
 					sb.append(",\n");
@@ -428,7 +436,7 @@ public class JsonArray implements Iterable<JsonValue> {
 			sb.append("\n");
 			sb.append(getSpaces(margin));
 			sb.append("]");
-			
+
 			return sb.toString();
 		}
 	}
