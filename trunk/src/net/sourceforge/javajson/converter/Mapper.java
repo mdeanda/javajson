@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 
@@ -16,8 +14,6 @@ import net.sourceforge.javajson.JsonObject;
  * objAtField.fieldName and maybe rename the field too
  */
 public class Mapper {
-	protected final Logger log = Logger.getLogger(getClass());
-
 	/**
 	 * Default mapper that can be used to map object all the way down the tree.
 	 */
@@ -43,12 +39,14 @@ public class Mapper {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 */
+	@SuppressWarnings("unchecked")
 	protected JsonObject toJson(Object obj, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		return toJson(obj, cls, false);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected JsonObject toJson(Object obj, Class cls, boolean flat)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
@@ -98,6 +96,7 @@ public class Mapper {
 		else
 			return toJson(obj, null);
 	}
+
 	/**
 	 * Maps a collection to jsonarray based on a class, this method only works
 	 * when using the default mapper and is meant to be called via convenience
@@ -115,11 +114,13 @@ public class Mapper {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	protected JsonArray toJsonArray(Collection col, Class cls)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		return toJsonArray(col, cls, false);
 	}
+
 	/**
 	 * Maps a collection to jsonarray based on a class, this method only works
 	 * when using the default mapper and is meant to be called via convenience
@@ -137,6 +138,7 @@ public class Mapper {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	protected JsonArray toJsonArray(Collection col, Class cls, boolean flat)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
@@ -157,12 +159,14 @@ public class Mapper {
 		return arr;
 	}
 
+	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection col)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		return toJsonArray(col, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection col, boolean flat)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {

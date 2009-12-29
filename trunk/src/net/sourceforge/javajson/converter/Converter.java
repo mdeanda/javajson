@@ -3,8 +3,6 @@ package net.sourceforge.javajson.converter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
 
@@ -15,8 +13,6 @@ import net.sourceforge.javajson.JsonObject;
  * @author miguel de anda
  */
 public class Converter {
-	protected final Logger log = Logger.getLogger(getClass());
-
 	public static final Converter instance = new Converter();
 
 	private Converter() {
@@ -26,6 +22,7 @@ public class Converter {
 		return instance;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object fromJson(JsonObject json) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
@@ -99,6 +96,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public JsonObject toJson(Object o, Class cls) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
@@ -121,6 +119,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection c) throws SecurityException,
 			IllegalArgumentException, NoSuchMethodException,
 			IllegalAccessException, InvocationTargetException {
@@ -143,9 +142,11 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public JsonArray toJsonArray(Collection c, boolean flat) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+	@SuppressWarnings("unchecked")
+	public JsonArray toJsonArray(Collection c, boolean flat)
+			throws SecurityException, IllegalArgumentException,
+			NoSuchMethodException, IllegalAccessException,
+			InvocationTargetException {
 		return Mapper.DefaultMapper.toJsonArray(c, flat);
 	}
 
@@ -165,6 +166,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection c, Class cls)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
@@ -188,6 +190,7 @@ public class Converter {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection c, Class cls, boolean flat)
 			throws SecurityException, IllegalArgumentException,
 			NoSuchMethodException, IllegalAccessException,
