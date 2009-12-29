@@ -3,6 +3,7 @@ package net.sourceforge.javajson;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sourceforge.javajson.parser.ASTparse;
-
 import net.sourceforge.javajson.parser.JsonParser;
 import net.sourceforge.javajson.parser.ParseException;
 import net.sourceforge.javajson.parser.TokenMgrError;
@@ -359,16 +359,17 @@ public class JsonObject implements Iterable<String> {
 		else
 			return false;
 	}
-	
+
 	/**
-	 * Checks if the field contains a null value (different than hasKey because it can have the key but be null)
+	 * Checks if the field contains a null value (different than hasKey because
+	 * it can have the key but be null)
 	 */
 	public boolean isNull(String key) {
 		if (map.containsKey(key)) {
 			JsonValue jv = map.get(key);
 			return jv.isNull();
 		}
-		
+
 		return false;
 	}
 
@@ -437,6 +438,8 @@ public class JsonObject implements Iterable<String> {
 			put(key, (JsonArray) value);
 		else if (value instanceof String)
 			put(key, (String) value);
+		else if (value instanceof Date)
+			put(key, (Date) value);
 		else if (value == null)
 			put(key, (String) null);
 		else
@@ -459,6 +462,11 @@ public class JsonObject implements Iterable<String> {
 	}
 
 	public JsonObject put(String key, int value) {
+		map.put(key, new JsonValue(value));
+		return this;
+	}
+
+	public JsonObject put(String key, Date value) {
 		map.put(key, new JsonValue(value));
 		return this;
 	}

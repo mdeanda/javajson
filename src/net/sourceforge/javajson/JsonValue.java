@@ -1,10 +1,15 @@
 package net.sourceforge.javajson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public class JsonValue {
+	private static DateFormat dateFormat = new SimpleDateFormat(
+			"yyyy:MM.dd'T'HH:mm:ssZ");
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
 	static {
 		escapeMap.put('\\', "\\\\");
@@ -84,6 +89,8 @@ public class JsonValue {
 			setBoolean(((Boolean) val).booleanValue());
 		else if (val instanceof String)
 			setString((String) val);
+		else if (val instanceof Date)
+			setDate((Date) val);
 		else if (val instanceof JsonObject)
 			setJsonObject((JsonObject) val);
 		else if (val instanceof JsonArray)
@@ -308,6 +315,10 @@ public class JsonValue {
 		setNull();
 		nativeType = JsonNativeType.BOOLEAN;
 		boolVal = b ? Boolean.TRUE : Boolean.FALSE;
+	}
+
+	public void setDate(Date d) {
+		setString(dateFormat.format(d));
 	}
 
 	public void setDouble(double d) {
