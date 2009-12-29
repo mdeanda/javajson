@@ -9,7 +9,8 @@ public class ComplexObject {
 	private List<Integer> intList = new LinkedList<Integer>();
 
 	private List<SimpleObject> simpleList = new LinkedList<SimpleObject>();
-	
+
+	@SuppressWarnings("unchecked")
 	private List objectList = new LinkedList();
 
 	public ComplexObject() {
@@ -33,7 +34,6 @@ public class ComplexObject {
 		return simpleObject;
 	}
 
-	
 	public void setIntList(List<Integer> intList) {
 		this.intList = intList;
 	}
@@ -45,7 +45,7 @@ public class ComplexObject {
 	public void setSimpleObject(SimpleObject simpleObject) {
 		this.simpleObject = simpleObject;
 	}
-	
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("simpleObject: " + simpleObject);
@@ -70,14 +70,16 @@ public class ComplexObject {
 			sb.append(" ");
 		}
 		sb.append("]");
-		
+
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List getObjectList() {
 		return objectList;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setObjectList(List objectList) {
 		this.objectList = objectList;
 	}
