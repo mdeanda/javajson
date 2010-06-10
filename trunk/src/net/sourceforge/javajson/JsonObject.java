@@ -214,6 +214,34 @@ public class JsonObject implements Iterable<String> {
 		return this;
 	}
 
+	/**
+	 * Get a JsonValue object via one ore more keys. This can be used as a
+	 * shortcut to objects deep in the json object similar to xpath. For
+	 * example: <code>
+	 * get("a", "b");
+	 * </code> is the same as: <code>
+	 * get("a").get("b");
+	 * </code>
+	 */
+	public JsonValue get(String... key) {
+		return get(0, key);
+	}
+
+	private JsonValue get(int offset, String... key) {
+		JsonValue ret = null;
+		if (offset < 0 || key == null || key.length == 0) {
+			ret = null;
+		} else if (offset == key.length - 1) {
+			ret = map.get(key[offset]);
+		} else {
+			JsonValue tmp = map.get(key[offset]);
+			if (tmp.isJsonObject()) {
+				ret = tmp.getJsonObject().get(offset + 1, key);
+			}
+		}
+		return ret;
+	}
+
 	public boolean getBoolean(String key) {
 		if (map.containsKey(key))
 			return map.get(key).getBoolean();
@@ -264,6 +292,10 @@ public class JsonObject implements Iterable<String> {
 
 	public boolean hasKey(String key) {
 		return map.containsKey(key);
+	}
+
+	public boolean hasKey(String... key) {
+		return get(key) != null;
 	}
 
 	/**
