@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class JsonValue {
 	private static DateFormat dateFormat = new SimpleDateFormat(
-			"yyyy:MM.dd'T'HH:mm:ssZ");
+			"yyyy:MM:dd'T'HH:mm:ssZ");
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
 	static {
 		escapeMap.put('\\', "\\\\");
