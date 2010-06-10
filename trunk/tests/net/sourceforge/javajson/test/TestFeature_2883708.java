@@ -11,7 +11,7 @@ import net.sourceforge.javajson.JsonObject;
 
 public class TestFeature_2883708 extends TestCase {
 	public void testSetDateObject() throws Exception {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM.dd'T'HH:mm:ssZ");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd'T'HH:mm:ssZ");
 
 		JsonObject json = new JsonObject();
 		Date date = new GregorianCalendar(1980, 5, 27, 7, 18, 30).getTime();
@@ -23,7 +23,7 @@ public class TestFeature_2883708 extends TestCase {
 	}
 
 	public void testSetDateArray() throws Exception {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM.dd'T'HH:mm:ssZ");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd'T'HH:mm:ssZ");
 
 		JsonArray json = new JsonArray();
 		Date date = new GregorianCalendar(1980, 5, 27, 7, 18, 30).getTime();
