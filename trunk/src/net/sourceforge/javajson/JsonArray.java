@@ -383,6 +383,10 @@ public class JsonArray implements Iterable<JsonValue> {
 		return list.iterator();
 	}
 
+	public JsonValue remove(int index) {
+		return list.remove(index);
+	}
+
 	public int size() {
 		return list.size();
 	}

@@ -522,6 +522,10 @@ public class JsonObject implements Iterable<String> {
 		map.put(key, new JsonValue(value));
 		return this;
 	}
+	
+	public JsonValue remove(String key) {
+		return map.remove(key);
+	}
 
 	public int size() {
 		return map.size();
