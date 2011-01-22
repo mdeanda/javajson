@@ -1,8 +1,11 @@
 package net.sourceforge.javajson.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.TestCase;
 import net.sourceforge.javajson.JsonArray;
 import net.sourceforge.javajson.JsonObject;
-import junit.framework.TestCase;
 
 public class TestJsonObject extends TestCase {
 
@@ -21,7 +24,7 @@ public class TestJsonObject extends TestCase {
 
 		assertTrue(json.isJsonArray("key1"));
 		assertFalse(json.isJsonObject("key1"));
-		//assertFalse(json.isNumber("key1"));
+		// assertFalse(json.isNumber("key1"));
 		assertFalse(json.isString("key1"));
 
 		assertNotNull(json.getJsonArray("key1"));
@@ -39,7 +42,7 @@ public class TestJsonObject extends TestCase {
 		assertTrue(json.hasKey("pi"));
 		assertTrue(json.hasKey("six"));
 
-		//assertTrue(json.isNumber("pi"));
+		// assertTrue(json.isNumber("pi"));
 		assertFalse(json.isJsonArray("pi"));
 		assertFalse(json.isJsonObject("pi"));
 		assertTrue(json.isString("pi"));
@@ -53,7 +56,7 @@ public class TestJsonObject extends TestCase {
 		assertTrue(3.14151f > json.getFloat("pi"));
 		assertEquals("3.1415", json.getString("pi"));
 
-		//assertTrue(json.isNumber("six"));
+		// assertTrue(json.isNumber("six"));
 		assertFalse(json.isJsonArray("six"));
 		assertFalse(json.isJsonObject("six"));
 		assertTrue(json.isDouble("six"));
@@ -74,7 +77,7 @@ public class TestJsonObject extends TestCase {
 
 		assertFalse(json.isJsonArray("key1"));
 		assertTrue(json.isJsonObject("key1"));
-		//assertFalse(json.isNumber("key1"));
+		// assertFalse(json.isNumber("key1"));
 		assertFalse(json.isString("key1"));
 
 		assertNotNull(json.getJsonObject("key1"));
@@ -187,7 +190,7 @@ public class TestJsonObject extends TestCase {
 		// Test for 2 different strings since output can be a little bit
 		// different because internally it uses a set
 		json2.put("key5", "value5");
-		//System.out.println(json.toString(2));
+		// System.out.println(json.toString(2));
 		String s = json.toString(2);
 		String s1 = "{\n  \"key3\":{\n    \"key5\":\"value5\",\n    \"key4\":\"value4\"\n  }\n}";
 		String s2 = "{\n  \"key3\":{\n    \"key4\":\"value4\",\n    \"key5\":\"value5\"\n  }\n}";
@@ -195,5 +198,38 @@ public class TestJsonObject extends TestCase {
 			assertEquals(s1, s);
 		else
 			assertEquals(s2, s);
+	}
+
+	public void testIterator() {
+		JsonObject json = new JsonObject();
+		List<String> items = new ArrayList<String>();
+		items.add("a");
+		items.add("b");
+		items.add("c");
+		for (String i : items)
+			json.put(i, i);
+		assertEquals(items.size(), json.size());
+		for (String key : json) {
+			items.remove(key);
+		}
+		assertEquals(0, items.size());
+	}
+
+	public void testRemove() throws Exception {
+		JsonObject j = new JsonObject();
+		j.put("a", "a");
+		assertEquals("{\"a\":\"a\"}", j.toString());
+		assertEquals("a", j.getString("a"));
+
+		j.remove("a");
+		assertNull(j.getString("a"));
+		assertEquals("{}", j.toString());
+	}
+
+	public void testEnum() throws Exception {
+		JsonObject json = new JsonObject();
+		json.put("a", TestEnum.VALUE_ONE);
+		assertEquals("VALUE_ONE", json.getString("a"));
+		assertEquals(TestEnum.VALUE_ONE.name(), json.getString("a"));
 	}
 }

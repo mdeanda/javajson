@@ -70,14 +70,14 @@ public class TestJsonArray extends TestCase {
 	}
 
 	public void testIsMethods() throws Exception {
-		array.add(true);				//0
-		array.add(3.5d);				//1
-		array.add(2.17f);				//2
-		array.add(6);					//3
-		array.add(new JsonArray());		//4
-		array.add(new JsonObject());	//5
-		array.add(15l);					//6
-		array.add("string");			//7
+		array.add(true); // 0
+		array.add(3.5d); // 1
+		array.add(2.17f); // 2
+		array.add(6); // 3
+		array.add(new JsonArray()); // 4
+		array.add(new JsonObject()); // 5
+		array.add(15l); // 6
+		array.add("string"); // 7
 
 		assertEquals(8, array.size());
 
@@ -154,4 +154,11 @@ public class TestJsonArray extends TestCase {
 		assertTrue(array.isString(7));
 	}
 
+	public void testRemove() {
+		JsonArray arr = new JsonArray();
+		arr.add(true);
+		assertEquals("[true]", arr.toString());
+		arr.remove(0);
+		assertEquals("[]", arr.toString());
+	}
 }

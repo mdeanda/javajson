@@ -474,6 +474,8 @@ public class JsonObject implements Iterable<String> {
 			put(key, (Date) value);
 		else if (value == null)
 			put(key, (String) null);
+		else if (value instanceof Enum)
+			put(key, ((Enum) value).name());
 		else
 			throw new ClassCastException("Unrecognized class");
 	}
@@ -522,7 +524,7 @@ public class JsonObject implements Iterable<String> {
 		map.put(key, new JsonValue(value));
 		return this;
 	}
-	
+
 	public JsonValue remove(String key) {
 		return map.remove(key);
 	}
