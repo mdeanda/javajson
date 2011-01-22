@@ -161,4 +161,11 @@ public class TestJsonArray extends TestCase {
 		arr.remove(0);
 		assertEquals("[]", arr.toString());
 	}
+
+	public void testEnum() throws Exception {
+		JsonArray json = new JsonArray();
+		json.add(TestEnum.VALUE_ONE);
+		assertEquals("VALUE_ONE", json.getString(0));
+		assertEquals(TestEnum.VALUE_ONE.name(), json.getString(0));
+	}
 }

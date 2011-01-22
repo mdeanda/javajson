@@ -119,6 +119,8 @@ public class JsonArray implements Iterable<JsonValue> {
 			add((Date) value);
 		else if (value == null)
 			add((String) null);
+		else if (value instanceof Enum)
+			add(((Enum) value).name());
 		else
 			throw new ClassCastException("Unrecognized class");
 		return this;
