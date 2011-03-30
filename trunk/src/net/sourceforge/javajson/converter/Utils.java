@@ -151,9 +151,12 @@ public class Utils {
 				// throw some kind of exception or something
 			}
 			// System.out.println("do something with a list");
+		} else if (param == boolean.class) {
+			ret[0] = json.getBoolean(fieldName);
 		} else {
 			System.out.println("** object:" + fieldName + ", "
 					+ param.getName());
+			System.out.println(param == boolean.class);
 			Object o = param.newInstance();
 			Utils.fromJson(o, json.getJsonObject(fieldName));
 			ret[0] = o;
