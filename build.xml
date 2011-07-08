@@ -68,6 +68,7 @@
 		<javac destdir="${build.dir}" debug="true"
 				deprecation="false"
 				optimize="true"
+				includeantruntime="false"
 				failonerror="true">
 			<compilerarg value="-Xlint:unchecked" />
 			<src path="${src.dir}" />

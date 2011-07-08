@@ -4,11 +4,11 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import net.sourceforge.javajson.parser.ASTparse;
 import net.sourceforge.javajson.parser.JsonParser;
@@ -57,7 +57,7 @@ public class JsonObject implements Iterable<String> {
 	}
 
 	public JsonObject() {
-		map = new HashMap<String, JsonValue>();
+		map = new TreeMap<String, JsonValue>();
 	}
 
 	/**
