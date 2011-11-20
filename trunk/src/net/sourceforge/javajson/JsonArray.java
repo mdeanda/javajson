@@ -2,6 +2,7 @@ package net.sourceforge.javajson;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +14,8 @@ import net.sourceforge.javajson.parser.JsonParser;
 import net.sourceforge.javajson.parser.ParseException;
 import net.sourceforge.javajson.parser.TokenMgrError;
 
-public class JsonArray implements Iterable<JsonValue> {
+public class JsonArray implements Iterable<JsonValue>, Serializable {
+	private static final long serialVersionUID = 1L;
 	private List<JsonValue> list;
 
 	/** Parses a string to a json object. */

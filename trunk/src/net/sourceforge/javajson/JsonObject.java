@@ -2,6 +2,7 @@ package net.sourceforge.javajson;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,7 +23,8 @@ import net.sourceforge.javajson.parser.TokenMgrError;
  * 
  * @author mdeanda
  */
-public class JsonObject implements Iterable<String> {
+public class JsonObject implements Iterable<String>, Serializable {
+	private static final long serialVersionUID = 1L;
 	private Map<String, JsonValue> map;
 
 	/** Parses a string to a json object. */
