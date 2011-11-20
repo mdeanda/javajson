@@ -1,5 +1,6 @@
 package net.sourceforge.javajson;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class JsonValue {
+public class JsonValue implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private static DateFormat dateFormat = new SimpleDateFormat(
 			"yyyy:MM:dd'T'HH:mm:ssZ");
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
