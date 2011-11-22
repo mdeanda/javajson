@@ -237,10 +237,13 @@ public class JsonObject implements Iterable<String>, Serializable {
 			ret = map.get(key[offset]);
 		} else {
 			JsonValue tmp = map.get(key[offset]);
-			if (tmp.isJsonObject()) {
+			if (tmp != null && tmp.isJsonObject()) {
 				ret = tmp.getJsonObject().get(offset + 1, key);
 			}
 		}
+
+		if (ret == null) 
+			ret = new JsonValue();
 		return ret;
 	}
 
