@@ -190,6 +190,11 @@ public class JsonValue implements Serializable {
 			return null;
 	}
 
+	public String getString(String defaultValue) {
+		String ret = getString();
+		return ret == null ? defaultValue : ret;
+	}
+
 	/**
 	 * Returns the class of the value being used. For example, if setFloat or
 	 * setDouble were used, Double.class is returned. If setInt or setLong is
