@@ -1,57 +1,83 @@
 <html>
 <head>
-<title>JavaJson</title>
-<style>
-code {
-	display: block;
-	background-color: beige;
-	padding: 1em;
-	max-width: 50em;
-}
-</style>
+	<title>JavaJson</title>
+	<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+	<script>
+	$(document).ready(function() { return;
+		var toc = [];
+		toc.push('<ul>');
+		$('h2').each(function() {
+			var index = toc.length;
+			toc.push('<li><a href="#toc_' + index + '">' + $(this).html() + '</a></li>');
+// 			toc.push(index);
+			var bm = '<a name="toc_' + index + '></a>';
+			$(this).html(bm + $(this).html());
+		});
+		toc.push('</ul>');
+
+		$('#toc_container').html(toc.join(''));
+	});
+	</script>
+	<style>
+		body { max-width: 60em; margin: 1em auto 5em auto; }
+		h1 { border-bottom: 4px double black ; text-align: center; }
+		h2 { border-bottom: 1px solid black; }
+		code {
+			white-space: pre;
+			font-color: #444;
+			font-size: small;
+			display: block;
+			border: 1px solid #ddd;
+			padding: 1em;
+			background: #f0f0f0;
+		}
+		a {
+			color: #444;
+			font-weight: bold;
+		}
+	</style>
 </head>
 <body>
-	<h3>JavaJson</h3>
 
-	<div>
-JavaJson is an alternate implementation of JavaScript Object Notation (json) to that at
-<a href="http://json.org">json.org</a>. The library uses a JavaCC based parser and is
-fairly small and is simple to use.
-	</div>
+<h1>JavaJson</h1>
+<div id="toc_container"></div>
 
-	<div>
-		<h4>Examples</h4>
-		<div>
-			<p>To parse a document from a string to a JsonObject:</p>
-			<code>JsonObject json = JsonObject.parse("{a:3, b:'hello world'}");</code>
 
-			<p>To generate a json string from a JsonObject:</p>
-			<code>System.out.println(json.toString);</code>
+<h2>Summary</h2>
+<p>JavaJson is a Java implementation of JavaScript Object Notation (JSON) similar to the one found at <a href="http://json.org">json.org</a>. The library uses a JavaCC based parser and is fairly small and is simple to use.</p>
 
-			<p>To generate a json string from a JsonObject - pretty print with 2 spaces for tabs:</p>
-			<code>System.out.println(json.toString(2));</code>
 
-			<p>To read ints/strings, etc:</p>
-			<code>
-			String b = json.getString("b");<br/>
-			int a = json.getInt("a");
-			</code>
+<h2>Examples</h2>
+<p>To parse a document from a string to a JsonObject:</p>
+<code>JsonObject json = JsonObject.parse("{a:3, b:'hello world'}");</code>
 
-			<p>JsonObjects rarely need exception handling, instead of throwing an exception if
-			fields aren't set, nulls or 0's are returned, but if you care to check, you can:</p>
-			<code>
-			String b = "...";<br/>
-			if (json.isString("b")) b = json.getString("b");<br/>
-			</code>
-		</div>
-	</div>
+<p>To generate a json string from a JsonObject:</p>
+<code>System.out.println(json.toString);</code>
 
-	<div>
-		<h4>Links</h4>
-		<a href="http://sourceforge.net/projects/javajson" title="JavaJson project page">JavaJson at SourceForge.net</a><br/>
-		<a href="doc/api" title="Javadoc">View the Javadocs</a><br/>
-		<a href="http://sourceforge.net/projects/javajson/files/">Download</a>
-	</div>
+<p>To generate a json string from a JsonObject - pretty print with 2 spaces for tabs:</p>
+<code>System.out.println(json.toString(2));</code>
+
+<p>To read ints/strings, etc:</p>
+<code>
+String b = json.getString("b");<br/>
+int a = json.getInt("a");
+</code>
+
+<p>JsonObjects rarely need exception handling, instead of throwing an exception if
+fields aren't set, nulls or 0's are returned, but if you care to check, you can:</p>
+<code>
+String b = "...";<br/>
+if (json.isString("b")) b = json.getString("b");<br/>
+</code>
+
+
+<h2>Links</h2>
+<ul>
+	<li><a href="http://sourceforge.net/projects/javajson" title="JavaJson project page">JavaJson at SourceForge.net</a></li>
+	<li><a href="doc/api" title="Javadoc">Javadocs</a></li>
+	<li><a href="http://sourceforge.net/projects/javajson/files/" title="downloads area">Downloads</a></li>
+</ul>
 
 </body>
 </html>
+
