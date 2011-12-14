@@ -9,7 +9,7 @@
 	<property name="src.dir" value="src" />
 	<property name="test.src.dir" value="tests" />
 
-	<property name="build.dir" value="build" />
+	<property name="build.dir" value="bin" />
 	<property name="dist.dir" value="dist" />
 
 	<!-- set this to the location of javacc -->
