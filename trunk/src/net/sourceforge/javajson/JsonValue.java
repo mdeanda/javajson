@@ -384,10 +384,15 @@ public class JsonValue implements Serializable {
 
 		if (s != null) {
 			// check if its a long or double
-			if (Pattern.matches("-?\\d+", s))
-				setLong(Long.parseLong(s));
-			else if (Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))
-				setDouble(Double.parseDouble(s));
+			try {
+				if (Pattern.matches("-?\\d+", s))
+					setLong(Long.parseLong(s));
+				else if (Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))
+					setDouble(Double.parseDouble(s));
+			} catch (NumberFormatException nfe) {
+				// nfe.printStackTrace();
+				// number too big... assume string
+			}
 			stringVal = s;
 			nativeType = JsonNativeType.STRING;
 		}
