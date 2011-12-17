@@ -236,10 +236,24 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public boolean isDouble() {
-		return nativeType == JsonNativeType.LONG
+		boolean ret = nativeType == JsonNativeType.LONG
 				|| nativeType == JsonNativeType.INTEGER
 				|| nativeType == JsonNativeType.FLOAT
 				|| nativeType == JsonNativeType.DOUBLE;
+
+		if (!ret && !isNull()) {
+			try {
+				String s = getString();
+				if (Pattern.matches("-?\\d+", s)
+						|| Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s)) {
+					Double.parseDouble(s);
+					ret = true;
+				}
+			} catch (NumberFormatException nfe) {
+				ret = false;
+			}
+		}
+		return ret;
 	}
 
 	/**
