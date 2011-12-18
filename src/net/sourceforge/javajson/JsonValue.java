@@ -169,19 +169,28 @@ public class JsonValue implements Serializable {
 	}
 
 	public long getLong() {
+		long ret = 0;
 		if (doubleVal != null)
-			return doubleVal.longValue();
+			ret = doubleVal.longValue();
 		else if (longVal != null)
-			return longVal.longValue();
-		// else if (stringVal != null)
-		// return Long.parseLong(stringVal);
-		else
-			return 0;
+			ret = longVal.longValue();
+		else if (stringVal != null) {
+			try {
+				ret = Long.parseLong(stringVal);
+			} catch (NumberFormatException nfe) {
+				ret = 0;
+			}
+		}
+		return ret;
 	}
 
 	public String getString() {
-		if (doubleVal != null)
+		if (boolVal != null)
+			return boolVal.toString();
+		else if (doubleVal != null)
 			return doubleVal.toString();
+		else if (floatVal != null)
+			return floatVal.toString();
 		else if (longVal != null)
 			return longVal.toString();
 		else if (stringVal != null)
@@ -244,8 +253,9 @@ public class JsonValue implements Serializable {
 		if (!ret && !isNull()) {
 			try {
 				String s = getString();
-				if (Pattern.matches("-?\\d+", s)
-						|| Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s)) {
+				if (s != null
+						&& (Pattern.matches("-?\\d+", s) || Pattern.matches(
+								"-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))) {
 					Double.parseDouble(s);
 					ret = true;
 				}
@@ -397,16 +407,6 @@ public class JsonValue implements Serializable {
 		setNull();
 
 		if (s != null) {
-			// check if its a long or double
-			try {
-				if (Pattern.matches("-?\\d+", s))
-					setLong(Long.parseLong(s));
-				else if (Pattern.matches("-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))
-					setDouble(Double.parseDouble(s));
-			} catch (NumberFormatException nfe) {
-				// nfe.printStackTrace();
-				// number too big... assume string
-			}
 			stringVal = s;
 			nativeType = JsonNativeType.STRING;
 		}
