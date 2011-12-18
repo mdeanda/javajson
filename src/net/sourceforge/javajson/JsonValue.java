@@ -137,6 +137,11 @@ public class JsonValue implements Serializable {
 			return 0;
 	}
 
+	/**
+	 * NOTE: this method currently doesn't check for overflows
+	 * 
+	 * @return
+	 */
 	public float getFloat() {
 		if (floatVal != null)
 			return floatVal.floatValue();
@@ -150,6 +155,11 @@ public class JsonValue implements Serializable {
 			return 0f;
 	}
 
+	/**
+	 * NOTE: this method currently doesn't check for overflows
+	 * 
+	 * @return
+	 */
 	public int getInt() {
 		return (int) getLong();
 	}
