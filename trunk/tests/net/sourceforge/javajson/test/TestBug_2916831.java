@@ -34,7 +34,7 @@ public class TestBug_2916831 extends TestCase {
 		String input;
 		JsonObject json;
 
-		input = "{a:\".\"}";
+		input = "{\"a\":\".\"}";
 		json = JsonObject.parse(input);
 		assertFalse(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
@@ -42,43 +42,48 @@ public class TestBug_2916831 extends TestCase {
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
+		assertEquals(input, json.toString());
 
-		input = "{a:\"0.1\"}";
+		input = "{\"a\":\"0.1\"}";
 		json = JsonObject.parse(input);
-		assertFalse(json.isDouble("a"));
+		assertTrue(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertFalse(json.isFloat("a"));
+		assertTrue(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
+		assertEquals(input, json.toString());
 
-		input = "{a:\".3\"}";
+		input = "{\"a\":\".3\"}";
 		json = JsonObject.parse(input);
-		assertFalse(json.isDouble("a"));
+		assertTrue(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertFalse(json.isFloat("a"));
+		assertTrue(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
+		assertEquals(input, json.toString());
 
-		input = "{a:\"5.\"}";
+		input = "{\"a\":\"5.\"}";
 		json = JsonObject.parse(input);
-		assertFalse(json.isDouble("a"));
+		assertTrue(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertFalse(json.isFloat("a"));
+		assertTrue(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
-		assertEquals(5, json.getInt("a"));
+		assertEquals(5.0d, json.getDouble("a"));
+		assertEquals(input, json.toString());
 
-		input = "{a:\"1.3\"}";
+		input = "{\"a\":\"1.3\"}";
 		json = JsonObject.parse(input);
-		assertFalse(json.isDouble("a"));
+		assertTrue(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertFalse(json.isFloat("a"));
+		assertTrue(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
+		assertEquals(input, json.toString());
 	}
 
 	public void testValue() throws Exception {
@@ -98,4 +103,25 @@ public class TestBug_2916831 extends TestCase {
 		assertFalse(json.isDouble("a"));
 		assertEquals(".", json.getString("a"));
 	}
+	
+	public void testVerifyReturnedData() throws Exception {
+		String input;
+		JsonObject json;
+
+		input = "{a:\"-\"}";
+		json = JsonObject.parse(input);
+		assertEquals("-", json.getString("a"));
+
+		input = "{a:\"003\"}";
+		json = JsonObject.parse(input);
+		assertEquals(3, json.getInt("a"));
+		assertEquals("003", json.getString("a"));
+
+		double pi = 3.141526;
+		String pis = String.valueOf(pi);
+		input = "{a:\"" + pis + "\"}";
+		json = JsonObject.parse(input);
+		assertEquals(pis, json.getString("a"));
+		assertEquals(pi, json.getDouble("a"));
+}
 }
