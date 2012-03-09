@@ -1,22 +1,17 @@
 package net.sourceforge.javajson.speedtest;
 
-import java.io.FileInputStream;
-import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import net.sourceforge.javajson.JsonObject;
-
-import org.apache.commons.io.IOUtils;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
 		int repeats = 2000;
+		String content = readFile();
 		long start = System.currentTimeMillis();
-
-		FileInputStream fis = new FileInputStream("data/samplefile.json");
-		StringWriter sw = new StringWriter();
-		IOUtils.copy(fis, sw);
-		String content = sw.toString();
 
 		for (int i = 0; i < repeats; i++) {
 			parseJson(content);
@@ -24,6 +19,18 @@ public class Main {
 
 		long end = System.currentTimeMillis();
 		System.out.println("JavaJson Duration: " + (end - start));
+	}
+
+	private static String readFile() throws Exception {
+		InputStream is = Main.class.getResourceAsStream("samplefile.json");
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line;
+		StringBuilder sb = new StringBuilder();
+		while ((line = br.readLine()) != null) {
+			sb.append(line);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 
 	private static final void parseJson(String content) throws Exception {
