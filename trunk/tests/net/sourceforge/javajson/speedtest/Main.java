@@ -9,7 +9,8 @@ import net.sourceforge.javajson.JsonObject;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		int repeats = 2000;
+		//base case 19000ms for 10000 records
+		int repeats = 10000; 
 		String content = readFile();
 		long start = System.currentTimeMillis();
 
