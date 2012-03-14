@@ -39,6 +39,7 @@ public class JsonValue implements Serializable {
 	private Long longVal;
 
 	private String stringVal;
+	private String rawString;
 
 	public JsonValue() {
 		setNull();
@@ -74,6 +75,11 @@ public class JsonValue implements Serializable {
 
 	public JsonValue(String val) {
 		setString(val);
+	}
+
+	/** stores the raw string before escaping, used to make parsing a little quicker */
+	public JsonValue(String value, boolean raw) {
+		this.rawString = value;
 	}
 
 	public JsonValue(Object val) {
