@@ -242,7 +242,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 			}
 		}
 
-		if (ret == null) 
+		if (ret == null)
 			ret = new JsonValue();
 		return ret;
 	}
@@ -456,6 +456,14 @@ public class JsonObject implements Iterable<String>, Serializable {
 
 	public Iterator<String> iterator() {
 		return map.keySet().iterator();
+	}
+
+	/**
+	 * puts an unparsed token as the value, it will get interpretted when
+	 * accessed
+	 */
+	public void putRaw(String key, String value) {
+		map.put(key, new JsonValue(value, true));
 	}
 
 	public void put(String key, Object value) {
