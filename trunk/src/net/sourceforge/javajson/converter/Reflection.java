@@ -61,7 +61,7 @@ public class Reflection {
 		return methods;
 	}
 
-	static Map<String, Object> getFields(Object o)
+	public static Map<String, Object> getFields(Object o)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		List<Method> methods = getGetterFieldMethods(o.getClass());
@@ -84,7 +84,7 @@ public class Reflection {
 	 * @param methodName
 	 * @return
 	 */
-	static String getFieldName(String methodName) {
+	public static String getFieldName(String methodName) {
 		int l = methodName.length();
 		if (l >= 2 && Character.isUpperCase(methodName.charAt(2))) {
 			if (methodName.startsWith("is")) {
