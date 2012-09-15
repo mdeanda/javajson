@@ -168,4 +168,12 @@ public class TestJsonArray extends TestCase {
 		assertEquals("VALUE_ONE", json.getString(0));
 		assertEquals(TestEnum.VALUE_ONE.name(), json.getString(0));
 	}
+	
+	public void testLongArrayStackError() throws Exception {
+		JsonArray a = new JsonArray();
+		for (int i=0; i<100000; i++) {
+			a.add(i);
+		}
+		JsonArray.parse(a.toString());
+	}
 }
