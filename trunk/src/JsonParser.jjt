@@ -121,12 +121,12 @@ void array() : {}
 
 void members() : {}
 {
-  key() ":" value() ( "," members() )?
+  key() ":" value() ( "," key() ":" value() )*
 }
 
 void elements() : {}
 {
-  value() ( "," elements() )?
+  value() ( "," value() )*
 }
 
 void value() : 

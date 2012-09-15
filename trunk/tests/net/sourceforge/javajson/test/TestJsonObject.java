@@ -184,8 +184,8 @@ public class TestJsonObject extends TestCase {
 
 		json2.put("key4", "value4");
 		// System.out.println(json.toString(2));
-		assertEquals("{\n  \"key3\":{\n    \"key4\":\"value4\"\n  }\n}", json
-				.toString(2));
+		assertEquals("{\n  \"key3\":{\n    \"key4\":\"value4\"\n  }\n}",
+				json.toString(2));
 
 		// Test for 2 different strings since output can be a little bit
 		// different because internally it uses a set
@@ -231,5 +231,13 @@ public class TestJsonObject extends TestCase {
 		json.put("a", TestEnum.VALUE_ONE);
 		assertEquals("VALUE_ONE", json.getString("a"));
 		assertEquals(TestEnum.VALUE_ONE.name(), json.getString("a"));
+	}
+
+	public void testLongObjectStackError() throws Exception {
+		JsonObject a = new JsonObject();
+		for (int i = 0; i < 100000; i++) {
+			a.put("o_" + i, new JsonObject());
+		}
+		JsonArray.parse(a.toString());
 	}
 }
