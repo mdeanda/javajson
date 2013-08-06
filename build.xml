@@ -70,6 +70,8 @@
 				deprecation="false"
 				optimize="true"
 				includeantruntime="false"
+				target="1.5"
+				source="1.5"
 				failonerror="true">
 			<compilerarg value="-Xlint:unchecked" />
 			<src path="${src.dir}" />
@@ -81,6 +83,8 @@
 		<javac destdir="${build.dir}" debug="true"
 				deprecation="false"
 				optimize="true"
+				target="1.5"
+				source="1.5"
 				failonerror="true">
 			<compilerarg value="-Xlint:unchecked" />
 			<src path="${test.src.dir}" />
