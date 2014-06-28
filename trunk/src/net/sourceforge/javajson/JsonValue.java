@@ -3,8 +3,10 @@ package net.sourceforge.javajson;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -77,7 +79,10 @@ public class JsonValue implements Serializable {
 		setString(val);
 	}
 
-	/** stores the raw string before escaping, used to make parsing a little quicker */
+	/**
+	 * stores the raw string before escaping, used to make parsing a little
+	 * quicker
+	 */
 	public JsonValue(String value, boolean raw) {
 		this.rawString = value;
 	}
@@ -121,6 +126,15 @@ public class JsonValue implements Serializable {
 			return String.valueOf(c);
 		else
 			return "\\u" + byteToHex(hiByte) + byteToHex(loByte);
+	}
+
+	public List<JsonValue> find(String... key) {
+		if (isJsonArray()) {
+			return getJsonArray().find(key);
+		} else if (isJsonObject()) {
+			return getJsonObject().find(key);
+		} else
+			return new ArrayList<JsonValue>();
 	}
 
 	public boolean getBoolean() {
