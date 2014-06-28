@@ -29,5 +29,11 @@ public class TestPathKeys extends TestCase {
 		assertNotNull("2 levels deep", json.get("o", "b2"));
 		assertNotNull("3 levels deep", json.get("o", "o2", "b3"));
 	}
+	
+	public void testValue() throws Exception {
+		assertEquals("1 level deep", true, json.get("b").getBoolean());
+		assertEquals("2 levels deep", true, json.get("o", "b2").getBoolean());
+		assertEquals("3 levels deep", "string3", json.get("o", "o2", "s3").getString());
+	}
 
 }

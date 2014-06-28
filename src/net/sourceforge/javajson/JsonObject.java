@@ -4,12 +4,16 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sourceforge.javajson.parser.ASTparse;
 import net.sourceforge.javajson.parser.JsonParser;
@@ -214,6 +218,41 @@ public class JsonObject implements Iterable<String>, Serializable {
 
 		getJsonArray(key).add(val);
 		return this;
+	}
+
+	public List<JsonValue> find(String... key) {
+		List<JsonValue> ret = new ArrayList<JsonValue>();
+		if (key != null && key.length > 0) {
+			String[] nextkey = null;
+			if (key.length > 1) {
+				nextkey = new String[key.length - 1];
+				for (int i = 1; i < key.length; i++) {
+					nextkey[i - 1] = key[i];
+				}
+			}
+			Pattern pattern = Pattern.compile(key[0]);
+			for (String fld : this) {
+				Matcher m = pattern.matcher(fld);
+				if (m.matches()) {
+					JsonValue val = get(fld);
+					if (nextkey == null) {
+						ret.add(val);
+					} else {
+						// recursive...
+						if (val.isJsonObject()) {
+							List<JsonValue> tmp = val.getJsonObject().find(
+									nextkey);
+							if (tmp != null && !tmp.isEmpty()) {
+								for (JsonValue jv : tmp) {
+									ret.add(jv);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
