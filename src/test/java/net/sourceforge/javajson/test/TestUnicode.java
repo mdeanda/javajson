@@ -1,7 +1,6 @@
 package net.sourceforge.javajson.test;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
@@ -31,12 +30,13 @@ public class TestUnicode extends TestCase {
 
 	public void testUnicode() throws Exception {
 		for (int i = 0; i < files.length; i++) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(PATH
-					+ files[i] + ".txt"), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					getClass().getResourceAsStream("/" + files[i] + ".txt"),
+					"UTF-8"));
 			String expected = br.readLine();
 
-			Reader is = new InputStreamReader(new FileInputStream(PATH
-					+ files[i] + ".json"), "UTF-8");
+			Reader is = new InputStreamReader(getClass().getResourceAsStream(
+					"/" + files[i] + ".json"), "UTF-8");
 			JsonObject obj = JsonObject.parse(is);
 			System.out.println(expected);
 			assertEquals("for file: " + files[i], expected,
