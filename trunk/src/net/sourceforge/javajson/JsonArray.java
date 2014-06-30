@@ -128,36 +128,6 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 		return this;
 	}
 
-	public List<JsonValue> find(String... key) {
-		List<JsonValue> ret = new ArrayList<JsonValue>();
-		if (key != null && key.length > 0) {
-			int index = -1;
-			String firstKey = key[0];
-			String[] nextkey = null;
-			try {
-				index = Integer.parseInt(firstKey);
-				if (key.length > 1) {
-					nextkey = new String[key.length - 1];
-					for (int i = 1; i < key.length; i++) {
-						nextkey[i - 1] = key[i];
-					}
-				}
-			} catch (NumberFormatException nfe) {
-				nextkey = key;
-			}
-
-			if (index >= 0) {
-				ret.addAll(list.get(index).find(nextkey));
-			} else {
-				// no index, just find inside children with same key
-				for (JsonValue val : this) {
-					ret.addAll(val.find(nextkey));
-				}
-			}
-		}
-		return ret;
-	}
-
 	/**
 	 * @param index
 	 * @throws ClassCastException
