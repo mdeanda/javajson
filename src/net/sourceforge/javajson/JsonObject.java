@@ -247,18 +247,10 @@ public class JsonObject implements Iterable<String>, Serializable {
 									ret.add(jv);
 								}
 							}
-						} else if (val.isJsonArray()) {
-							List<JsonValue> tmp = val.getJsonArray().find(
-									nextkey);
-							if (tmp != null) {
-								ret.addAll(tmp);
-							}
 						}
 					}
 				}
 			}
-		} else {
-			ret.add(new JsonValue(this));
 		}
 		return ret;
 	}

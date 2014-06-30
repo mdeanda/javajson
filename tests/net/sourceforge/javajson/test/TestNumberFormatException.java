@@ -19,7 +19,7 @@ public class TestNumberFormatException extends TestCase {
 
 	public void testUnicode() throws Exception {
 		for (int i = 0; i < files.length; i++) {
-			InputStream is = getClass().getResourceAsStream("/" + files[i] + ".json");
+			InputStream is = new FileInputStream(PATH + files[i] + ".json");
 			JsonObject obj = JsonObject.parse(is);
 		}
 	}
