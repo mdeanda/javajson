@@ -39,6 +39,8 @@ public class TestFindBasic extends TestCase {
 		assertEquals(4, matches.size());
 		assertEquals(json.getString("key1"), matches.get(0).getString());
 		assertEquals(json1.toString(), matches.get(1).toString());
+		assertEquals(json2.toString(), matches.get(2).toString());
+		assertEquals(json3.toString(), matches.get(3).toString());
 	}
 
 	public void testBasicValue() {
@@ -46,6 +48,8 @@ public class TestFindBasic extends TestCase {
 		assertNotNull(matches);
 		assertEquals(3, matches.size());
 		assertEquals(json1.getString("id"), matches.get(0).getString());
+		assertEquals(json2.getString("id"), matches.get(1).getString());
+		assertEquals(json3.getString("id"), matches.get(2).getString());
 	}
 
 	public void testDeepNonExistPath() {

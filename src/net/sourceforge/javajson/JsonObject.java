@@ -220,17 +220,32 @@ public class JsonObject implements Iterable<String>, Serializable {
 		return this;
 	}
 
-	public List<JsonValue> find(String... key) {
+	/**
+	 * Finds nodes where the keys match the path as given by keys. For example
+	 * given "a", ".*", "c" it will match both nodes in:
+	 * 
+	 * {a:{ x : { c: "match1" }, y: { c: "match2" } } }
+	 * 
+	 * but none in the following b/c the first key doesn't have any matches:
+	 * 
+	 * { x : { c: "no match" } }
+	 * 
+	 * 
+	 * @param keyPattern
+	 * @return
+	 */
+	public List<JsonValue> find(String... keyPattern) {
 		List<JsonValue> ret = new ArrayList<JsonValue>();
-		if (key != null && key.length > 0) {
+		if (keyPattern != null && keyPattern.length > 0) {
 			String[] nextkey = null;
-			if (key.length > 1) {
-				nextkey = new String[key.length - 1];
-				for (int i = 1; i < key.length; i++) {
-					nextkey[i - 1] = key[i];
+			if (keyPattern.length > 1) {
+				nextkey = new String[keyPattern.length - 1];
+				for (int i = 1; i < keyPattern.length; i++) {
+					nextkey[i - 1] = keyPattern[i];
 				}
 			}
-			Pattern pattern = Pattern.compile(key[0]);
+
+			Pattern pattern = Pattern.compile(keyPattern[0]);
 			for (String fld : this) {
 				Matcher m = pattern.matcher(fld);
 				if (m.matches()) {
