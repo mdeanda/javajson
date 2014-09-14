@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+apply from:'http://gradle.smokejumperit.com/github-libs.gradle'
+apply plugin:com.smokejumperit.gradle.compiler.JavaccPlugin
+
+group = 'com.thedeanda'
+version = '1.0-snapshot'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'RobertFischer:gradle-javacc-plugin:0.0.5.1'
+    }
+}
