@@ -6,8 +6,8 @@
 
 	<property name="dist.dir" value="dist" />
 	<property name="doc.dir" value="doc" />
-	<property name="src.dir" value="src" />
-	<property name="test.src.dir" value="tests" />
+	<property name="src.dir" value="src/main/java" />
+	<property name="test.src.dir" value="src/test/java" />
 
 	<property name="build.dir" value="bin" />
 	<property name="dist.dir" value="dist" />
@@ -49,7 +49,7 @@
 
 	<target name="javacc" depends="prepare" description="Builds the jjtree">
 		<mkdir dir="${src.dir}/net/sourceforge/javajson/parser" />
-		<jjtree target="${src.dir}/JsonParser.jjt"
+		<jjtree target="src/main/jjtree/JsonParser.jjt"
 				outputdirectory="${src.dir}/net/sourceforge/javajson/parser"
 				javacchome="${javacchome}"
 				nodeusesparser="true"
