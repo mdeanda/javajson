@@ -1,2 +1,6 @@
 /.gradle/
 /build.properties
+/bin/
+/build/
+/doc/
+/iu/

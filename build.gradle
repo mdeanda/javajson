@@ -2,17 +2,18 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-apply from:'http://gradle.smokejumperit.com/github-libs.gradle'
-apply plugin:com.smokejumperit.gradle.compiler.JavaccPlugin
+apply plugin: 'ca.coglinc.javacc'
 
 group = 'com.thedeanda'
 version = '1.0-snapshot'
 
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'RobertFischer:gradle-javacc-plugin:0.0.5.1'
-    }
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
+	}
 }
+
