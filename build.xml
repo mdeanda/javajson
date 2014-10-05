@@ -27,7 +27,7 @@
 		<delete dir="${doc.dir}" />
 		<delete dir="${build.dir}" />
 		<delete>
-			<fileset dir="${src.dir}/net/sourceforge/javajson/parser">
+			<fileset dir="${src.dir}/com/thedeanda/javajson/parser">
 				<exclude name="TMember.java" />
 				<exclude name="MyNode.java" />
 				<exclude name="AST*" />
@@ -48,17 +48,17 @@
 	</target>
 
 	<target name="javacc" depends="prepare" description="Builds the jjtree">
-		<mkdir dir="${src.dir}/net/sourceforge/javajson/parser" />
+		<mkdir dir="${src.dir}/com/thedeanda/javajson/parser" />
 		<jjtree target="src/main/jjtree/JsonParser.jjt"
-				outputdirectory="${src.dir}/net/sourceforge/javajson/parser"
+				outputdirectory="${src.dir}/com/thedeanda/javajson/parser"
 				javacchome="${javacchome}"
 				nodeusesparser="true"
-				nodepackage="net.sourceforge.javajson.parser"/>
-		<javacc target="${src.dir}/net/sourceforge/javajson/parser/JsonParser.jj"
-				outputdirectory="${src.dir}/net/sourceforge/javajson/parser"
+				nodepackage="com.thedeanda.javajson.parser"/>
+		<javacc target="${src.dir}/com/thedeanda/javajson/parser/JsonParser.jj"
+				outputdirectory="${src.dir}/com/thedeanda/javajson/parser"
 				javacchome="${javacchome}"
 				static="false"/>
-		<jjdoc target="${src.dir}/net/sourceforge/javajson/parser/JsonParser.jj"
+		<jjdoc target="${src.dir}/com/thedeanda/javajson/parser/JsonParser.jj"
 				outputfile="${doc.dir}/JsonParserBNF.html"
 				javacchome="${javacchome}"/>
 
@@ -93,7 +93,7 @@
 				author="true" use="true" linksource="true">
 			<classpath refid="classpath" />
 			<packageset dir="${src.dir}">
-				<include name="net/sourceforge/javajson/**" />
+				<include name="com/thedeanda/javajson/**" />
 				<include name="org/json/**" />
 			</packageset>
 			<link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
