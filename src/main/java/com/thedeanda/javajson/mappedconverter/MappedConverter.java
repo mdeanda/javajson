@@ -1,10 +1,10 @@
-package net.sourceforge.javajson.mappedconverter;
+package com.thedeanda.javajson.mappedconverter;
 
 import java.util.Map;
 
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.JsonValue;
-import net.sourceforge.javajson.converter.Reflection;
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
+import com.thedeanda.javajson.converter.Reflection;
 
 public class MappedConverter {
 	private JsonObject map;

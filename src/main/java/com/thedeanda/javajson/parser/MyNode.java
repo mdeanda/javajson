@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.parser;
+package com.thedeanda.javajson.parser;
 
 public class MyNode {
 	/** Symbol table */

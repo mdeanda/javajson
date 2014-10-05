@@ -1,10 +1,10 @@
-package net.sourceforge.javajson.converter;
+package com.thedeanda.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
 
 /**
  * Converts java objects to json based on bean-style fields and

@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.converter;
+package com.thedeanda.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.JsonValue;
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 public class Utils {
 

@@ -1,12 +1,12 @@
-package net.sourceforge.javajson.converter;
+package com.thedeanda.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
 
 /**
  * Maps objects to a json object TODO: addMapper as: String field, String alias

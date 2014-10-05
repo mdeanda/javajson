@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.converter;
+package com.thedeanda.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

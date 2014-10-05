@@ -1,4 +1,4 @@
-package net.sourceforge.javajson;
+package com.thedeanda.javajson;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.javajson.parser.ASTparse;
-import net.sourceforge.javajson.parser.JsonParser;
-import net.sourceforge.javajson.parser.ParseException;
-import net.sourceforge.javajson.parser.TokenMgrError;
+import com.thedeanda.javajson.parser.ASTparse;
+import com.thedeanda.javajson.parser.JsonParser;
+import com.thedeanda.javajson.parser.ParseException;
+import com.thedeanda.javajson.parser.TokenMgrError;
 
 public class JsonArray implements Iterable<JsonValue>, Serializable {
 	private static final long serialVersionUID = 1L;

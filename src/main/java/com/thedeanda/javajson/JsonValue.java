@@ -1,4 +1,4 @@
-package net.sourceforge.javajson;
+package com.thedeanda.javajson;
 
 import java.io.Serializable;
 import java.text.DateFormat;

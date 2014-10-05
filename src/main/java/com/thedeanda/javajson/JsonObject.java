@@ -1,4 +1,4 @@
-package net.sourceforge.javajson;
+package com.thedeanda.javajson;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -15,10 +15,10 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.javajson.parser.ASTparse;
-import net.sourceforge.javajson.parser.JsonParser;
-import net.sourceforge.javajson.parser.ParseException;
-import net.sourceforge.javajson.parser.TokenMgrError;
+import com.thedeanda.javajson.parser.ASTparse;
+import com.thedeanda.javajson.parser.JsonParser;
+import com.thedeanda.javajson.parser.ParseException;
+import com.thedeanda.javajson.parser.TokenMgrError;
 
 /**
  * Simpler implementation of Json that throws less exceptions. For all the
