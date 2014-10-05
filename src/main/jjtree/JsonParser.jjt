@@ -1,12 +1,12 @@
 options {
    MULTI=true;
-   NODE_EXTENDS="net.sourceforge.javajson.parser.MyNode";
+   NODE_EXTENDS="com.thedeanda.javajson.parser.MyNode";
    STATIC = false;
    JAVA_UNICODE_ESCAPE = true;
 }
 
 PARSER_BEGIN(JsonParser)
-package net.sourceforge.javajson.parser;
+package com.thedeanda.javajson.parser;
 
 public class JsonParser {
   public static void main(String args[]) throws Exception {
@@ -78,7 +78,7 @@ TOKEN : /* LITERALS */
             )
           )
       )*
-      "\"") 
+      "\"")
    >
 |
   < STRING_LITERAL_SINGLE_QUOTES:
@@ -90,7 +90,7 @@ TOKEN : /* LITERALS */
             )
           )
       )*
-      "\'") 
+      "\'")
   >
 }
 
@@ -129,20 +129,20 @@ void elements() : {}
   value() ( "," value() )*
 }
 
-void value() : 
+void value() :
 {
   Token t;
 }
 {
   (
-    string() | number() | object() | array() 
+    string() | number() | object() | array()
   |
-    t=<TRUE_LITERAL> { jjtThis.val = t.image; } 
+    t=<TRUE_LITERAL> { jjtThis.val = t.image; }
   |
-    t=<FALSE_LITERAL> { jjtThis.val = t.image; } 
+    t=<FALSE_LITERAL> { jjtThis.val = t.image; }
   |
     t=<NULL_LITERAL> { jjtThis.val = t.image; }
-  ) 
+  )
 }
 
 void key() :
@@ -159,7 +159,7 @@ void key() :
   )
 }
 
-void string() : 
+void string() :
 {
   Token t;
 }
@@ -177,7 +177,7 @@ void number() :
 }
 {
   (
-    t=<INTEGER_LITERAL> { jjtThis.val = t.image; } 
+    t=<INTEGER_LITERAL> { jjtThis.val = t.image; }
   |
     t=<FLOATING_POINT_LITERAL> { jjtThis.val = t.image; }
   )
