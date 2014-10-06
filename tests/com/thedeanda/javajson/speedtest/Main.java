@@ -1,10 +1,10 @@
-package net.sourceforge.javajson.speedtest;
+package com.thedeanda.javajson.speedtest;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import net.sourceforge.javajson.JsonObject;
+import com.thedeanda.javajson.JsonObject;
 
 public class Main {
 

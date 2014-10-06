@@ -1,10 +1,11 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonObject;
 
 public class TestNumberFormatException extends TestCase {
 

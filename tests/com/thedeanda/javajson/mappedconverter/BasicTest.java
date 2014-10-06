@@ -1,8 +1,9 @@
-package net.sourceforge.javajson.mappedconverter;
+package com.thedeanda.javajson.mappedconverter;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.converter.test.SimpleObject;
+
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.converter.test.SimpleObject;
 
 public class BasicTest extends TestCase {
 

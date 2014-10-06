@@ -1,9 +1,10 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.JsonValue;
 import junit.framework.TestCase;
+
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 public class TestJsonValue extends TestCase {
 

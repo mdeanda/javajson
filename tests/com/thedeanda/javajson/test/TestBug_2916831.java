@@ -1,7 +1,8 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonObject;
 
 /**
  * 

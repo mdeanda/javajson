@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,8 +6,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
 
 public class TestFeature_2883708 extends TestCase {
 	public void testSetDateObject() throws Exception {

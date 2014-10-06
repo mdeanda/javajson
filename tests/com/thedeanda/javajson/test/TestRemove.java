@@ -1,8 +1,9 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
 
 public class TestRemove extends TestCase {
 	private JsonObject json;

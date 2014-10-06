@@ -1,10 +1,11 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import java.util.List;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.JsonValue;
+
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 public class TestFindBasic extends TestCase {
 	JsonObject json;

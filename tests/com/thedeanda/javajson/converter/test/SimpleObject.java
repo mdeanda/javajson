@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.converter.test;
+package com.thedeanda.javajson.converter.test;
 
 import java.util.Date;
 

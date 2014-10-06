@@ -1,10 +1,11 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonObject;
 
 public class TestSpecialChars extends TestCase {
 

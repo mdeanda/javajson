@@ -1,4 +1,4 @@
-package net.sourceforge.javajson.test;
+package com.thedeanda.javajson.test;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -6,7 +6,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import junit.framework.TestCase;
-import net.sourceforge.javajson.JsonObject;
+
+import com.thedeanda.javajson.JsonObject;
 
 public class TestUnicode extends TestCase {
 

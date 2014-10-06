@@ -1,9 +1,9 @@
-package net.sourceforge.javajson.test;
-
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
+package com.thedeanda.javajson.test;
 
 import junit.framework.TestCase;
+
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
 
 public class TestPathKeys extends TestCase {
 

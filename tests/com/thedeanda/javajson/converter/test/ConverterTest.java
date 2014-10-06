@@ -1,14 +1,14 @@
-package net.sourceforge.javajson.converter.test;
+package com.thedeanda.javajson.converter.test;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import net.sourceforge.javajson.JsonArray;
-import net.sourceforge.javajson.JsonObject;
-import net.sourceforge.javajson.JsonValue;
-import net.sourceforge.javajson.converter.Converter;
-
 import junit.framework.TestCase;
+
+import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
+import com.thedeanda.javajson.converter.Converter;
 
 public class ConverterTest extends TestCase {
 
