@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 
 apply plugin: 'ca.coglinc.javacc'
 
-group = 'com.thedeanda'
+group = 'com.thedeanda.javajson'
 version = '1.0-snapshot'
 
 buildscript {
