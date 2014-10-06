@@ -9,7 +9,7 @@ import com.thedeanda.javajson.JsonObject;
 
 public class TestNumberFormatException extends TestCase {
 
-	private static final String PATH = "tests/net/sourceforge/javajson/test/";
+	private static final String PATH = "src/test/java/com/thedeanda/javajson/test/";
 
 	private static final String[] files = { "TestNumberFormatException" };
 

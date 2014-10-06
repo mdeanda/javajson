@@ -45,7 +45,7 @@ public class ConverterTest extends TestCase {
 		assertEquals(3, json.getInt("field2"));
 		assertEquals(3.14f, json.getFloat("floatField"));
 		assertEquals("2006/11/22 23:55:03", json.getString("today"));
-		assertEquals("net.sourceforge.javajson.converter.test.SimpleObject",
+		assertEquals("com.thedeanda.javajson.converter.test.SimpleObject",
 				json.getString("class"));
 	}
 
