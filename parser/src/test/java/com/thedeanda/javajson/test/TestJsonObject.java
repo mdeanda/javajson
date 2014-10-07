@@ -1,22 +1,34 @@
 package com.thedeanda.javajson.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
 
-public class TestJsonObject extends TestCase {
+public class TestJsonObject {
 
 	JsonObject json;
 
-	@Override
+	@Before
 	public void setUp() throws Exception {
 		json = new JsonObject();
 	}
 
+	@Test
 	public void testArray() throws Exception {
 		JsonArray array1 = new JsonArray();
 		JsonArray array2 = new JsonArray();
@@ -35,6 +47,7 @@ public class TestJsonObject extends TestCase {
 		assertNotSame(array1, json.getJsonArray("key2"));
 	}
 
+	@Test
 	public void testNumber() throws Exception {
 		json.put("pi", 3.1415);
 		json.put("six", 6);
@@ -70,6 +83,7 @@ public class TestJsonObject extends TestCase {
 		assertEquals("6", json.getString("six"));
 	}
 
+	@Test
 	public void testObject() throws Exception {
 		JsonObject obj1 = new JsonObject();
 		JsonObject obj2 = new JsonObject();
@@ -88,6 +102,7 @@ public class TestJsonObject extends TestCase {
 		assertNotSame(obj1, json.getJsonObject("key2"));
 	}
 
+	@Test
 	public void testString() throws Exception {
 		json.put("key1", "value1");
 
@@ -101,6 +116,7 @@ public class TestJsonObject extends TestCase {
 		assertEquals(0, json.getInt("key1"));
 	}
 
+	@Test
 	public void testSimilar() throws Exception {
 		JsonObject simObj = new JsonObject();
 
@@ -173,6 +189,7 @@ public class TestJsonObject extends TestCase {
 		assertTrue(json.isSimilar(simObj));
 	}
 
+	@Test
 	public void testToString() throws Exception {
 		json.put("key", "value");
 		assertEquals("{\n  \"key\":\"value\"\n}", json.toString(2));
@@ -201,6 +218,7 @@ public class TestJsonObject extends TestCase {
 			assertEquals(s2, s);
 	}
 
+	@Test
 	public void testIterator() {
 		JsonObject json = new JsonObject();
 		List<String> items = new ArrayList<String>();
@@ -216,6 +234,7 @@ public class TestJsonObject extends TestCase {
 		assertEquals(0, items.size());
 	}
 
+	@Test
 	public void testRemove() throws Exception {
 		JsonObject j = new JsonObject();
 		j.put("a", "a");
@@ -227,6 +246,7 @@ public class TestJsonObject extends TestCase {
 		assertEquals("{}", j.toString());
 	}
 
+	@Test
 	public void testEnum() throws Exception {
 		JsonObject json = new JsonObject();
 		json.put("a", TestEnum.VALUE_ONE);
@@ -234,11 +254,42 @@ public class TestJsonObject extends TestCase {
 		assertEquals(TestEnum.VALUE_ONE.name(), json.getString("a"));
 	}
 
+	@Test
 	public void testLongObjectStackError() throws Exception {
 		JsonObject a = new JsonObject();
 		for (int i = 0; i < 100000; i++) {
 			a.put("o_" + i, new JsonObject());
 		}
 		JsonArray.parse(a.toString());
+	}
+
+	@Test
+	public void testPut() {
+		String key = "key";
+		Float fpi = new Float(3.14f);
+		Integer answer = new Integer(42);
+		Date date = new Date(0);
+
+		json.put(key, fpi);
+		assertTrue(fpi == json.getFloat(key));
+		json.put(key, answer);
+		assertTrue(answer == json.getInt(key));
+		json.put(key, (Object) date);
+		assertTrue("1970-01-01T00:00:00.000Z".equals(json.getString(key)));
+
+		try {
+			json.put(key, new HashSet<String>());
+			fail("expect error");
+		} catch (IllegalArgumentException ex) {
+
+		}
+	}
+
+	@Test
+	public void testNull() {
+		assertTrue(json.isNull("monkey"));
+
+		json.put("test", (Object) null);
+		assertTrue(json.isNull("test"));
 	}
 }

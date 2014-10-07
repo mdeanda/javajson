@@ -438,7 +438,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 
 	/**
 	 * Checks if the field contains a null value (different than hasKey because
-	 * it can have the key but be null)
+	 * it can have the key but be null). No value is assumed to be equal to null
 	 */
 	public boolean isNull(String key) {
 		if (map.containsKey(key)) {
@@ -446,7 +446,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 			return jv.isNull();
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
@@ -505,6 +505,13 @@ public class JsonObject implements Iterable<String>, Serializable {
 		map.put(key, new JsonValue(value, true));
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @throws IllegalArgumentException
+	 *             if its not a supported object type
+	 */
 	public void put(String key, Object value) {
 		if (value instanceof Boolean)
 			put(key, ((Boolean) value).booleanValue());
@@ -529,7 +536,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 		else if (value instanceof Enum)
 			put(key, ((Enum) value).name());
 		else
-			throw new ClassCastException("Unrecognized class");
+			throw new IllegalArgumentException("Unrecognized class");
 	}
 
 	public JsonObject put(String key, boolean value) {

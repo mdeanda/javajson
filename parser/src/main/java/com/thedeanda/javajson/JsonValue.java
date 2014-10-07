@@ -6,12 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class JsonValue implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static DateFormat dateFormat = new SimpleDateFormat(
-			"yyyy:MM:dd'T'HH:mm:ssZ");
+			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
 	static {
 		escapeMap.put('\\', "\\\\");
@@ -22,6 +23,8 @@ public class JsonValue implements Serializable {
 		escapeMap.put('\t', "\\t");
 		escapeMap.put('\"', "\\\"");
 		// escapeMap.put('\'', "\\\'");
+
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	private JsonNativeType nativeType;
@@ -77,7 +80,10 @@ public class JsonValue implements Serializable {
 		setString(val);
 	}
 
-	/** stores the raw string before escaping, used to make parsing a little quicker */
+	/**
+	 * stores the raw string before escaping, used to make parsing a little
+	 * quicker
+	 */
 	public JsonValue(String value, boolean raw) {
 		this.rawString = value;
 	}
