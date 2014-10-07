@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+group = 'com.thedeanda.javajson'
+version = '1.0-SNAPSHOT'
+
+description = 'javajson-mapper is an object mapper for javajson'
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+dependencies {
+	compile 'com.thedeanda:javajson:latest.integration'
+
+	compile 'org.slf4j:slf4j-api:latest.integration'
+	testCompile 'junit:junit:latest.integration'
+	testCompile 'org.slf4j:slf4j-simple:latest.integration'
+}
+
