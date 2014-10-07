@@ -2,18 +2,21 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-apply plugin: 'ca.coglinc.javacc'
+//apply plugin: 'ca.coglinc.javacc'
 
 group = 'com.thedeanda'
 version = '1.0-snapshot'
 
+dependencies {
+	testCompile 'junit:junit:4.11'
+}
 buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
 	}
 	dependencies {
-		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
+//		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
 	}
 }
 
