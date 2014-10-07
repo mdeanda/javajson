@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
-
+apply plugin: "jacoco"
 //apply plugin: 'ca.coglinc.javacc'
 
 group = 'com.thedeanda'
@@ -24,3 +24,10 @@ buildscript {
 	}
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
