@@ -292,4 +292,16 @@ public class TestJsonObject {
 		json.put("test", (Object) null);
 		assertTrue(json.isNull("test"));
 	}
+
+	@Test
+	public void testEmptyGetters() {
+		String key = "key";
+		assertEquals(0, json.getInt(key));
+		assertEquals(0l, json.getLong(key));
+		assertEquals(0.0f, json.getFloat(key), 0.1f);
+		assertEquals(0.0d, json.getDouble(key), 0.1f);
+		assertFalse(json.getBoolean(key));
+		assertNull(json.getJsonArray(key));
+		assertNull(json.getJsonObject(key));
+	}
 }
