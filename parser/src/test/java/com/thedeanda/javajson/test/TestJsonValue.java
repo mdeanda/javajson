@@ -139,7 +139,6 @@ public class TestJsonValue {
 		assertEquals("unecoded tab", "\"tab\\tspace\"", v.toString());
 
 		v = new JsonValue(15.3f);
-		System.out.println(Float.toString(15.3f));
 		assertEquals(Float.toString(15.3f), v.toString());
 
 		v = new JsonValue(new JsonArray());

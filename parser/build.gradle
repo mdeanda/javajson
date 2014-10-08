@@ -31,3 +31,8 @@ jacocoTestReport {
         html.destination "${buildDir}/jacocoHtml"
     }
 }
+
+task dist << {
+	println("123")
+}
+dist.dependsOn test, javadoc, jacocoTestReport

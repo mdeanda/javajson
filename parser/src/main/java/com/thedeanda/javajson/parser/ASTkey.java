@@ -20,17 +20,16 @@ public class ASTkey extends SimpleNode {
 
 	private String fixString(String s) {
 		String ret = s;
-		boolean escaped = false;
-		if (!escaped && ret.length() >= 2 && ret.startsWith("\"")
-				&& ret.endsWith("\"")) {
-			ret = ASTstring.fixString(s);
-			escaped = true;
+
+		if (s == null || s.length() < 2)
+			return ret;
+
+		if (ret.startsWith("\"") && ret.endsWith("\"")) {
+			return ASTstring.fixString(s);
 		}
 
-		if (!escaped && ret.length() >= 2 && ret.startsWith("'")
-				&& ret.endsWith("'")) {
-			ret = ASTstring.fixString(s);
-			escaped = true;
+		if (ret.startsWith("'") && ret.endsWith("'")) {
+			return ASTstring.fixString(s);
 		}
 
 		return ret;

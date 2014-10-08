@@ -20,11 +20,9 @@ public class ASTvalue extends SimpleNode {
 				if (children[i] instanceof SimpleNode) {
 					SimpleNode node = (SimpleNode) children[i];
 					node.interpret();
-					// push(node);
 				}
 			}
 		} else {
-			//System.out.println("What's my value?" + val);
 			if ("true".equals(val))
 				push(Boolean.TRUE);
 			else if ("false".equals(val))

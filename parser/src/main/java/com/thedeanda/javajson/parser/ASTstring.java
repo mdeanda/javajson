@@ -5,6 +5,8 @@ package com.thedeanda.javajson.parser;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.thedeanda.javajson.JsonValue;
+
 public class ASTstring extends SimpleNode {
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
 	static {
@@ -31,11 +33,12 @@ public class ASTstring extends SimpleNode {
 
 	@Override
 	protected void interpret() {
-		((SimpleNode) parent).push(ASTstring.fixString(val));
+		// ((SimpleNode) parent).push(ASTstring.fixString(val));
+		((SimpleNode) parent).push(new JsonValue(val, true));
 	}
 
 	/** Removes escapes from string and returns normal string */
-	protected static String fixString(String s) {
+	public static String fixString(String s) {
 		s = s.substring(1, s.length() - 1);
 		StringBuffer ret = new StringBuffer();
 		boolean escape = false;

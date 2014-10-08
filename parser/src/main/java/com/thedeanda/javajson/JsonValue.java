@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
+import com.thedeanda.javajson.parser.ASTstring;
+
 public class JsonValue implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static DateFormat dateFormat = new SimpleDateFormat(
@@ -86,6 +88,7 @@ public class JsonValue implements Serializable {
 	 */
 	public JsonValue(String value, boolean raw) {
 		this.rawString = value;
+		nativeType = JsonNativeType.STRING;
 	}
 
 	public JsonValue(Object val) {
@@ -129,7 +132,15 @@ public class JsonValue implements Serializable {
 			return "\\u" + byteToHex(hiByte) + byteToHex(loByte);
 	}
 
+	private void init() {
+		if (rawString != null) {
+			stringVal = ASTstring.fixString(rawString);
+			rawString = null;
+		}
+	}
+
 	public boolean getBoolean() {
+		init();
 		boolean ret = false;
 		if (boolVal != null)
 			ret = boolVal.booleanValue();
@@ -142,6 +153,7 @@ public class JsonValue implements Serializable {
 	}
 
 	public double getDouble() {
+		init();
 		double ret = 0d;
 		if (doubleVal != null)
 			ret = doubleVal.doubleValue();
@@ -162,6 +174,7 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public float getFloat() {
+		init();
 		float ret = 0f;
 
 		if (floatVal != null)
@@ -200,6 +213,7 @@ public class JsonValue implements Serializable {
 	}
 
 	public long getLong() {
+		init();
 		long ret = 0;
 		if (longVal != null)
 			ret = longVal.longValue();
@@ -219,6 +233,7 @@ public class JsonValue implements Serializable {
 	}
 
 	public String getString() {
+		init();
 		String retVal = null;
 		switch (nativeType) {
 		case BOOLEAN:
@@ -399,6 +414,7 @@ public class JsonValue implements Serializable {
 		jsonArray = null;
 		jsonObject = null;
 		stringVal = null;
+		rawString = null;
 	}
 
 	public void setString(String s) {
@@ -432,6 +448,7 @@ public class JsonValue implements Serializable {
 
 	@Override
 	public String toString() {
+		init();
 		if (nativeType == JsonNativeType.BOOLEAN)
 			return boolVal ? "true" : "false";
 		else if (nativeType == JsonNativeType.LONG

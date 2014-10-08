@@ -123,6 +123,8 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 			add((String) null);
 		else if (value instanceof Enum)
 			add(((Enum) value).name());
+		else if (value instanceof JsonValue)
+			list.add((JsonValue) value);
 		else
 			throw new ClassCastException("Unrecognized class");
 		return this;

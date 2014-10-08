@@ -535,6 +535,8 @@ public class JsonObject implements Iterable<String>, Serializable {
 			put(key, (String) null);
 		else if (value instanceof Enum)
 			put(key, ((Enum) value).name());
+		else if (value instanceof JsonValue)
+			map.put(key, (JsonValue) value);
 		else
 			throw new IllegalArgumentException("Unrecognized class");
 	}

@@ -38,7 +38,6 @@ public class ASTmembers extends SimpleNode {
 
 		if (o instanceof TMember) {
 			// recursive call
-			//System.out.println("ignoring child member" + parent.getClass().getSimpleName());
 			((SimpleNode) parent).push(o);
 			on = Next.KEY;
 		} else if (on == Next.KEY) {

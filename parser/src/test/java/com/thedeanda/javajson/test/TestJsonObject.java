@@ -197,18 +197,15 @@ public class TestJsonObject {
 		json = new JsonObject();
 		JsonObject json2 = new JsonObject();
 		json.put("key3", json2);
-		// System.out.println(json.toString(2));
 		assertEquals("{\n  \"key3\":{}\n}", json.toString(2));
 
 		json2.put("key4", "value4");
-		// System.out.println(json.toString(2));
 		assertEquals("{\n  \"key3\":{\n    \"key4\":\"value4\"\n  }\n}",
 				json.toString(2));
 
 		// Test for 2 different strings since output can be a little bit
 		// different because internally it uses a set
 		json2.put("key5", "value5");
-		// System.out.println(json.toString(2));
 		String s = json.toString(2);
 		String s1 = "{\n  \"key3\":{\n    \"key5\":\"value5\",\n    \"key4\":\"value4\"\n  }\n}";
 		String s2 = "{\n  \"key3\":{\n    \"key4\":\"value4\",\n    \"key5\":\"value5\"\n  }\n}";
