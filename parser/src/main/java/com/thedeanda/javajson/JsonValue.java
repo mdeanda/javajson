@@ -141,6 +141,8 @@ public class JsonValue implements Serializable {
 	public double getDouble() {
 		if (doubleVal != null)
 			return doubleVal.doubleValue();
+		else if (floatVal != null)
+			return floatVal.doubleValue();
 		else if (longVal != null)
 			return longVal.doubleValue();
 		else if (stringVal != null)
@@ -194,6 +196,8 @@ public class JsonValue implements Serializable {
 		long ret = 0;
 		if (doubleVal != null)
 			ret = doubleVal.longValue();
+		else if (floatVal != null)
+			ret = floatVal.longValue();
 		else if (longVal != null)
 			ret = longVal.longValue();
 		else if (stringVal != null) {
@@ -332,8 +336,21 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public boolean isLong() {
-		return nativeType == JsonNativeType.LONG
+		boolean ret = nativeType == JsonNativeType.LONG
 				|| nativeType == JsonNativeType.INTEGER;
+
+		if (!ret && !isNull()) {
+			try {
+				String s = getString();
+				if (s != null && Pattern.matches("-?\\d+", s)) {
+					Long.parseLong(s);
+					ret = true;
+				}
+			} catch (NumberFormatException nfe) {
+				ret = false;
+			}
+		}
+		return ret;
 	}
 
 	public boolean isNull() {

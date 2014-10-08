@@ -304,4 +304,20 @@ public class TestJsonObject {
 		assertNull(json.getJsonArray(key));
 		assertNull(json.getJsonObject(key));
 	}
+	
+	@Test
+	public void testIsMethods() {
+		String key = "key";
+		assertFalse(json.isBoolean(key));
+		assertFalse(json.isDouble(key));
+		assertFalse(json.isFloat(key));
+		assertFalse(json.isInt(key));
+		assertFalse(json.isJsonArray(key));
+		assertFalse(json.isJsonObject(key));
+		assertFalse(json.isLong(key));
+		assertTrue(json.isNull(key));
+		assertFalse(json.isSimilar(null));
+		assertFalse(json.isString(key));
+
+	}
 }
