@@ -76,7 +76,7 @@ public class ConverterTest extends TestCase {
 		assertTrue(json.isJsonArray("intList"));
 		array = json.getJsonArray("intList");
 		for (JsonValue val : array) {
-			assertTrue(val.isFloat());
+			assertTrue(val.isNumber());
 		}
 	}
 

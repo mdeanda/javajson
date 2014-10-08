@@ -47,9 +47,9 @@ public class TestBug_2916831 extends TestCase {
 
 		input = "{\"a\":\"0.1\"}";
 		json = JsonObject.parse(input);
-		assertTrue(json.isDouble("a"));
+		assertFalse(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertTrue(json.isFloat("a"));
+		assertFalse(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
@@ -57,9 +57,9 @@ public class TestBug_2916831 extends TestCase {
 
 		input = "{\"a\":\".3\"}";
 		json = JsonObject.parse(input);
-		assertTrue(json.isDouble("a"));
+		assertFalse(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertTrue(json.isFloat("a"));
+		assertFalse(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
@@ -67,9 +67,9 @@ public class TestBug_2916831 extends TestCase {
 
 		input = "{\"a\":\"5.\"}";
 		json = JsonObject.parse(input);
-		assertTrue(json.isDouble("a"));
+		assertFalse(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertTrue(json.isFloat("a"));
+		assertFalse(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
@@ -78,9 +78,9 @@ public class TestBug_2916831 extends TestCase {
 
 		input = "{\"a\":\"1.3\"}";
 		json = JsonObject.parse(input);
-		assertTrue(json.isDouble("a"));
+		assertFalse(json.isDouble("a"));
 		assertFalse(json.isBoolean("a"));
-		assertTrue(json.isFloat("a"));
+		assertFalse(json.isFloat("a"));
 		assertFalse(json.isInt("a"));
 		assertFalse(json.isLong("a"));
 		assertTrue(json.isString("a"));
@@ -104,7 +104,7 @@ public class TestBug_2916831 extends TestCase {
 		assertFalse(json.isDouble("a"));
 		assertEquals(".", json.getString("a"));
 	}
-	
+
 	public void testVerifyReturnedData() throws Exception {
 		String input;
 		JsonObject json;
@@ -124,5 +124,5 @@ public class TestBug_2916831 extends TestCase {
 		json = JsonObject.parse(input);
 		assertEquals(pis, json.getString("a"));
 		assertEquals(pi, json.getDouble("a"));
-}
+	}
 }

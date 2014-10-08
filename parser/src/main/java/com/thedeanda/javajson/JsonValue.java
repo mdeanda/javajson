@@ -130,25 +130,30 @@ public class JsonValue implements Serializable {
 	}
 
 	public boolean getBoolean() {
+		boolean ret = false;
 		if (boolVal != null)
-			return boolVal.booleanValue();
-		else if (stringVal != null)
-			return "true".equals(stringVal);
-		else
-			return false;
+			ret = boolVal.booleanValue();
+		else if (stringVal != null) {
+			ret = "true".equals(stringVal);
+		}
+
+		boolVal = ret;
+		return ret;
 	}
 
 	public double getDouble() {
+		double ret = 0d;
 		if (doubleVal != null)
-			return doubleVal.doubleValue();
+			ret = doubleVal.doubleValue();
 		else if (floatVal != null)
-			return floatVal.doubleValue();
+			ret = floatVal.doubleValue();
 		else if (longVal != null)
-			return longVal.doubleValue();
+			ret = longVal.doubleValue();
 		else if (stringVal != null)
-			return Double.parseDouble(stringVal);
-		else
-			return 0;
+			ret = Double.parseDouble(stringVal);
+
+		doubleVal = ret;
+		return ret;
 	}
 
 	/**
@@ -157,16 +162,18 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public float getFloat() {
+		float ret = 0f;
+
 		if (floatVal != null)
-			return floatVal.floatValue();
+			ret = floatVal.floatValue();
 		else if (doubleVal != null)
-			return doubleVal.floatValue();
+			ret = doubleVal.floatValue();
 		else if (longVal != null)
-			return longVal.floatValue();
+			ret = longVal.floatValue();
 		else if (stringVal != null)
-			return Float.parseFloat(stringVal);
-		else
-			return 0f;
+			ret = Float.parseFloat(stringVal);
+		floatVal = ret;
+		return ret;
 	}
 
 	/**
@@ -194,12 +201,12 @@ public class JsonValue implements Serializable {
 
 	public long getLong() {
 		long ret = 0;
-		if (doubleVal != null)
+		if (longVal != null)
+			ret = longVal.longValue();
+		else if (doubleVal != null)
 			ret = doubleVal.longValue();
 		else if (floatVal != null)
 			ret = floatVal.longValue();
-		else if (longVal != null)
-			ret = longVal.longValue();
 		else if (stringVal != null) {
 			try {
 				ret = Long.parseLong(stringVal);
@@ -207,48 +214,40 @@ public class JsonValue implements Serializable {
 				ret = 0;
 			}
 		}
+		longVal = ret;
 		return ret;
 	}
 
 	public String getString() {
-		if (boolVal != null)
-			return boolVal.toString();
-		else if (doubleVal != null)
-			return doubleVal.toString();
-		else if (floatVal != null)
-			return floatVal.toString();
-		else if (longVal != null)
-			return longVal.toString();
-		else if (stringVal != null)
-			return stringVal;
-		else
-			return null;
+		String retVal = null;
+		switch (nativeType) {
+		case BOOLEAN:
+			retVal = boolVal.toString();
+			break;
+		case DOUBLE:
+			retVal = doubleVal.toString();
+			break;
+		case FLOAT:
+			retVal = floatVal.toString();
+			break;
+		case INTEGER:
+		case LONG:
+			retVal = longVal.toString();
+			break;
+		case STRING:
+			retVal = stringVal;
+			break;
+		case JSON_ARRAY:
+		case JSON_OBJECT:
+		case NULL:
+			retVal = null;
+		}
+		return retVal;
 	}
 
 	public String getString(String defaultValue) {
 		String ret = getString();
 		return ret == null ? defaultValue : ret;
-	}
-
-	/**
-	 * Returns the class of the value being used. For example, if setFloat or
-	 * setDouble were used, Double.class is returned. If setInt or setLong is
-	 * used, Long.class is returned.
-	 * 
-	 * @deprecated User getNativeType instead
-	 */
-	@SuppressWarnings("unchecked")
-	public Class getValueClass() {
-		if (doubleVal != null)
-			return Double.class;
-		else if (longVal != null)
-			return Long.class;
-		else if (jsonArray != null)
-			return JsonArray.class;
-		else if (jsonObject != null)
-			return JsonObject.class;
-		else
-			return null;
 	}
 
 	public JsonNativeType getNativeType() {
@@ -265,58 +264,30 @@ public class JsonValue implements Serializable {
 	}
 
 	/**
-	 * Checks if the value can be safely converted to this type without losing
-	 * data. This is true of any type of number
+	 * Checks if the value is any type of number and not a quoted number as that
+	 * is considered a string
 	 * 
 	 * @return
 	 */
-	public boolean isDouble() {
+	public boolean isNumber() {
 		boolean ret = nativeType == JsonNativeType.LONG
 				|| nativeType == JsonNativeType.INTEGER
 				|| nativeType == JsonNativeType.FLOAT
 				|| nativeType == JsonNativeType.DOUBLE;
 
-		if (!ret && !isNull()) {
-			try {
-				String s = getString();
-				if (s != null
-						&& (Pattern.matches("-?\\d+", s) || Pattern.matches(
-								"-?(\\d+\\.\\d*)|(\\d*\\.\\d+)", s))) {
-					Double.parseDouble(s);
-					ret = true;
-				}
-			} catch (NumberFormatException nfe) {
-				ret = false;
-			}
-		}
 		return ret;
 	}
 
 	/**
-	 * Checks if the value can be safely converted to this type without losing.
-	 * It returns the same as isDouble as long as the value is not out of range
-	 * TODO: check out of range errors
-	 * 
-	 * @return
-	 */
-	public boolean isFloat() {
-		return isDouble();
-	}
-
-	/**
-	 * Checks if the value can be safely converted to this type without losing
-	 * data. It returns the same as isLong as long as the value is not out of
-	 * range TODO: check out of range errors
+	 * Returns true if the native value is a long or int
 	 * 
 	 * @return
 	 */
 	public boolean isInt() {
-		boolean ret = isLong();
-		if (ret) {
-			// check if in range
-			long l = getLong();
-			if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE)
-				ret = false;
+		boolean ret = nativeType == JsonNativeType.LONG
+				|| nativeType == JsonNativeType.INTEGER;
+		if (nativeType == JsonNativeType.LONG) {
+			ret = longVal < Integer.MAX_VALUE && longVal > Integer.MIN_VALUE;
 		}
 		return ret;
 	}
@@ -330,8 +301,7 @@ public class JsonValue implements Serializable {
 	}
 
 	/**
-	 * Checks if the value can be safely converted to this type without losing
-	 * data
+	 * Returns true if native time is long or int
 	 * 
 	 * @return
 	 */
@@ -339,17 +309,6 @@ public class JsonValue implements Serializable {
 		boolean ret = nativeType == JsonNativeType.LONG
 				|| nativeType == JsonNativeType.INTEGER;
 
-		if (!ret && !isNull()) {
-			try {
-				String s = getString();
-				if (s != null && Pattern.matches("-?\\d+", s)) {
-					Long.parseLong(s);
-					ret = true;
-				}
-			} catch (NumberFormatException nfe) {
-				ret = false;
-			}
-		}
 		return ret;
 	}
 

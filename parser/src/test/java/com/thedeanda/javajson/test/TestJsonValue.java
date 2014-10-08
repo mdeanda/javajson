@@ -20,8 +20,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(true);
 		assertTrue(v.isBoolean());
-		assertFalse(v.isDouble());
-		assertFalse(v.isFloat());
+		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -30,8 +29,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(4.14643534534434653463456d);
 		assertFalse(v.isBoolean());
-		assertTrue(v.isDouble());
-		assertTrue(v.isFloat());
+		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -40,8 +38,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(2.5f);
 		assertFalse(v.isBoolean());
-		assertTrue(v.isDouble());
-		assertTrue(v.isFloat());
+		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -50,8 +47,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(15);
 		assertFalse(v.isBoolean());
-		assertTrue(v.isDouble());
-		assertTrue(v.isFloat());
+		assertTrue(v.isNumber());
 		assertTrue(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -60,8 +56,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(new JsonArray());
 		assertFalse(v.isBoolean());
-		assertFalse(v.isDouble());
-		assertFalse(v.isFloat());
+		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertTrue(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -70,8 +65,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(new JsonObject());
 		assertFalse(v.isBoolean());
-		assertFalse(v.isDouble());
-		assertFalse(v.isFloat());
+		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertTrue(v.isJsonObject());
@@ -80,8 +74,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(156l);
 		assertFalse(v.isBoolean());
-		assertTrue(v.isDouble());
-		assertTrue(v.isFloat());
+		assertTrue(v.isNumber());
 		assertTrue(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -90,8 +83,7 @@ public class TestJsonValue {
 
 		v = new JsonValue(2532263343453345289l);
 		assertFalse(v.isBoolean());
-		assertTrue(v.isDouble());
-		assertTrue(v.isFloat());
+		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isJsonArray());
 		assertFalse(v.isJsonObject());
@@ -292,20 +284,16 @@ public class TestJsonValue {
 	@Test
 	public void testIsMethodsWithAutoConversion() {
 		JsonValue v = new JsonValue("3.14");
-		assertTrue(v.isFloat());
-		assertTrue(v.isDouble());
+		assertFalse(v.isNumber());
 
 		v = new JsonValue("3");
-		assertTrue(v.isFloat());
-		assertTrue(v.isDouble());
-		assertTrue(v.isInt());
-		assertTrue(v.isLong());
+		assertFalse(v.isNumber());
+		assertFalse(v.isInt());
+		assertFalse(v.isLong());
 
 		v = new JsonValue(
 				"300000000000000000000000000000000000000000000000000000000000000");
-		// TODO: these should return false as it won't parse to correct value
-		// assertFalse(v.isFloat());
-		// assertFalse(v.isDouble());
+		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isLong());
 	}

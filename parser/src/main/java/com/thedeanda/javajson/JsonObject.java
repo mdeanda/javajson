@@ -364,7 +364,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	 */
 	public boolean isDouble(String key) {
 		if (map.containsKey(key))
-			return map.get(key).isDouble();
+			return map.get(key).isNumber();
 		else
 			return false;
 	}
@@ -377,7 +377,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	 */
 	public boolean isFloat(String key) {
 		if (map.containsKey(key))
-			return map.get(key).isFloat();
+			return map.get(key).isNumber();
 		else
 			return false;
 	}

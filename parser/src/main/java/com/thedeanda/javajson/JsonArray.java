@@ -258,7 +258,7 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 	 */
 	public boolean isDouble(int index) {
 		if (index >= 0 && index < list.size())
-			return list.get(index).isDouble();
+			return list.get(index).isNumber();
 		else
 			throw new IndexOutOfBoundsException();
 	}
@@ -274,7 +274,7 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 	 */
 	public boolean isFloat(int index) {
 		if (index >= 0 && index < list.size())
-			return list.get(index).isFloat();
+			return list.get(index).isNumber();
 		else
 			throw new IndexOutOfBoundsException();
 	}

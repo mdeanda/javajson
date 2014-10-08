@@ -9,7 +9,7 @@ import com.thedeanda.javajson.JsonObject;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		//typically: 17000ms for 10000 records on my i5
+		//typically: 16000ms for 10000 records on my i5
 		int repeats = 10000; 
 		String content = readFile();
 		long start = System.currentTimeMillis();

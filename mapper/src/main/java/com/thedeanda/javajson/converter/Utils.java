@@ -127,11 +127,11 @@ public class Utils {
 							&& (typeName == null || Boolean.class.getName()
 									.equals(typeName))) {
 						c.add(value.getBoolean());
-					} else if (value.isFloat()
+					} else if (value.isNumber()
 							&& (typeName == null || Float.class.getName()
 									.equals(typeName))) {
 						c.add(value.getFloat());
-					} else if (value.isDouble()
+					} else if (value.isNumber()
 							&& (typeName == null || Double.class.getName()
 									.equals(typeName))) {
 						c.add(value.getDouble());
