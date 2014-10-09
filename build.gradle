@@ -1,0 +1,60 @@
+apply plugin: 'eclipse'
+//apply plugin: 'ca.coglinc.javacc'
+
+group = 'com.thedeanda.javajson'
+version = '1.0-snapshot'
+
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+//		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
+	}
+}
+
+subprojects {
+	apply plugin: 'maven'
+	apply plugin: 'java'
+	apply plugin: 'jacoco'
+	repositories {
+		jcenter()
+		mavenCentral()
+		mavenLocal()
+	}
+	dependencies {
+		testCompile 'junit:junit:4.11'
+	}
+
+	jacocoTestReport {
+		reports {
+			xml.enabled false
+			csv.enabled false
+			html.destination "${buildDir}/jacocoHtml"
+		}
+	}
+
+	task copyCoverageReport(type: Copy) {
+		from 'build/jacocoHtml'
+		into 'build/target/jacoco'
+	}
+	copyCoverageReport.dependsOn jacocoTestReport
+
+	task copyTest(type: Copy) {
+		from 'build/reports/tests'
+		into 'build/target/tests'
+	}
+	copyTest.dependsOn test
+
+	task copyJavadoc(type: Copy) {
+		from 'build/docs/javadoc'
+		into 'build/target/javadoc'
+	}
+	copyJavadoc.dependsOn javadoc
+
+	task dist << {
+		println("123")
+	}
+	dist.dependsOn compileJava, copyJavadoc, copyCoverageReport, copyTest
+}

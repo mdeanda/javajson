@@ -4,16 +4,6 @@ apply plugin: 'eclipse'
 apply plugin: "jacoco"
 //apply plugin: 'ca.coglinc.javacc'
 
-group = 'com.thedeanda'
-version = '1.0-snapshot'
-
-repositories {
-	jcenter()
-	mavenCentral()
-}
-dependencies {
-	testCompile 'junit:junit:4.11'
-}
 buildscript {
 	repositories {
 		jcenter()
@@ -23,16 +13,3 @@ buildscript {
 //		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
 	}
 }
-
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
-    }
-}
-
-task dist << {
-	println("123")
-}
-dist.dependsOn test, javadoc, jacocoTestReport
