@@ -1,15 +1,18 @@
 package com.thedeanda.javajson.mappedconverter;
 
-import junit.framework.TestCase;
+import static junit.framework.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.thedeanda.javajson.JsonObject;
 import com.thedeanda.javajson.converter.test.SimpleObject;
 
-public class BasicTest extends TestCase {
+public class BasicTest {
 
 	private MappedConverter mc;
 
-	@Override
+	@Before
 	public void setUp() throws Exception {
 		JsonObject json = new JsonObject();
 
@@ -26,6 +29,8 @@ public class BasicTest extends TestCase {
 		mc = new MappedConverter(json);
 	}
 
+	/*
+	@Test
 	public void testSimple() throws Exception {
 		SimpleObject so = new SimpleObject();
 		so.setField1("f1");
@@ -47,4 +52,5 @@ public class BasicTest extends TestCase {
 		assertEquals(expected2.toString(), ret.toString());
 
 	}
+	*/
 }

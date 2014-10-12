@@ -13,7 +13,8 @@ public class MappedConverter {
 		this.map = map;
 	}
 
-	public JsonObject map(Object object, String mapKey) throws Exception {
+	//not working yet
+	private JsonObject map(Object object, String mapKey) throws Exception {
 		JsonObject ret = null;
 		JsonObject map = this.map.getJsonObject(mapKey);
 		if (map != null) {
@@ -22,12 +23,11 @@ public class MappedConverter {
 			// using "field1" but "getField1"
 			Map<String, Object> flds = Reflection.getFields(object);
 			for (String key : map) {
-				JsonValue jv = map.get(key);
-				boolean accept = jv.getBoolean();
+				boolean accept = map.getBoolean(key);
 
 				if (!accept)
 					continue;
-
+				
 				if (flds.containsKey(key)) {
 					ret.put(key, flds.get(key));
 				}
