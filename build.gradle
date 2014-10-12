@@ -18,9 +18,9 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'jacoco'
 	apply plugin: 'eclipse'
+	apply plugin: 'maven-publish'
 
 	jar.baseName = "${parent.name}-${name}-${parent.version}"
-
 	repositories {
 		jcenter()
 		mavenCentral()
@@ -28,6 +28,15 @@ subprojects {
 	}
 	dependencies {
 		testCompile 'junit:junit:4.11'
+	}
+	publishing {
+		publications {
+			maven(MavenPublication) {
+				artifactId "$parent.name}-${name}"
+				from components.java
+
+			}
+		}
 	}
 
 	jacocoTestReport {
