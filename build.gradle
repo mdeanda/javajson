@@ -20,15 +20,21 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
 
-	jar.baseName = "${parent.name}-${name}-${parent.version}"
+	version = parent.version
+	jar {
+		baseName = "${parent.name}-${project.name}"
+	}
+
 	repositories {
 		jcenter()
 		mavenCentral()
 		mavenLocal()
 	}
+
 	dependencies {
 		testCompile 'junit:junit:4.11'
 	}
+
 	publishing {
 		publications {
 			maven(MavenPublication) {
@@ -46,6 +52,7 @@ subprojects {
 			html.destination "${buildDir}/jacocoHtml"
 		}
 	}
+
 	eclipse {
 		project {
 			name = "${parent.name}-${name}"
@@ -71,7 +78,7 @@ subprojects {
 	copyJavadoc.dependsOn javadoc
 
 	task dist << {
-		println("123")
+		println("dist:::: ${parent.name}-${name}-${parent.version}")
 	}
 	dist.dependsOn compileJava, copyJavadoc, copyCoverageReport, copyTest
 }
