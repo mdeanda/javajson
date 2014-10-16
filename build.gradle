@@ -1,8 +1,5 @@
 //apply plugin: 'ca.coglinc.javacc'
 
-group = 'com.thedeanda.javajson'
-version = '1.0-snapshot'
-
 buildscript {
 	repositories {
 		jcenter()
@@ -20,9 +17,13 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
 
-	version = parent.version
+	group = 'com.thedeanda.javajson'
+	version = '1.0-snapshot'
+	archivesBaseName = rootProject.name + '-' + project.name
+	//version = parent.version
 	jar {
-		baseName = "${parent.name}-${project.name}"
+		manifest.attributes provider: 'gradle'
+		//baseName = "${parent.name}-${project.name}"
 	}
 
 	repositories {
