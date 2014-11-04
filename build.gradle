@@ -1,12 +1,10 @@
 //apply plugin: 'ca.coglinc.javacc'
 
-group = 'com.thedeanda.javajson'
-version = '1.0-snapshot'
-
 buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
+		mavenLocal()
 	}
 	dependencies {
 //		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
@@ -19,7 +17,10 @@ subprojects {
 	apply plugin: 'jacoco'
 	apply plugin: 'eclipse'
 
-	jar.baseName = "${parent.name}-${name}-${parent.version}"
+	archivesBaseName = rootProject.name + '-' + project.name
+	//jar.baseName = "${parent.name}-${name}-${parent.version}"
+	group = 'com.thedeanda.javajson'
+	version = '1.0-snapshot'
 
 	repositories {
 		jcenter()
