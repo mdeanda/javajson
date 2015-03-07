@@ -1,16 +1,10 @@
-//apply plugin: 'ca.coglinc.javacc'
-
 buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
 		mavenLocal()
 	}
-	dependencies {
-//		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
-	}
 }
-
 subprojects {
 	apply plugin: 'maven'
 	apply plugin: 'java'
