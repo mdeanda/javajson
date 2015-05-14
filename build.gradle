@@ -22,7 +22,8 @@ subprojects {
 		mavenLocal()
 	}
 	dependencies {
-		testCompile 'junit:junit:4.11'
+		testCompile 'junit:junit:4.+'
+		testCompile 'commons-io:commons-io:2.+'
 	}
 
 	jacocoTestReport {
