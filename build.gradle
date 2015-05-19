@@ -21,7 +21,7 @@ allprojects {
 	apply plugin: "com.jfrog.artifactory"
 
 	group = 'com.thedeanda.javajson'
-	version = '1.0'
+	version = '1.0.1-SNAPSHOT'
 }
 configurations {
 	published
