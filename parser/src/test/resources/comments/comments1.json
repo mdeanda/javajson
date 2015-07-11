@@ -1,0 +1,5 @@
+{/** start of object */
+  hello: "world", /* this is a string */
+  num: 3 //this is a number
+  ,foo: "bar", /* wow! */ bar: "!foo"
+} /* end of object */
