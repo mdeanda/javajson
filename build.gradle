@@ -13,7 +13,6 @@ buildscript {
 
 subprojects {
 
-
 	apply plugin: 'maven'
 	apply plugin: 'java'
 	apply plugin: 'jacoco'
@@ -21,6 +20,7 @@ subprojects {
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.artifactory-upload'
 	apply plugin: 'pmd'
+	apply plugin: 'findbugs'
 
 	group = 'com.thedeanda.javajson'
 	version = '1.0-SNAPSHOT'
@@ -100,6 +100,17 @@ subprojects {
 	pmd {
 		ignoreFailures = true
 		reportsDir = file('build/docs/pmd')
+	}
+	findbugs {
+		ignoreFailures = true
+		reportsDir = file('build/docs/findbugs')
+		toolVersion = '3.0.1'
+	}
+	findbugsMain {
+		reports {
+			xml.enabled = false
+			html.enabled = true
+		}
 	}
 
 	task copyCoverageReport(type: Copy) {
