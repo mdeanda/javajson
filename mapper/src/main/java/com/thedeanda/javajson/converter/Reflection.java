@@ -86,17 +86,19 @@ public class Reflection {
 	 */
 	public static String getFieldName(String methodName) {
 		int l = methodName.length();
-		if (l >= 2 && Character.isUpperCase(methodName.charAt(2))) {
-			if (methodName.startsWith("is")) {
-				return Character.toLowerCase(methodName.charAt(2))
-						+ methodName.substring(3);
-			}
+		if (l >= 2 && Character.isUpperCase(methodName.charAt(2))
+				&& methodName.startsWith("is")) {
+			return Character.toLowerCase(methodName.charAt(2))
+					+ methodName.substring(3);
+
 		}
-		if (l >= 3 && Character.isUpperCase(methodName.charAt(3))) {
-			if (methodName.startsWith("get") || methodName.startsWith("set")) {
-				return Character.toLowerCase(methodName.charAt(3))
-						+ methodName.substring(4);
-			}
+		if (l >= 3
+				&& Character.isUpperCase(methodName.charAt(3))
+				&& (methodName.startsWith("get") || methodName
+						.startsWith("set"))) {
+			return Character.toLowerCase(methodName.charAt(3))
+					+ methodName.substring(4);
+
 		}
 
 		return null;

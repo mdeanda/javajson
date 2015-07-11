@@ -17,7 +17,7 @@ public class Mapper {
 	/**
 	 * Default mapper that can be used to map object all the way down the tree.
 	 */
-	public static Mapper DefaultMapper = new Mapper();
+	public static final Mapper DefaultMapper = new Mapper();
 
 	private Mapper() {
 	}

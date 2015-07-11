@@ -11,66 +11,76 @@ buildscript {
 	}
 }
 
-description "javajson"
-
-allprojects {
-	apply plugin: 'java'
-	apply plugin: 'maven'
-	apply plugin: 'eclipse'
-	apply plugin: 'com.jfrog.artifactory-upload'
-	apply plugin: "com.jfrog.artifactory"
-
-	group = 'com.thedeanda.javajson'
-	version = '1.0.1-SNAPSHOT'
-}
-configurations {
-	published
-}
-artifactory {
-	contextUrl = "${artifactory_contextUrl}"
-	publish {
-		repository {
-			if (version.matches(/[0-9\.]+$/)) {
-				repoKey = 'libs-release-local'
-			} else {
-				repoKey = 'libs-snapshot-local'
-			}
-			username = "${artifactory_user}" //The publisher user name
-			password = "${artifactory_password}" //The publisher password
-		}
-		defaults {
-			publishConfigs('archives', 'published')
-			//properties = ['build.status': "$it.project.status".toString()]
-			publishPom = true //Publish generated POM files to Artifactory (true by default)
-			publishIvy = false //Publish generated Ivy descriptor files to Artifactory (true by default)
-		}
-	}
-	resolve {
-		repository {
-			repoKey = 'libs-release'
-			username = "${artifactory_user}"
-			password = "${artifactory_password}"
-			maven = true
-		}
-	}
-}
-
 subprojects {
+
 	apply plugin: 'maven'
 	apply plugin: 'java'
 	apply plugin: 'jacoco'
 	apply plugin: 'eclipse'
+	apply plugin: 'maven-publish'
+	apply plugin: 'com.jfrog.artifactory-upload'
+	apply plugin: 'pmd'
+	apply plugin: 'findbugs'
 
+	group = 'com.thedeanda.javajson'
+	version = '1.0.1'
 	archivesBaseName = rootProject.name + '-' + project.name
-	//jar.baseName = "${parent.name}-${name}-${parent.version}"
-
+	//version = parent.version
 
 	configurations {
 		published
 	}
+	artifactory {
+		contextUrl = "${artifactory_contextUrl}"
+		publish {
+			repository {
+				if (version.matches(/[0-9\.]+$/)) {
+					repoKey = 'libs-release-local'
+				} else {
+					repoKey = 'libs-snapshot-local'
+				}
+				username = "${artifactory_user}" //The publisher user name
+				password = "${artifactory_password}" //The publisher password
+			}
+			defaults {
+				publishConfigs('archives', 'published')
+				//properties = ['build.status': "$it.project.status".toString()]
+				publishPom = true //Publish generated POM files to Artifactory (true by default)
+				publishIvy = false //Publish generated Ivy descriptor files to Artifactory (true by default)
+			}
+		}
+		resolve {
+			repository {
+				repoKey = 'libs-release' //The Artifactory (preferably virtual) repository key to resolve from
+				username = "${artifactory_user}" //Optional resolver user name (leave out to use anonymous resolution)
+				password = "${artifactory_password}" //The resolver password
+				maven = true
+			}
+		}
+	}
+	jar {
+		manifest.attributes provider: 'gradle'
+		//baseName = "${parent.name}-${project.name}"
+	}
+
+	repositories {
+		jcenter()
+		mavenCentral()
+		mavenLocal()
+	}
+
 	dependencies {
-		testCompile 'junit:junit:4.+'
-		testCompile 'commons-io:commons-io:2.+'
+		testCompile 'junit:junit:4.11'
+	}
+
+	publishing {
+		publications {
+			maven(MavenPublication) {
+				artifactId "$parent.name}-${name}"
+				from components.java
+
+			}
+		}
 	}
 
 	jacocoTestReport {
@@ -80,37 +90,50 @@ subprojects {
 			html.destination "${buildDir}/jacocoHtml"
 		}
 	}
+
 	eclipse {
 		project {
 			name = "${parent.name}-${name}"
 		}
 	}
-	jar {
-		manifest.attributes provider: 'gradle'
+
+	pmd {
+		ignoreFailures = true
+		reportsDir = file('build/docs/pmd')
 	}
+	findbugs {
+		ignoreFailures = true
+		reportsDir = file('build/docs/findbugs')
+		toolVersion = '3.0.1'
+	}
+	findbugsMain {
+		reports {
+			xml.enabled = false
+			html.enabled = true
+		}
+	}
+
 	task copyCoverageReport(type: Copy) {
 		from 'build/jacocoHtml'
-		into 'build/target/jacoco'
+		into 'build/docs/jacoco'
 	}
 	copyCoverageReport.dependsOn jacocoTestReport
 
 	task copyTest(type: Copy) {
 		from 'build/reports/tests'
-		into 'build/target/tests'
+		into 'build/docs/tests'
 	}
 	copyTest.dependsOn test
 
-	task copyJavadoc(type: Copy) {
-		from 'build/docs/javadoc'
-		into 'build/target/javadoc'
+	task docJar(type: Jar) {
+		classifier = 'doc'
+		from 'build/docs'
 	}
-	copyJavadoc.dependsOn javadoc
-
-	task dist << {
-		println("123")
+	docJar.dependsOn javadoc, copyTest, copyCoverageReport, check
+	artifactoryPublish {
+		dependsOn docJar
 	}
-	dist.dependsOn compileJava, copyJavadoc, copyCoverageReport, copyTest
-
-
+	artifacts {
+		published docJar
+	}
 }
-
