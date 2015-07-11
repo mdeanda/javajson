@@ -20,6 +20,7 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.artifactory-upload'
+	apply plugin: 'pmd'
 
 	group = 'com.thedeanda.javajson'
 	version = '1.0-SNAPSHOT'
@@ -96,6 +97,11 @@ subprojects {
 		}
 	}
 
+	pmd {
+		ignoreFailures = true
+		reportsDir = file('build/docs/pmd')
+	}
+
 	task copyCoverageReport(type: Copy) {
 		from 'build/jacocoHtml'
 		into 'build/docs/jacoco'
@@ -112,7 +118,7 @@ subprojects {
 		classifier = 'doc'
 		from 'build/docs'
 	}
-	docJar.dependsOn javadoc, copyTest, copyCoverageReport
+	docJar.dependsOn javadoc, copyTest, copyCoverageReport, check
 	artifactoryPublish {
 		dependsOn docJar
 	}
