@@ -1,26 +1,62 @@
-//apply plugin: 'ca.coglinc.javacc'
-
 buildscript {
 	repositories {
+		maven {
+			url "http://repo.jfrog.org/artifactory/gradle"
+		}
 		jcenter()
-		mavenCentral()
-	}
-	dependencies {
-//		classpath group: 'ca.coglinc', name: 'javacc-gradle-plugin', version: '2.0.1'
+		mavenLocal()
+		dependencies {
+			classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '3.0.1')
+		}
 	}
 }
 
 subprojects {
+
+
 	apply plugin: 'maven'
 	apply plugin: 'java'
 	apply plugin: 'jacoco'
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
+	apply plugin: 'com.jfrog.artifactory-upload'
 
 	group = 'com.thedeanda.javajson'
-	version = '1.0-snapshot'
+	version = '1.0-SNAPSHOT'
 	archivesBaseName = rootProject.name + '-' + project.name
 	//version = parent.version
+
+	configurations {
+		published
+	}
+	artifactory {
+		contextUrl = "${artifactory_contextUrl}"
+		publish {
+			repository {
+				if (version.matches(/[0-9\.]+$/)) {
+					repoKey = 'libs-release-local'
+				} else {
+					repoKey = 'libs-snapshot-local'
+				}
+				username = "${artifactory_user}" //The publisher user name
+				password = "${artifactory_password}" //The publisher password
+			}
+			defaults {
+				publishConfigs('archives', 'published')
+				//properties = ['build.status': "$it.project.status".toString()]
+				publishPom = true //Publish generated POM files to Artifactory (true by default)
+				publishIvy = false //Publish generated Ivy descriptor files to Artifactory (true by default)
+			}
+		}
+		resolve {
+			repository {
+				repoKey = 'libs-release' //The Artifactory (preferably virtual) repository key to resolve from
+				username = "${artifactory_user}" //Optional resolver user name (leave out to use anonymous resolution)
+				password = "${artifactory_password}" //The resolver password
+				maven = true
+			}
+		}
+	}
 	jar {
 		manifest.attributes provider: 'gradle'
 		//baseName = "${parent.name}-${project.name}"
@@ -82,4 +118,15 @@ subprojects {
 		println("dist:::: ${parent.name}-${name}-${parent.version}")
 	}
 	dist.dependsOn compileJava, copyJavadoc, copyCoverageReport, copyTest
+
+	task javadocJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from javadoc.destinationDir
+	}
+	artifactoryPublish {
+		dependsOn javadocJar
+	}
+	artifacts {
+		published javadocJar
+	}
 }
