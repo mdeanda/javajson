@@ -98,35 +98,25 @@ subprojects {
 
 	task copyCoverageReport(type: Copy) {
 		from 'build/jacocoHtml'
-		into 'build/target/jacoco'
+		into 'build/docs/jacoco'
 	}
 	copyCoverageReport.dependsOn jacocoTestReport
 
 	task copyTest(type: Copy) {
 		from 'build/reports/tests'
-		into 'build/target/tests'
+		into 'build/docs/tests'
 	}
 	copyTest.dependsOn test
 
-	task copyJavadoc(type: Copy) {
-		from 'build/docs/javadoc'
-		into 'build/target/javadoc'
+	task docJar(type: Jar) {
+		classifier = 'doc'
+		from 'build/docs'
 	}
-	copyJavadoc.dependsOn javadoc
-
-	task dist << {
-		println("dist:::: ${parent.name}-${name}-${parent.version}")
-	}
-	dist.dependsOn compileJava, copyJavadoc, copyCoverageReport, copyTest
-
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		classifier = 'javadoc'
-		from javadoc.destinationDir
-	}
+	docJar.dependsOn javadoc, copyTest, copyCoverageReport
 	artifactoryPublish {
-		dependsOn javadocJar
+		dependsOn docJar
 	}
 	artifacts {
-		published javadocJar
+		published docJar
 	}
 }
