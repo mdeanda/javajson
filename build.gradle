@@ -23,7 +23,7 @@ subprojects {
 	apply plugin: 'findbugs'
 
 	group = 'com.thedeanda.javajson'
-	version = '1.0.1'
+	version = '1.0.2-SNAPSHOT'
 	archivesBaseName = rootProject.name + '-' + project.name
 	//version = parent.version
 
