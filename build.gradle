@@ -24,6 +24,7 @@ subprojects {
 
 	group = 'com.thedeanda.javajson'
 	version = '1.0.2-SNAPSHOT'
+	description = "json parser"
 	archivesBaseName = rootProject.name + '-' + project.name
 	//version = parent.version
 
@@ -62,17 +63,11 @@ subprojects {
 		manifest.attributes provider: 'gradle'
 		//baseName = "${parent.name}-${project.name}"
 	}
-
 	repositories {
 		jcenter()
 		mavenCentral()
 		mavenLocal()
 	}
-
-	dependencies {
-		testCompile 'junit:junit:4.11'
-	}
-
 	publishing {
 		publications {
 			maven(MavenPublication) {
@@ -82,7 +77,6 @@ subprojects {
 			}
 		}
 	}
-
 	jacocoTestReport {
 		reports {
 			xml.enabled false
@@ -90,13 +84,11 @@ subprojects {
 			html.destination "${buildDir}/jacocoHtml"
 		}
 	}
-
 	eclipse {
 		project {
 			name = "${parent.name}-${name}"
 		}
 	}
-
 	pmd {
 		ignoreFailures = true
 		reportsDir = file('build/docs/pmd')
@@ -112,19 +104,16 @@ subprojects {
 			html.enabled = true
 		}
 	}
-
 	task copyCoverageReport(type: Copy) {
 		from 'build/jacocoHtml'
 		into 'build/docs/jacoco'
 	}
 	copyCoverageReport.dependsOn jacocoTestReport
-
 	task copyTest(type: Copy) {
 		from 'build/reports/tests'
 		into 'build/docs/tests'
 	}
 	copyTest.dependsOn test
-
 	task docJar(type: Jar) {
 		classifier = 'doc'
 		from 'build/docs'
@@ -135,5 +124,9 @@ subprojects {
 	}
 	artifacts {
 		published docJar
+	}
+
+	dependencies {
+		testCompile 'junit:junit:4.11'
 	}
 }
