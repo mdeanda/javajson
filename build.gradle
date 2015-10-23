@@ -128,5 +128,7 @@ subprojects {
 
 	dependencies {
 		testCompile 'junit:junit:4.11'
+		testCompile 'commons-io:commons-io:2.4'
+
 	}
 }

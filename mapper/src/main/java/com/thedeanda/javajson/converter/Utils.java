@@ -243,8 +243,7 @@ public class Utils {
 	/**
 	 * Adds known simple types to the json array
 	 * 
-	 * @param obj
-	 * @param key
+	 * @param arr
 	 * @param o
 	 * @return True if the object as of a simple type
 	 */

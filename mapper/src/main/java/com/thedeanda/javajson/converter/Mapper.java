@@ -30,11 +30,7 @@ public class Mapper {
 	 * @param obj
 	 *            The object to convert to json
 	 * @param cls
-	 * @param locale
 	 * @return
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -108,11 +104,6 @@ public class Mapper {
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
 	 */
 	@SuppressWarnings("unchecked")
 	protected JsonArray toJsonArray(Collection col, Class cls)
@@ -129,13 +120,8 @@ public class Mapper {
 	 * @param col
 	 * @param cls
 	 * @return
-	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
 	@SuppressWarnings("unchecked")
