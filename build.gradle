@@ -71,7 +71,7 @@ subprojects {
 	publishing {
 		publications {
 			maven(MavenPublication) {
-				artifactId "$parent.name}-${name}"
+				artifactId "${parent.name}-${name}"
 				from components.java
 
 			}
