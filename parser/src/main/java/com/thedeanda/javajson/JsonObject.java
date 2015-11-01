@@ -220,6 +220,14 @@ public class JsonObject implements Iterable<String>, Serializable {
 		return this;
 	}
 
+	/**
+	 * finds all the values by keys matching regular expressions. if multiple
+	 * expressions are passed in, they keys are matched by looking at children
+	 * similar to the varargs get method.
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public List<JsonValue> find(String... key) {
 		List<JsonValue> ret = new ArrayList<JsonValue>();
 		if (key != null && key.length > 0) {
@@ -339,7 +347,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	public boolean hasKey(String... key) {
-		return get(key) != null;
+		return !get(key).isNull();
 	}
 
 	/**

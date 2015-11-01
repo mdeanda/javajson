@@ -283,6 +283,14 @@ public class TestJsonObject {
 	}
 
 	@Test
+	public void testPutStringAsObject() {
+		String key = "mykey";
+		Object value = "my value";
+		json.put(key, value);
+		assertEquals(value, json.getString(key));
+	}
+
+	@Test
 	public void testNull() {
 		assertTrue(json.isNull("monkey"));
 
@@ -301,7 +309,7 @@ public class TestJsonObject {
 		assertNull(json.getJsonArray(key));
 		assertNull(json.getJsonObject(key));
 	}
-	
+
 	@Test
 	public void testIsMethods() {
 		String key = "key";
