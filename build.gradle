@@ -27,6 +27,9 @@ subprojects {
 	description = "json parser"
 	archivesBaseName = rootProject.name + '-' + project.name
 	//version = parent.version
+	sourceCompatibility = "1.7"
+	targetCompatibility = "1.7"
+
 
 	configurations {
 		published
