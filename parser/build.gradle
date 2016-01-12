@@ -1,1 +1,15 @@
+plugins {
+  id "ca.coglinc.javacc" version "2.3.1"
+}
 
+apply plugin: 'eclipse'
+
+sourceSets {
+    main {
+        java {
+            srcDir compileJavacc.outputDirectory
+        }
+    }
+}
+
+eclipseClasspath.dependsOn("compileJavacc")
