@@ -4,7 +4,6 @@ dependencies {
 	compile project(':parser')
 
 	compile 'org.slf4j:slf4j-api:latest.integration'
-	testCompile 'junit:junit:latest.integration'
 	testCompile 'org.slf4j:slf4j-simple:latest.integration'
 }
 

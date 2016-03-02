@@ -23,9 +23,13 @@ subprojects {
 	apply plugin: 'findbugs'
 
 	group = 'com.thedeanda.javajson'
-	version = '1.0.2-SNAPSHOT'
+	version = '1.0.2'
+	description = "json parser"
 	archivesBaseName = rootProject.name + '-' + project.name
 	//version = parent.version
+	sourceCompatibility = "1.7"
+	targetCompatibility = "1.7"
+
 
 	configurations {
 		published
@@ -62,27 +66,20 @@ subprojects {
 		manifest.attributes provider: 'gradle'
 		//baseName = "${parent.name}-${project.name}"
 	}
-
 	repositories {
 		jcenter()
 		mavenCentral()
 		mavenLocal()
 	}
-
-	dependencies {
-		testCompile 'junit:junit:4.11'
-	}
-
 	publishing {
 		publications {
 			maven(MavenPublication) {
-				artifactId "$parent.name}-${name}"
+				artifactId "${parent.name}-${name}"
 				from components.java
 
 			}
 		}
 	}
-
 	jacocoTestReport {
 		reports {
 			xml.enabled false
@@ -90,13 +87,11 @@ subprojects {
 			html.destination "${buildDir}/jacocoHtml"
 		}
 	}
-
 	eclipse {
 		project {
 			name = "${parent.name}-${name}"
 		}
 	}
-
 	pmd {
 		ignoreFailures = true
 		reportsDir = file('build/docs/pmd')
@@ -112,19 +107,16 @@ subprojects {
 			html.enabled = true
 		}
 	}
-
 	task copyCoverageReport(type: Copy) {
 		from 'build/jacocoHtml'
 		into 'build/docs/jacoco'
 	}
 	copyCoverageReport.dependsOn jacocoTestReport
-
 	task copyTest(type: Copy) {
 		from 'build/reports/tests'
 		into 'build/docs/tests'
 	}
 	copyTest.dependsOn test
-
 	task docJar(type: Jar) {
 		classifier = 'doc'
 		from 'build/docs'
@@ -135,5 +127,11 @@ subprojects {
 	}
 	artifacts {
 		published docJar
+	}
+
+	dependencies {
+		testCompile 'junit:junit:4.+'
+		testCompile 'commons-io:commons-io:2.4'
+
 	}
 }

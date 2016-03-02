@@ -117,6 +117,14 @@ public class TestJsonObject {
 	}
 
 	@Test
+	public void testStringObjectMethod() throws Exception {
+		json.put("key3", (Object) "something");
+
+		assertEquals(1, json.size());
+		assertEquals("something", json.getString("key3"));
+	}
+
+	@Test
 	public void testSimilar() throws Exception {
 		JsonObject simObj = new JsonObject();
 

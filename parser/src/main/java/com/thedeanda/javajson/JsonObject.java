@@ -271,6 +271,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	 * </code> is the same as: <code>
 	 * get("a").get("b");
 	 * </code>
+	 * @return the value
 	 */
 	public JsonValue get(String... key) {
 		return get(0, key);
@@ -365,7 +366,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	/**
-	 * Checks if the item at a key is a double. See {@link JsonValue#isDouble()}
+	 * Checks if the item at a key is a double. See {@link JsonValue#isNumber()}
 	 * for more information
 	 * 
 	 * @param key
@@ -378,7 +379,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	/**
-	 * Checks if the item at a key is a float. See {@link JsonValue#isFloat()}
+	 * Checks if the item at a key is a float. See {@link JsonValue#isNumber()}
 	 * for more information
 	 * 
 	 * @param key

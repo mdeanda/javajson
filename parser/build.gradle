@@ -1,5 +1,33 @@
-dependencies {
-	testCompile 'commons-io:commons-io:2.4'
-	testCompile 'junit:junit:4.+'
+plugins {
+  id "ca.coglinc.javacc" version "2.3.1"
 }
 
+apply plugin: 'eclipse'
+
+
+compileJavacc {
+    outputDirectory = file(project.buildDir.absolutePath + '/generated/jjtree/com/thedeanda/javajson/parser')
+    //arguments = [grammar_encoding: 'UTF-8', static: 'false']
+}
+
+task moveGen(type: Copy) {
+	from file(project.buildDir.absolutePath + '/generated/jjtree/SimpleNode.java')
+	into file(project.buildDir.absolutePath + '/generated/jjtree/com/thedeanda/javajson/parser')
+}
+task moveFile(type: Delete) {
+	delete file(project.buildDir.absolutePath + '/generated/jjtree/SimpleNode.java')
+}
+moveGen.shouldRunAfter compileJavacc
+moveFile.dependsOn('moveGen')
+compileJava.dependsOn('moveFile')
+eclipseClasspath.dependsOn('moveFile')
+
+sourceSets {
+    main {
+        java {
+            srcDir file(project.buildDir.absolutePath + '/generated/jjtree')
+        }
+    }
+}
+
+eclipseClasspath.dependsOn("compileJavacc")

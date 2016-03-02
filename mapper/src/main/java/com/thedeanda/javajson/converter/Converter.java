@@ -111,7 +111,7 @@ public class Converter {
 	 * well. If the return type is a Collection, it will be converted to a
 	 * JsonArray
 	 * 
-	 * @param o
+	 * @param c
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -134,7 +134,8 @@ public class Converter {
 	 * well. If the return type is a Collection, it will be converted to a
 	 * JsonArray
 	 * 
-	 * @param o
+	 * @param c
+	 * @param flat
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
@@ -156,7 +157,8 @@ public class Converter {
 	 * will inspect every public getter and return its value, if the value is
 	 * not a Number, String or Date, it will be skipped.
 	 * 
-	 * @param o
+	 * @param c
+	 *            The collection
 	 * @param cls
 	 *            The class to read the fields from
 	 * @return
@@ -180,9 +182,10 @@ public class Converter {
 	 * will inspect every public getter and return its value, if the value is
 	 * not a Number, String or Date, it will be skipped.
 	 * 
-	 * @param o
+	 * @param c
 	 * @param cls
 	 *            The class to read the fields from
+	 * @param flat
 	 * @return
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException
