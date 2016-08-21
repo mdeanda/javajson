@@ -2,13 +2,17 @@ package com.thedeanda.javajson.converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 /**
- * Converts java objects to json based on bean-style fields and
- * classes/interfaces (to filter)
+ * Converts pojos to json based on bean-style fields
  * 
  * @author miguel de anda
  */
@@ -22,182 +26,132 @@ public class Converter {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Object fromJson(JsonObject json) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
-		Object o = null;
-		Class cls = Class.forName(json.getString("class"));
-		o = cls.newInstance();
-		Utils.fromJson(o, json);
-		return o;
+	public JsonValue toJsonValue(Object object)
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		return toJsonValue(object, new HashSet<Object>());
 	}
 
-	/**
-	 * Convenience method for converting objects without a predefined mapper.
-	 * This method does not allow objects to be filtered in any way and will
-	 * inspect every public getter and return its value, if the value is not a
-	 * Number, String or Date, it will then do the conversion on that object as
-	 * well. If the return type is a Collection, it will be converted to a
-	 * JsonArray
-	 * 
-	 * @param o
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	public JsonObject toJson(Object o) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJson(o);
+	private JsonValue toJsonValue(Object object, Set<Object> seen)
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		JsonValue value = new JsonValue();
+
+		if (!duplicateOk(object) && seen.contains(object)) {
+			throw new RuntimeException("object already seen: " + object);
+		}
+		seen.add(object);
+
+		if (object != null) {
+			Class<? extends Object> cls = object.getClass();
+
+			if (cls.isArray()) {
+				toJsonValueFromArray(value, object, cls, seen);
+			} else if (Map.class.isAssignableFrom(cls)) {
+				Map map = (Map) object;
+				JsonObject json = new JsonObject();
+				for (Object key : map.keySet()) {
+					Object mapValue = map.get(key);
+					JsonValue newMapValue = toJsonValue(mapValue, seen);
+					json.put(String.valueOf(key), newMapValue);
+				}
+				value.setJsonObject(json);
+			} else if (Collection.class.isAssignableFrom(cls)) {
+				Collection<?> col = (Collection<?>) object;
+				JsonArray arr = new JsonArray();
+				for (Object o : col) {
+					JsonValue newArrValue = toJsonValue(o, seen);
+					arr.add(newArrValue);
+				}
+				value.setJsonArray(arr);
+			} else if (Boolean.class.isAssignableFrom(cls)) {
+				value.setBoolean((Boolean) object);
+			} else if (Double.class.isAssignableFrom(cls)) {
+				value.setDouble((Double) object);
+			} else if (Float.class.isAssignableFrom(cls)) {
+				value.setFloat((Float) object);
+			} else if (Long.class.isAssignableFrom(cls)) {
+				value.setLong((Long) object);
+			} else if (Integer.class.isAssignableFrom(cls)) {
+				value.setInt((Integer) object);
+			} else if (Date.class.isAssignableFrom(cls)) {
+				value.setDate((Date) object);
+			} else if (String.class.isAssignableFrom(cls)) {
+				value.setString((String) object);
+			} else { // pojo
+				Map<String, Object> fields = Reflection.getFields(object);
+				JsonObject json = new JsonObject();
+				for (String key : fields.keySet()) {
+					Object val = fields.get(key);
+					String jsonKey = Reflection.getFieldName(key);
+					if (keyOk(jsonKey))
+						json.put(jsonKey, toJsonValue(val, seen));
+				}
+				value.setJsonObject(json);
+			}
+		}
+
+		return value;
 	}
 
-	/**
-	 * Convenience method for converting objects without a predefined mapper.
-	 * This method does not allow objects to be filtered in any way and will
-	 * inspect every public getter and return its value, if the value is not a
-	 * Number, String or Date, it will then do the conversion on that object as
-	 * well. If the return type is a Collection, it will be converted to a
-	 * JsonArray
-	 * 
-	 * @param o
-	 * @param flat
-	 *            Don't look at non basic fields (numbers, strings, dates,
-	 *            boolean)
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	public JsonObject toJson(Object o, boolean flat) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJson(o, flat);
+	private void toJsonValueFromArray(JsonValue value, Object object, Class<? extends Object> cls, Set<Object> seen)
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		JsonArray arr = new JsonArray();
+		value.setJsonArray(arr);
+		if (object instanceof short[]) {
+			for (short i : (short[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof int[]) {
+			for (int i : (int[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof long[]) {
+			for (long i : (long[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof float[]) {
+			for (float i : (float[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof double[]) {
+			for (double i : (double[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof boolean[]) {
+			for (boolean i : (boolean[]) object) {
+				arr.add(i);
+			}
+		} else if (object instanceof char[]) {
+			for (char i : (char[]) object) {
+				arr.add(String.valueOf(i));
+			}
+		} else if (object instanceof String[]) {
+			for (String i : (String[]) object) {
+				arr.add(String.valueOf(i));
+			}
+		} else {
+			// generic array
+			for (Object i : (Object[]) object) {
+				arr.add(toJsonValue(i, seen));
+			}
+		}
 	}
 
-	/**
-	 * Convenience method for converting objects without a predefined mapper.
-	 * This method does not allow objects to be filtered in any way and will
-	 * inspect every public getter and return its value, if the value is not a
-	 * Number, String or Date, it will be skipped.
-	 * 
-	 * @param o
-	 * @param cls
-	 *            The class to read the fields from
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	@SuppressWarnings("unchecked")
-	public JsonObject toJson(Object o, Class cls) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJson(o, cls);
+	private boolean duplicateOk(Object object) {
+		if (object == null)
+			return true;
+		Class<? extends Object> cls = object.getClass();
+
+		if (Number.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls) || String.class.isAssignableFrom(cls)
+				|| Boolean.class.isAssignableFrom(cls)) {
+			return true;
+		} else if (object instanceof Collection) {
+			// lists and sets can equal each other if they are empty
+			return true;
+		}
+		return false;
 	}
 
-	/**
-	 * Convenience method for converting objects without a predefined mapper.
-	 * This method does not allow objects to be filtered in any way and will
-	 * inspect every public getter and return its value, if the value is not a
-	 * Number, String or Date, it will then do the conversion on that object as
-	 * well. If the return type is a Collection, it will be converted to a
-	 * JsonArray
-	 * 
-	 * @param c
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	@SuppressWarnings("unchecked")
-	public JsonArray toJsonArray(Collection c) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c);
-	}
-
-	/**
-	 * Convenience method for converting objects without a predefined mapper.
-	 * This method does not allow objects to be filtered in any way and will
-	 * inspect every public getter and return its value, if the value is not a
-	 * Number, String or Date, it will then do the conversion on that object as
-	 * well. If the return type is a Collection, it will be converted to a
-	 * JsonArray
-	 * 
-	 * @param c
-	 * @param flat
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	@SuppressWarnings("unchecked")
-	public JsonArray toJsonArray(Collection c, boolean flat)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c, flat);
-	}
-
-	/**
-	 * Convenience method for converting collections without a predefined
-	 * mapper. This method does not allow objects to be filtered in any way and
-	 * will inspect every public getter and return its value, if the value is
-	 * not a Number, String or Date, it will be skipped.
-	 * 
-	 * @param c
-	 *            The collection
-	 * @param cls
-	 *            The class to read the fields from
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	@SuppressWarnings("unchecked")
-	public JsonArray toJsonArray(Collection c, Class cls)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c, cls);
-	}
-
-	/**
-	 * Convenience method for converting collections without a predefined
-	 * mapper. This method does not allow objects to be filtered in any way and
-	 * will inspect every public getter and return its value, if the value is
-	 * not a Number, String or Date, it will be skipped.
-	 * 
-	 * @param c
-	 * @param cls
-	 *            The class to read the fields from
-	 * @param flat
-	 * @return
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	@SuppressWarnings("unchecked")
-	public JsonArray toJsonArray(Collection c, Class cls, boolean flat)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
-		return Mapper.DefaultMapper.toJsonArray(c, cls, flat);
+	private boolean keyOk(String key) {
+		return !"class".equalsIgnoreCase(key);
 	}
 }

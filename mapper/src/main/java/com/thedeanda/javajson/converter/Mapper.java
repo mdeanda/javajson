@@ -37,32 +37,45 @@ public class Mapper {
 	 */
 	@SuppressWarnings("unchecked")
 	protected JsonObject toJson(Object obj, Class cls)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		return toJson(obj, cls, false);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected JsonObject toJson(Object obj, Class cls, boolean flat)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		JsonObject ret = null;
 		if (obj != null) {
-			if (cls == null)
-				ret = Utils.toJson(obj, obj.getClass());
-			else
+			if (cls == null) {
+				cls = obj.getClass();
+			}
+			if (Map.class.isAssignableFrom(cls)) {
+				JsonObject json = new JsonObject();
+				Map map = (Map) obj;
+				for (Object valueKey : map.keySet()) {
+					json.put(String.valueOf(valueKey), toJson(map.get(valueKey)));
+				}
+				ret = json;				
+			}else {
 				ret = Utils.toJson(obj, cls);
+			}
 
 			if (!flat) {
 				Map<String, Object> fields = Reflection.getFields(obj);
 				for (String key : fields.keySet()) {
 					Object val = fields.get(key);
-					if (!(val instanceof Number || val instanceof Date
-							|| val instanceof String || val instanceof Boolean || val instanceof Class)
-							&& val != null) {
+					if (!(val instanceof Number || val instanceof Date || val instanceof String
+							|| val instanceof Boolean || val instanceof Class) && val != null) {
 						// non basic types...
 						String jsonKey = Reflection.getFieldName(key);
-						if (val instanceof Collection) {
+						if (val instanceof Map) {
+							JsonObject json = new JsonObject();
+							Map map = (Map) val;
+							for (Object valueKey : map.keySet()) {
+								json.put(String.valueOf(valueKey), toJson(map.get(valueKey)));
+							}
+							ret.put(jsonKey, json);
+						} else if (val instanceof Collection) {
 							JsonArray array = toJsonArray((Collection) val);
 							ret.put(jsonKey, array);
 						} else {
@@ -76,16 +89,15 @@ public class Mapper {
 	}
 
 	public JsonObject toJson(Object obj, boolean flat)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (obj != null)
 			return toJson(obj, obj.getClass(), flat);
 		else
 			return toJson(obj, null, flat);
 	}
 
-	public JsonObject toJson(Object obj) throws IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException {
+	public JsonObject toJson(Object obj)
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
 		if (obj != null)
 			return toJson(obj, obj.getClass());
@@ -107,8 +119,7 @@ public class Mapper {
 	 */
 	@SuppressWarnings("unchecked")
 	protected JsonArray toJsonArray(Collection col, Class cls)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		return toJsonArray(col, cls, false);
 	}
 
@@ -126,8 +137,7 @@ public class Mapper {
 	 */
 	@SuppressWarnings("unchecked")
 	protected JsonArray toJsonArray(Collection col, Class cls, boolean flat)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		JsonArray arr = new JsonArray();
 
 		if (col != null) {
@@ -147,15 +157,13 @@ public class Mapper {
 
 	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection col)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		return toJsonArray(col, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	public JsonArray toJsonArray(Collection col, boolean flat)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		return toJsonArray(col, null, flat);
 	}
 }

@@ -11,15 +11,9 @@ public class ComplexObject {
 	private List<SimpleObject> simpleList = new LinkedList<SimpleObject>();
 
 	@SuppressWarnings("unchecked")
-	private List objectList = new LinkedList();
+	private List objectList;
 
 	public ComplexObject() {
-		intList.add(5);
-		intList.add(7);
-		intList.add(0);
-
-		simpleList.add(new SimpleObject());
-		simpleList.add(new SimpleObject());
 	}
 
 	public List<Integer> getIntList() {

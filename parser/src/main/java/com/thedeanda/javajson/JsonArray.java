@@ -68,6 +68,11 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 		return this;
 	}
 
+	public JsonArray add(char value) {
+		list.add(new JsonValue(String.valueOf(value)));
+		return this;
+	}
+
 	public JsonArray add(int value) {
 		list.add(new JsonValue(value));
 		return this;

@@ -1,161 +1,310 @@
 package com.thedeanda.javajson.converter.test;
 
-import java.util.Calendar;
-import java.util.Date;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.TestCase;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
 import com.thedeanda.javajson.JsonValue;
 import com.thedeanda.javajson.converter.Converter;
 
-public class ConverterTest extends TestCase {
+public class ConverterTest {
 
-	public static void main(String[] args) {
-		System.out.println("start of test ");
-		junit.textui.TestRunner.run(ConverterTest.class);
+	private static final String STRING_VALUE = "value of field 1";
+	private static final int INT_VALUE = 33425;
+	private static final float FLOAT_VALUE = 3.14f;
+	private static final float FLOAT_DELTA = 0.01f;
+
+	@Test
+	public void testSimpleValues() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		Converter c = Converter.getInstance();
+		JsonValue value;
+
+		value = c.toJsonValue(INT_VALUE);
+		assertNotNull(value);
+		assertTrue(value.isInt());
+		assertEquals(INT_VALUE, value.getInt());
+		
+		value = c.toJsonValue(FLOAT_VALUE);
+		assertNotNull(value);
+		assertTrue(value.isNumber());
+		assertEquals(FLOAT_VALUE, value.getFloat(), FLOAT_DELTA);
+		
+		value = c.toJsonValue(STRING_VALUE);
+		assertNotNull(value);
+		assertTrue(value.isString());
+		assertEquals(STRING_VALUE, value.getString());
+		
+		
 	}
 
+	@Test
+	public void testStringArray() throws Exception {
+		String[] vals = new String[] { "a", "b", "c" };
+		JsonArray arr = new JsonArray();
+		arr.add("a").add("b").add("c");
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testCharArray() throws Exception {
+		char[] vals = new char[] { 'a', 'b', 'c' };
+		JsonArray arr = new JsonArray();
+		arr.add('a').add('b').add('c');
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testBoolArray() throws Exception {
+		boolean[] vals = new boolean[] { true, true, false };
+		JsonArray arr = new JsonArray();
+		arr.add(true).add(true).add(false);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testShortArray() throws Exception {
+		short[] vals = new short[] { 1, 2, 3 };
+		JsonArray arr = new JsonArray();
+		arr.add(1).add(2).add(3);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testIntArray() throws Exception {
+		int[] vals = new int[] { 1, 2, 3 };
+		JsonArray arr = new JsonArray();
+		arr.add(1).add(2).add(3);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testLongArray() throws Exception {
+		long[] vals = new long[] { 1, 2, 3 };
+		JsonArray arr = new JsonArray();
+		arr.add(1).add(2).add(3);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testDoubleArray() throws Exception {
+		double[] vals = new double[] { 1, 2, 3 };
+		JsonArray arr = new JsonArray();
+		arr.add(1.0).add(2.0).add(3.0);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
+	public void testFloatArray() throws Exception {
+		float[] vals = new float[] { 1, 2, 3 };
+		JsonArray arr = new JsonArray();
+		arr.add(1.0).add(2.0).add(3.0);
+
+		Converter c = Converter.getInstance();
+		JsonValue value = c.toJsonValue(vals);
+		assertNotNull(value);
+		assertTrue(value.isJsonArray());
+		JsonArray outputJson = value.getJsonArray();
+
+		assertEquals(arr.toString(), outputJson.toString());
+	}
+
+	@Test
 	public void testSimpleObject() throws Exception {
 		Converter c = Converter.getInstance();
 		SimpleObject si = new SimpleObject();
 
-		c.toJson(si);
-		// testSimpleObject(json);
+		JsonValue value = c.toJsonValue(si);
+		assertNotNull(value);
+		JsonObject outputJson = value.getJsonObject();
+
+		JsonObject expected = new JsonObject();
+		expected.put("field1", (String) null);
+		expected.put("field2", 0);
+		expected.put("floatField", 0.0f);
+		expected.put("today", (Date) null);
+
+		assertEquals(expected.toString(), outputJson.toString());
 	}
 
+	@Test
 	public void testSimpleObjectValues() throws Exception {
 		JsonObject json;
 		Converter c = Converter.getInstance();
 		SimpleObject si = new SimpleObject();
 
+		Date dt = new Date(1471824000000l); // Mon, 22 Aug 2016 00:00:00 GMT
 		si.setField1("s1");
 		si.setField2(3);
 		si.setFloatField(3.14f);
-		Calendar cal = Calendar.getInstance();
-		cal.set(2006, 10, 22, 23, 55, 03); // this is actually november, month
-		// starts from 0.
-		si.setToday(cal.getTime());
+		si.setToday(dt);
 
-		json = c.toJson(si);
-		// testSimpleObject(json);
+		JsonValue value = c.toJsonValue(si);
+		assertNotNull(value);
+		JsonObject outputJson = value.getJsonObject();
 
-		assertEquals("s1", json.getString("field1"));
-		assertEquals(3, json.getInt("field2"));
-		assertEquals(3.14f, json.getFloat("floatField"));
-		assertEquals("2006/11/22 23:55:03", json.getString("today"));
-		assertEquals("com.thedeanda.javajson.converter.test.SimpleObject",
-				json.getString("class"));
+		assertEquals("s1", outputJson.getString("field1"));
+		assertEquals(3, outputJson.getInt("field2"));
+		assertEquals(3.14f, outputJson.getFloat("floatField"), 0.02);
+		assertEquals("2016-08-22T00:00:00.000Z", outputJson.getString("today"));
+
+		JsonObject expected = new JsonObject();
+		expected.put("field1", "s1");
+		expected.put("field2", 3);
+		expected.put("floatField", 3.14f);
+		expected.put("today", dt);
+
+		assertEquals(expected.toString(), outputJson.toString());
 	}
 
+	@Test
 	public void testComplexObject() throws Exception {
 		JsonObject json;
 		JsonArray array;
 		Converter c = Converter.getInstance();
 		ComplexObject co = new ComplexObject();
 
-		json = c.toJson(co);
-		// System.out.println(json.toString(2));
+		JsonValue value = c.toJsonValue(co);
+		assertNotNull(value);
+		assertTrue(value.isJsonObject());
 
-		assertTrue(json.hasKey("simpleObject"));
-		// testSimpleObject(json.getJsonObject("simpleObject"));
+		json = value.getJsonObject();
 
-		assertTrue(json.hasKey("simpleList"));
-		assertTrue(json.isJsonArray("simpleList"));
-		array = json.getJsonArray("simpleList");
-		assertEquals("size of simplelist", 2, array.size());
-		for (JsonValue val : array) {
-			// System.out.println("value of val:" + val);
-			assertNotNull("val shouldn't be null" + val);
-			assertTrue(val.isJsonObject());
-			// testSimpleObject(val.getJsonObject());
-		}
+		JsonObject simpleObject1 = c.toJsonValue(new SimpleObject()).getJsonObject();
+		JsonObject expected = new JsonObject();
+		expected.put("simpleObject", simpleObject1);
+		expected.put("intList", new JsonArray());
+		expected.put("simpleList", new JsonArray());
+		expected.put("objectList", (Object) null);
 
-		assertTrue(json.hasKey("intList"));
-		assertTrue(json.isJsonArray("intList"));
-		array = json.getJsonArray("intList");
-		for (JsonValue val : array) {
-			assertTrue(val.isNumber());
-		}
+		assertEquals(expected.toString(), json.toString());
 	}
 
-	public void testComplexObjectWithNull() throws Exception {
+	@Test
+	public void testComplexObjectValues() throws Exception {
 		JsonObject json;
+		JsonArray array;
 		Converter c = Converter.getInstance();
 		ComplexObject co = new ComplexObject();
-		co.setSimpleObject(null);
+		JsonObject expected = new JsonObject();
+		prepComplex(co, expected);
 
-		json = c.toJson(co);
+		JsonValue value = c.toJsonValue(co);
+		assertNotNull(value);
+		assertTrue(value.isJsonObject());
 
-		assertNotNull(json);
-		assertTrue(json.hasKey("simpleObject"));
-		assertNull(json.getString("simpleObject"));
-	}
+		json = value.getJsonObject();
 
-	public void testToJsonAndBackSimple() throws Exception {
-		Converter c = Converter.getInstance();
-		JsonObject json;
-		SimpleObject so;
-		String so1, so2, so3;
-
-		so = new SimpleObject();
-		prepSimple(so);
-		so1 = so.toString();
-		so = new SimpleObject();
-		prepSimple(so);
-		so2 = so.toString();
-		assertEquals(so1, so2);
-
-		json = c.toJson(so);
-		so = (SimpleObject) c.fromJson(json);
-		so3 = so.toString();
-		// System.out.println("comparing:\n" + so1 + "\n with\n" + so3);
-		assertEquals("back from json", so1, so3);
-
-	}
-
-	public void testToJsonAndBackComplex() throws Exception {
-		Converter c = Converter.getInstance();
-		JsonObject json;
-		ComplexObject co1 = new ComplexObject();
-		prepComplex(co1);
-
-		json = c.toJson(co1);
-
-		ComplexObject co2 = new ComplexObject();
-		prepComplex(co2);
-
-		assertEquals(co1.toString(), co2.toString());
-
-		ComplexObject co3 = (ComplexObject) c.fromJson(json);
-		assertEquals("simple object list length", co1.getSimpleList().size(),
-				co3.getSimpleList().size());
-		assertEquals("int list length", co1.getIntList().size(), co3
-				.getIntList().size());
-
-		// NOTE: this test may never pass because json looses information about
-		// a number's type
-		//assertEquals("int in object list", co1.getObjectList().get(1), co3
-				//.getObjectList().get(1));
-		//assertEquals(co1.toString(), co3.toString());
+		assertEquals(expected.toString(), json.toString());
 	}
 
 	@SuppressWarnings("unchecked")
-	private void prepComplex(ComplexObject co) {
-		SimpleObject so = co.getSimpleObject();
-		so.setField1("value of field 1");
-		so.setField2(3243);
-		so.setFloatField(2.5f);
+	private void prepComplex(ComplexObject co, JsonObject json) {
+		SimpleObject so = new SimpleObject();
+		JsonObject soJson = new JsonObject();
+		prepSimple(so, soJson);
+		co.setSimpleObject(so);
+		json.put("simpleObject", soJson);
 
-		co.getObjectList().add("test");
-		co.getObjectList().add(new Integer(23423));
+		List<Object> ol = new ArrayList<>();
+		JsonArray olJson = new JsonArray();
+		ol.add(STRING_VALUE);
+		olJson.add(STRING_VALUE);
+		ol.add(new Integer(INT_VALUE));
+		olJson.add(INT_VALUE);
+
+		co.setObjectList(ol);
+		json.put("objectList", olJson);
+
+		List<Integer> il = new ArrayList<>();
+		JsonArray ilJson = new JsonArray();
+		il.add(5);
+		ilJson.add(5);
+		il.add(6);
+		ilJson.add(6);
+		co.setIntList(il);
+		json.put("intList", ilJson);
+
+		List<SimpleObject> sol = co.getSimpleList();
+		JsonArray solJson = new JsonArray();
+		SimpleObject sol1 = new SimpleObject();
+		JsonObject sol1Json = new JsonObject();
+		prepSimple(sol1, sol1Json);
+		sol.add(sol1);
+		solJson.add(sol1Json);
+		co.setSimpleList(sol);
+		json.put("simpleList", solJson);
+
 	}
 
-	private void prepSimple(SimpleObject so) {
-		so.setField1("value of field 1");
-		so.setField2(13243);
-		so.setFloatField(12.55f);
-		so.setToday(new Date());
+	private void prepSimple(SimpleObject so, JsonObject soJson) {
+		Date dt = new Date();
+
+		so.setField1(STRING_VALUE);
+		soJson.put("field1", STRING_VALUE);
+		so.setField2(INT_VALUE);
+		soJson.put("field2", INT_VALUE);
+		so.setFloatField(FLOAT_VALUE);
+		soJson.put("floatField", FLOAT_VALUE);
+		soJson.put("today", (String) null);
+		so.setToday(dt);
+		soJson.put("today", dt);
 	}
 }
