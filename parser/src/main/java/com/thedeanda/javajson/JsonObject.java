@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -221,77 +222,42 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	/**
-	 * finds all the values by keys matching regular expressions. if multiple
-	 * expressions are passed in, they keys are matched by looking at children
-	 * similar to the varargs get method.
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public List<JsonValue> find(String... key) {
-		List<JsonValue> ret = new ArrayList<JsonValue>();
-		if (key != null && key.length > 0) {
-			String[] nextkey = null;
-			if (key.length > 1) {
-				nextkey = new String[key.length - 1];
-				for (int i = 1; i < key.length; i++) {
-					nextkey[i - 1] = key[i];
-				}
-			}
-			Pattern pattern = Pattern.compile(key[0]);
-			for (String fld : this) {
-				Matcher m = pattern.matcher(fld);
-				if (m.matches()) {
-					JsonValue val = get(fld);
-					if (nextkey == null) {
-						ret.add(val);
-					} else {
-						// recursive...
-						if (val.isJsonObject()) {
-							List<JsonValue> tmp = val.getJsonObject().find(
-									nextkey);
-							if (tmp != null && !tmp.isEmpty()) {
-								for (JsonValue jv : tmp) {
-									ret.add(jv);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return ret;
-	}
-
-	/**
 	 * Get a JsonValue object via one ore more keys. This can be used as a
 	 * shortcut to objects deep in the json object similar to xpath. For
 	 * example: <code>
 	 * get("a", "b");
 	 * </code> is the same as: <code>
 	 * get("a").get("b");
-	 * </code>
+	 * </code> This method will not fail if the path doesn't exist and should
+	 * return null if nothing matches the path.
+	 * 
 	 * @return the value
 	 */
-	public JsonValue get(String... key) {
+	public JsonValue get(Object... key) {
 		return get(0, key);
 	}
 
-	private JsonValue get(int offset, String... key) {
+	private JsonValue get(int offset, Object... key) {
 		JsonValue ret = null;
-		if (offset < 0 || key == null || key.length == 0) {
+		if (key == null || key.length == 0) {
 			ret = null;
 		} else if (offset == key.length - 1) {
+			// last one, just get the value
 			ret = map.get(key[offset]);
 		} else {
-			JsonValue tmp = map.get(key[offset]);
-			if (tmp != null && tmp.isJsonObject()) {
-				ret = tmp.getJsonObject().get(offset + 1, key);
+			Object keyVal = key[offset];
+			if (keyVal instanceof String) {
+				JsonValue tmp = map.get(keyVal);
+				if (tmp != null) {
+					if (tmp.isJsonObject()) {
+						ret = tmp.getJsonObject().get(offset + 1, key);
+					} else if (tmp.isJsonArray()) {
+						ret = tmp.getJsonArray().get(Arrays.copyOfRange(key, offset + 1, key.length));
+					}
+				}
 			}
 		}
 
-		if (ret == null)
-			ret = new JsonValue();
 		return ret;
 	}
 
@@ -348,7 +314,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	public boolean hasKey(String... key) {
-		return !get(key).isNull();
+		return get(key) != null;
 	}
 
 	/**

@@ -7,14 +7,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.regex.Pattern;
 
 import com.thedeanda.javajson.parser.ASTstring;
 
 public class JsonValue implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static DateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	private static Map<Character, String> escapeMap = new HashMap<Character, String>();
 	static {
 		escapeMap.put('\\', "\\\\");
@@ -117,8 +115,7 @@ public class JsonValue implements Serializable {
 	}
 
 	static public String byteToHex(byte b) {
-		char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-				'a', 'b', 'c', 'd', 'e', 'f' };
+		char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 		char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
 		return new String(array);
 	}
@@ -137,6 +134,19 @@ public class JsonValue implements Serializable {
 			stringVal = ASTstring.fixString(rawString);
 			rawString = null;
 		}
+	}
+
+	public JsonValue get(Object... key) {
+		if (key == null || key.length <= 0) {
+			return null;
+		}
+
+		if (this.isJsonArray()) {
+			return getJsonArray().get(key);
+		} else if (this.isJsonObject()) {
+			return getJsonObject().get(key);
+		}
+		return null;
 	}
 
 	public boolean getBoolean() {
@@ -285,10 +295,8 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public boolean isNumber() {
-		boolean ret = nativeType == JsonNativeType.LONG
-				|| nativeType == JsonNativeType.INTEGER
-				|| nativeType == JsonNativeType.FLOAT
-				|| nativeType == JsonNativeType.DOUBLE;
+		boolean ret = nativeType == JsonNativeType.LONG || nativeType == JsonNativeType.INTEGER
+				|| nativeType == JsonNativeType.FLOAT || nativeType == JsonNativeType.DOUBLE;
 
 		return ret;
 	}
@@ -299,8 +307,7 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public boolean isInt() {
-		boolean ret = nativeType == JsonNativeType.LONG
-				|| nativeType == JsonNativeType.INTEGER;
+		boolean ret = nativeType == JsonNativeType.LONG || nativeType == JsonNativeType.INTEGER;
 		if (nativeType == JsonNativeType.LONG) {
 			ret = longVal < Integer.MAX_VALUE && longVal > Integer.MIN_VALUE;
 		}
@@ -308,11 +315,11 @@ public class JsonValue implements Serializable {
 	}
 
 	public boolean isJsonArray() {
-		return (jsonArray != null);
+		return jsonArray != null;
 	}
 
 	public boolean isJsonObject() {
-		return (jsonObject != null);
+		return jsonObject != null;
 	}
 
 	/**
@@ -321,8 +328,7 @@ public class JsonValue implements Serializable {
 	 * @return
 	 */
 	public boolean isLong() {
-		boolean ret = nativeType == JsonNativeType.LONG
-				|| nativeType == JsonNativeType.INTEGER;
+		boolean ret = nativeType == JsonNativeType.LONG || nativeType == JsonNativeType.INTEGER;
 
 		return ret;
 	}
@@ -451,8 +457,7 @@ public class JsonValue implements Serializable {
 		init();
 		if (nativeType == JsonNativeType.BOOLEAN)
 			return boolVal ? "true" : "false";
-		else if (nativeType == JsonNativeType.LONG
-				|| nativeType == JsonNativeType.INTEGER)
+		else if (nativeType == JsonNativeType.LONG || nativeType == JsonNativeType.INTEGER)
 			return longVal.toString();
 		else if (nativeType == JsonNativeType.DOUBLE)
 			return doubleVal.toString();

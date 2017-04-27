@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -133,6 +134,29 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 		else
 			throw new ClassCastException("Unrecognized class");
 		return this;
+	}
+
+	public JsonValue get(Object... key) {
+		if (key == null || key.length <= 0) {
+			return null;
+		}
+
+		int index = 0;
+		try {
+			Object s = key[0];
+			index = Integer.parseInt(String.valueOf(s));
+		} catch (NumberFormatException nfe) {
+			return null;
+		}
+
+		if (index >= this.list.size() || index < 0) {
+			return null;
+		}
+		JsonValue ret = this.list.get(index);
+		if (key.length > 1) {
+			ret = ret.get(Arrays.copyOfRange(key, 1, key.length));
+		}
+		return ret;
 	}
 
 	/**
