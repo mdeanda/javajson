@@ -135,6 +135,10 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 			throw new ClassCastException("Unrecognized class");
 		return this;
 	}
+	
+	public void clear() {
+		list.clear();
+	}
 
 	public JsonValue get(Object... key) {
 		if (key == null || key.length <= 0) {
