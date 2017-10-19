@@ -227,6 +227,10 @@ public class JsonObject implements Iterable<String>, Serializable {
 		return get(0, key);
 	}
 
+	public void clear() {
+		map.clear();
+	}
+
 	private JsonValue get(int offset, Object... key) {
 		JsonValue ret = null;
 		if (key == null || key.length == 0) {
