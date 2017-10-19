@@ -68,156 +68,146 @@ public class JsonObject implements Iterable<String>, Serializable {
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * creates an array at a given field, if a non-array value existed there
+	 * before, put it in as the first item in the array
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private JsonArray accumulate_prep(String key) {
+		JsonArray ret = null;
+		if (!map.containsKey(key)) {
+			ret = new JsonArray();
+			put(key, ret);
+		} else if (!map.get(key).isJsonArray()) {
+			ret = new JsonArray();
+			JsonValue old = map.get(key);
+			put(key, ret);
+			ret.add(old);
+		} else {
+			ret = getJsonArray(key);
+		}
+
+		return ret;
+	}
+
+	/**
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, boolean val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, double val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, float val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, int val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
+	 * 
+	 * @param key
+	 * @param val
+	 */
+	public JsonObject accumulate(String key, long val) {
+		accumulate_prep(key).add(val);
+		return this;
+	}
+
+	/**
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, JsonArray val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, JsonObject val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
 	/**
-	 * Accumlates multiple values into an array. This is a convenience function
-	 * for creating an array, adding it to the object, then adding to the array.
-	 * If there is already a value for this key, it will be the first item in
-	 * the array
+	 * Accumulates multiple values into an array. This is a convenience function
+	 * for creating an array, adding to the array, then adding array to the
+	 * object. If there is already a value for this key, it will be the first
+	 * item in the array and a second value will be added with the passed in
+	 * value
 	 * 
 	 * @param key
 	 * @param val
 	 */
 	public JsonObject accumulate(String key, String val) {
-		if (!map.containsKey(key)) {
-			put(key, new JsonArray());
-		} else if (!map.get(key).isJsonArray()) {
-			JsonValue old = map.get(key);
-			put(key, new JsonArray());
-			getJsonArray(key).add(old);
-		}
-
-		getJsonArray(key).add(val);
+		accumulate_prep(key).add(val);
 		return this;
 	}
 
@@ -245,15 +235,13 @@ public class JsonObject implements Iterable<String>, Serializable {
 			// last one, just get the value
 			ret = map.get(key[offset]);
 		} else {
-			Object keyVal = key[offset];
-			if (keyVal instanceof String) {
-				JsonValue tmp = map.get(keyVal);
-				if (tmp != null) {
-					if (tmp.isJsonObject()) {
-						ret = tmp.getJsonObject().get(offset + 1, key);
-					} else if (tmp.isJsonArray()) {
-						ret = tmp.getJsonArray().get(Arrays.copyOfRange(key, offset + 1, key.length));
-					}
+			String keyVal = String.valueOf(key[offset]);
+			JsonValue tmp = map.get(keyVal);
+			if (tmp != null) {
+				if (tmp.isJsonObject()) {
+					ret = tmp.getJsonObject().get(offset + 1, key);
+				} else if (tmp.isJsonArray()) {
+					ret = tmp.getJsonArray().get(Arrays.copyOfRange(key, offset + 1, key.length));
 				}
 			}
 		}
@@ -313,7 +301,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 		return map.containsKey(key);
 	}
 
-	public boolean hasKey(String... key) {
+	public boolean hasKey(Object... key) {
 		return get(key) != null;
 	}
 
