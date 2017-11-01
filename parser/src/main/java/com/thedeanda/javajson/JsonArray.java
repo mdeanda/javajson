@@ -129,8 +129,6 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 			add((String) null);
 		else if (value instanceof Enum)
 			add(((Enum) value).name());
-		else if (value instanceof JsonValue)
-			list.add((JsonValue) value);
 		else
 			throw new ClassCastException("Unrecognized class");
 		return this;
@@ -266,6 +264,85 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 			throw new IndexOutOfBoundsException();
 	}
 
+	public JsonArray insert(int index, boolean value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, double value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, float value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, char value) {
+		list.add(index, new JsonValue(String.valueOf(value)));
+		return this;
+	}
+
+	public JsonArray insert(int index, int value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, long value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, Date value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, JsonArray value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, JsonObject value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, String value) {
+		list.add(index, new JsonValue(value));
+		return this;
+	}
+
+	public JsonArray insert(int index, Object value) {
+		if (value instanceof Boolean)
+			insert(index, ((Boolean) value).booleanValue());
+		else if (value instanceof Double)
+			insert(index, ((Double) value).doubleValue());
+		else if (value instanceof Float)
+			insert(index, ((Float) value).floatValue());
+		else if (value instanceof Integer)
+			insert(index, ((Integer) value).intValue());
+		else if (value instanceof Long)
+			insert(index, ((Long) value).longValue());
+		else if (value instanceof JsonArray)
+			insert(index, (JsonArray) value);
+		else if (value instanceof JsonObject)
+			insert(index, (JsonObject) value);
+		else if (value instanceof JsonValue)
+			list.add(index, (JsonValue) value);
+		else if (value instanceof String)
+			insert(index, (String) value);
+		else if (value instanceof Date)
+			insert(index, (Date) value);
+		else if (value == null)
+			insert(index, (String) null);
+		else if (value instanceof Enum)
+			insert(index, ((Enum) value).name());
+		else
+			throw new ClassCastException("Unrecognized class");
+		return this;
+	}
 	/**
 	 * Checks if the item at an index is a boolean. See
 	 * {@link JsonValue#isBoolean()} for more information
