@@ -130,10 +130,10 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 		else if (value instanceof Enum)
 			add(((Enum) value).name());
 		else
-			throw new ClassCastException("Unrecognized class");
+			throw new IllegalArgumentException("Unrecognized class");
 		return this;
 	}
-	
+
 	public void clear() {
 		list.clear();
 	}
@@ -163,8 +163,6 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 
 	/**
 	 * @param index
-	 * @throws ClassCastException
-	 *             if the value cannot be converted to a boolean
 	 * @throws IndexOutOfBoundsException
 	 *             if its out of bounds
 	 */
@@ -340,9 +338,10 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 		else if (value instanceof Enum)
 			insert(index, ((Enum) value).name());
 		else
-			throw new ClassCastException("Unrecognized class");
+			throw new IllegalArgumentException("Unrecognized class");
 		return this;
 	}
+
 	/**
 	 * Checks if the item at an index is a boolean. See
 	 * {@link JsonValue#isBoolean()} for more information

@@ -1,19 +1,23 @@
 package com.thedeanda.javajson.test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
 
-public class TestJsonArray extends TestCase {
+public class TestJsonArray {
 
 	JsonArray array;
 
-	@Override
+	@Before
 	public void setUp() throws Exception {
 		array = new JsonArray();
 	}
 
+	@Test
 	public void testArrayBasic() throws Exception {
 		assertEquals(0, array.size());
 
@@ -31,6 +35,7 @@ public class TestJsonArray extends TestCase {
 		assertEquals("[true,\"string\",3.1415]", array.toString());
 	}
 
+	@Test
 	public void testToString() throws Exception {
 		assertEquals("[]", array.toString(2));
 
@@ -49,19 +54,14 @@ public class TestJsonArray extends TestCase {
 		assertEquals("[\n  2,\n  false,\n  {},\n  []\n]", array.toString(2));
 
 		ar2.add(3);
-		assertEquals("[\n  2,\n  false,\n  {},\n  [\n    3\n  ]\n]", array
-				.toString(2));
+		assertEquals("[\n  2,\n  false,\n  {},\n  [\n    3\n  ]\n]", array.toString(2));
 
 		json.put("key", 3);
-		assertEquals(
-				"[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3\n  ]\n]",
-				array.toString(2));
+		assertEquals("[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3\n  ]\n]", array.toString(2));
 
 		json = new JsonObject();
 		ar2.add(json);
-		assertEquals(
-				"[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3,\n    {}\n  ]\n]",
-				array.toString(2));
+		assertEquals("[\n  2,\n  false,\n  {\n    \"key\":3\n  },\n  [\n    3,\n    {}\n  ]\n]", array.toString(2));
 
 		json.put("test", "ok");
 		assertEquals(
@@ -69,6 +69,7 @@ public class TestJsonArray extends TestCase {
 				array.toString(2));
 	}
 
+	@Test
 	public void testIsMethods() throws Exception {
 		array.add(true); // 0
 		array.add(3.5d); // 1
@@ -154,6 +155,7 @@ public class TestJsonArray extends TestCase {
 		assertTrue(array.isString(7));
 	}
 
+	@Test
 	public void testRemove() {
 		JsonArray arr = new JsonArray();
 		arr.add(true);
@@ -162,18 +164,224 @@ public class TestJsonArray extends TestCase {
 		assertEquals("[]", arr.toString());
 	}
 
+	@Test
 	public void testEnum() throws Exception {
 		JsonArray json = new JsonArray();
 		json.add(TestEnum.VALUE_ONE);
 		assertEquals("VALUE_ONE", json.getString(0));
 		assertEquals(TestEnum.VALUE_ONE.name(), json.getString(0));
 	}
-	
+
+	@Test
 	public void testLongArrayStackError() throws Exception {
 		JsonArray a = new JsonArray();
-		for (int i=0; i<100000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			a.add(i);
 		}
 		JsonArray.parse(a.toString());
 	}
+
+	@Test
+	public void testBoolean() {
+		array.add(true);
+		array.add("true");
+		array.add("t");
+
+		assertTrue(array.getBoolean(0));
+		assertTrue(array.isBoolean(0));
+
+		assertTrue(array.getBoolean(1));
+		assertFalse(array.isBoolean(1));
+
+		assertFalse(array.getBoolean(2));
+		assertFalse(array.isBoolean(2));
+
+		try {
+			array.getBoolean(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isBoolean(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getBoolean(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isBoolean(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
+	public void testDouble() {
+		array.add(2d);
+		array.add("2.0");
+		array.add(false);
+
+		assertEquals(2d, array.getDouble(0), 1);
+		assertTrue(array.isDouble(0));
+
+		assertEquals(2d, array.getDouble(1), 1);
+		assertFalse(array.isDouble(1));
+
+		assertEquals(0d, array.getDouble(2), 1);
+		assertFalse(array.isDouble(2));
+
+		try {
+			array.getDouble(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isDouble(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getDouble(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isDouble(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
+	public void testFloat() {
+		array.add(2f);
+		array.add("2.0");
+		array.add(false);
+
+		assertEquals(2d, array.getFloat(0), 1);
+		assertTrue(array.isFloat(0));
+
+		assertEquals(2d, array.getFloat(1), 1);
+		assertFalse(array.isFloat(1));
+
+		assertEquals(0d, array.getFloat(2), 1);
+		assertFalse(array.isFloat(2));
+
+		try {
+			array.getFloat(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isFloat(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getFloat(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isFloat(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
+	public void testInt() {
+		array.add(2);
+		array.add("2");
+		array.add(false);
+
+		assertEquals(2, array.getInt(0));
+		assertTrue(array.isInt(0));
+
+		assertEquals(2, array.getInt(1));
+		assertFalse(array.isInt(1));
+
+		assertEquals(0, array.getInt(2));
+		assertFalse(array.isInt(2));
+
+		try {
+			array.getInt(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isInt(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getInt(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isInt(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
+	public void testLong() {
+		array.add(2);
+		array.add("2");
+		array.add(false);
+
+		assertEquals(2, array.getLong(0));
+		assertTrue(array.isLong(0));
+
+		assertEquals(2, array.getLong(1));
+		assertFalse(array.isLong(1));
+
+		assertEquals(0, array.getLong(2));
+		assertFalse(array.isLong(2));
+
+		try {
+			array.getLong(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isLong(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getLong(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isLong(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+	@Test
+	public void testClear() {
+		assertEquals(0, array.size());
+		array.add(true);
+		assertEquals(1, array.size());
+		array.clear();
+		assertEquals(0, array.size());
+	}
+
 }

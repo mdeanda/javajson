@@ -178,7 +178,7 @@ public class TestJsonArrayInsert {
 		try {
 			ja.insert(1, new SimpleDateFormat());
 			fail("expected exception");
-		} catch (ClassCastException cce) {
+		} catch (IllegalArgumentException cce) {
 
 		}
 	}
