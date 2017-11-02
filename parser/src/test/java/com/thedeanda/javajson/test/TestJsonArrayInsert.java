@@ -2,6 +2,7 @@ package com.thedeanda.javajson.test;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Before;
@@ -9,11 +10,14 @@ import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 public class TestJsonArrayInsert {
 	JsonArray ja;
 
 	private static final long DT = 1509321600000l;
+	
+	public enum SomeEnum { FOO, BAR };
 
 	@Before
 	public void init() {
@@ -121,21 +125,61 @@ public class TestJsonArrayInsert {
 	}
 
 	@Test
+	public void testInsertEnum() {
+		ja.insert(1, SomeEnum.BAR);
+		assertEquals("[1,\"BAR\",3]", ja.toString());
+	}
+
+	@Test
 	public void testInsertJsonArray() {
 		ja.insert(1, (Object) new JsonArray());
 		assertEquals("[1,[],3]", ja.toString());
+
+		ja.insert(0, new JsonArray());
+		assertEquals("[[],1,[],3]", ja.toString());
 	}
 
 	@Test
 	public void testInsertJsonObject() {
 		ja.insert(1, (Object) new JsonObject());
 		assertEquals("[1,{},3]", ja.toString());
+
+		ja.insert(0, new JsonObject());
+		assertEquals("[{},1,{},3]", ja.toString());
 	}
 
 	@Test
 	public void testInsertDate() {
 		ja.insert(1, (Object) new Date(DT));
 		assertEquals("[1,\"2017-10-30T00:00:00.000Z\",3]", ja.toString());
+
+		ja.insert(0, (Object) new Date(DT));
+		assertEquals("[\"2017-10-30T00:00:00.000Z\",1,\"2017-10-30T00:00:00.000Z\",3]", ja.toString());
 	}
 
+	@Test
+	public void testInsertString() {
+		ja.insert(1, "help");
+		assertEquals("[1,\"help\",3]", ja.toString());
+
+		ja.insert(0, (Object) "please");
+		assertEquals("[\"please\",1,\"help\",3]", ja.toString());
+	}
+	@Test
+	public void testInsertJsonValue() {
+		ja.insert(1, new JsonValue(2));
+		assertEquals("[1,2,3]", ja.toString());
+
+		ja.insert(0, (Object) new JsonValue(0));
+		assertEquals("[0,1,2,3]", ja.toString());
+	}
+	@Test
+	public void testInsertBadType() {
+		try {
+			ja.insert(1, new SimpleDateFormat());
+			fail("expected exception");
+		} catch (ClassCastException cce) {
+
+		}
+	}
 }
