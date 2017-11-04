@@ -80,6 +80,10 @@ public class JsonValue implements Serializable {
 		setString(val);
 	}
 
+	public JsonValue(Date val) {
+		setDate(val);
+	}
+
 	/**
 	 * stores the raw string before escaping, used to make parsing a little
 	 * quicker
@@ -286,6 +290,14 @@ public class JsonValue implements Serializable {
 	 */
 	public boolean isBoolean() {
 		return nativeType == JsonNativeType.BOOLEAN;
+	}
+	
+	public boolean isDouble() {
+		return nativeType == JsonNativeType.DOUBLE || isFloat();
+	}
+	
+	public boolean isFloat() {
+		return nativeType == JsonNativeType.FLOAT;
 	}
 
 	/**

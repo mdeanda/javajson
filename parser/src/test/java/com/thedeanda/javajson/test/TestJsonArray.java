@@ -375,6 +375,115 @@ public class TestJsonArray {
 		} catch (IndexOutOfBoundsException e) {
 		}
 	}
+
+	@Test
+	public void testString() {
+		array.add(2);
+		array.add("2");
+		array.add(false);
+
+		assertEquals("2", array.getString(0));
+		assertTrue(array.isString(0));
+
+		assertEquals("2", array.getString(1));
+		assertTrue(array.isString(1));
+
+		assertEquals("false", array.getString(2));
+		assertTrue(array.isString(2));
+
+		try {
+			array.getString(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isString(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getString(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isString(3);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
+	public void testJson() {
+		JsonObject jo = new JsonObject();
+		JsonArray ja = new JsonArray();
+		
+		array.add(2);
+		array.add(jo);
+		array.add(ja);
+		array.add(false);
+
+		assertFalse(array.isJsonObject(0));
+
+		assertEquals(jo, array.getJsonObject(1));
+		assertTrue(array.isJsonObject(1));
+
+		assertEquals(ja, array.getJsonArray(2));
+		assertTrue(array.isJsonArray(2));
+
+		assertEquals("false", array.getString(3));
+		assertTrue(array.isString(3));
+
+		try {
+			array.getJsonObject(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isJsonObject(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getJsonObject(4);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isJsonObject(4);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getJsonArray(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.isJsonArray(-1);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+
+		try {
+			array.getJsonArray(4);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		try {
+			array.isJsonArray(4);
+			fail("expected out of bounds exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
 	@Test
 	public void testClear() {
 		assertEquals(0, array.size());
