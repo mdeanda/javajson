@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonNativeType;
 import com.thedeanda.javajson.JsonObject;
 import com.thedeanda.javajson.JsonValue;
 
@@ -19,6 +20,7 @@ public class TestJsonValue {
 		JsonValue v;
 
 		v = new JsonValue(true);
+		assertEquals(JsonNativeType.BOOLEAN, v.getNativeType());
 		assertTrue(v.isBoolean());
 		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
@@ -28,6 +30,7 @@ public class TestJsonValue {
 		assertTrue(v.isString());
 
 		v = new JsonValue(4.14643534534434653463456d);
+		assertEquals(JsonNativeType.DOUBLE, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
@@ -37,6 +40,7 @@ public class TestJsonValue {
 		assertTrue(v.isString());
 
 		v = new JsonValue(2.5f);
+		assertEquals(JsonNativeType.FLOAT, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
@@ -46,6 +50,7 @@ public class TestJsonValue {
 		assertTrue(v.isString());
 
 		v = new JsonValue(15);
+		assertEquals(JsonNativeType.INTEGER, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertTrue(v.isNumber());
 		assertTrue(v.isInt());
@@ -55,6 +60,7 @@ public class TestJsonValue {
 		assertTrue(v.isString());
 
 		v = new JsonValue(new JsonArray());
+		assertEquals(JsonNativeType.JSON_ARRAY, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
@@ -64,6 +70,7 @@ public class TestJsonValue {
 		assertFalse(v.isString());
 
 		v = new JsonValue(new JsonObject());
+		assertEquals(JsonNativeType.JSON_OBJECT, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
@@ -73,6 +80,7 @@ public class TestJsonValue {
 		assertFalse(v.isString());
 
 		v = new JsonValue(156l);
+		assertEquals(JsonNativeType.LONG, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertTrue(v.isNumber());
 		assertTrue(v.isInt());
@@ -82,6 +90,7 @@ public class TestJsonValue {
 		assertTrue(v.isString());
 
 		v = new JsonValue(2532263343453345289l);
+		assertEquals(JsonNativeType.LONG, v.getNativeType());
 		assertFalse(v.isBoolean());
 		assertTrue(v.isNumber());
 		assertFalse(v.isInt());
@@ -97,12 +106,15 @@ public class TestJsonValue {
 		JsonValue v;
 
 		v = new JsonValue(3.167f);
+		assertEquals(JsonNativeType.FLOAT, v.getNativeType());
 		assertEquals(3.167f, v.getFloat(), 0.1f);
 
 		v = new JsonValue(3.1670);
+		assertEquals(JsonNativeType.DOUBLE, v.getNativeType());
 		assertEquals(3.1670, v.getDouble(), 0.1d);
 
 		v = new JsonValue(36);
+		assertEquals(JsonNativeType.INTEGER, v.getNativeType());
 		assertEquals(36, v.getLong());
 		assertEquals(36, v.getInt());
 
@@ -114,12 +126,15 @@ public class TestJsonValue {
 	@Test
 	public void testToString() throws Exception {
 		JsonValue v = new JsonValue();
+		assertEquals(JsonNativeType.NULL, v.getNativeType());
 		assertEquals("null", v.toString());
 
 		v = new JsonValue(true);
+		assertEquals(JsonNativeType.BOOLEAN, v.getNativeType());
 		assertEquals("true", v.toString());
 
 		v = new JsonValue(false);
+		assertEquals(JsonNativeType.BOOLEAN, v.getNativeType());
 		assertEquals("false", v.toString());
 
 		v = new JsonValue(15);
@@ -127,6 +142,7 @@ public class TestJsonValue {
 
 		// strings should be the only ones quoted
 		v = new JsonValue("simple string");
+		assertEquals(JsonNativeType.STRING, v.getNativeType());
 		assertEquals("\"simple string\"", v.toString());
 
 		v = new JsonValue("simple \"quote\"");
@@ -176,19 +192,47 @@ public class TestJsonValue {
 		assertEquals("5", v.getString());
 		assertNull(v.getJsonArray());
 		assertNull(v.getJsonObject());
+		assertTrue(v.isInt());
+		assertTrue(v.isLong());
 	}
 
 	@Test
 	public void testGetsOnLong() {
 		JsonValue v = new JsonValue(5l);
 		assertEquals(5l, v.getLong());
+
+		v = new JsonValue(5l);
 		assertFalse(v.getBoolean());
+
+		v = new JsonValue(5l);
 		assertEquals(5f, v.getFloat(), 0.1f);
+
+		v = new JsonValue(5l);
 		assertEquals(5d, v.getDouble(), 0.1d);
+
+		v = new JsonValue(5l);
 		assertEquals(5, v.getInt());
+
+		v = new JsonValue(5l);
 		assertEquals("5", v.getString());
+
+		v = new JsonValue(5l);
 		assertNull(v.getJsonArray());
+
+		v = new JsonValue(5l);
 		assertNull(v.getJsonObject());
+
+		v = new JsonValue(5l);
+		assertTrue(v.isLong());
+		assertTrue(v.isInt());
+
+		v = new JsonValue(-50000000000l);
+		assertTrue(v.isLong());
+		assertFalse(v.isInt());
+
+		v = new JsonValue(50000000000l);
+		assertTrue(v.isLong());
+		assertFalse(v.isInt());
 	}
 
 	@Test
@@ -202,6 +246,7 @@ public class TestJsonValue {
 		assertEquals("5.0", v.getString());
 		assertNull(v.getJsonArray());
 		assertNull(v.getJsonObject());
+		assertTrue(v.isDouble());
 	}
 
 	@Test
@@ -215,6 +260,8 @@ public class TestJsonValue {
 		assertEquals("5.0", v.getString());
 		assertNull(v.getJsonArray());
 		assertNull(v.getJsonObject());
+		assertTrue(v.isDouble());
+		assertTrue(v.isFloat());
 	}
 
 	@Test
@@ -289,11 +336,29 @@ public class TestJsonValue {
 		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isLong());
+		assertFalse(v.isDouble());
+		assertFalse(v.isFloat());
 
-		v = new JsonValue(
-				"300000000000000000000000000000000000000000000000000000000000000");
+		v = new JsonValue("300000000000000000000000000000000000000000000000000000000000000");
 		assertFalse(v.isNumber());
 		assertFalse(v.isInt());
 		assertFalse(v.isLong());
+	}
+
+	@Test
+	public void testIsString() {
+		JsonValue v;
+		v = new JsonValue(5l);
+		assertTrue(v.isString());
+
+		v = new JsonValue();
+		assertFalse(v.isString());
+
+		v = new JsonValue(new JsonObject());
+		assertFalse(v.isString());
+
+		v = new JsonValue(new JsonArray());
+		assertFalse(v.isString());
+
 	}
 }

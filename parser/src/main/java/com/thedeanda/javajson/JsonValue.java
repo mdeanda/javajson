@@ -269,11 +269,13 @@ public class JsonValue implements Serializable {
 		case JSON_ARRAY:
 		case JSON_OBJECT:
 		case NULL:
+		default:
 			retVal = null;
 		}
 		return retVal;
 	}
 
+	@Deprecated
 	public String getString(String defaultValue) {
 		String ret = getString();
 		return ret == null ? defaultValue : ret;
