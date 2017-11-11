@@ -2,13 +2,20 @@ package com.thedeanda.javajson.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
+import java.util.Iterator;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.thedeanda.javajson.JsonArray;
+import com.thedeanda.javajson.JsonNativeType;
 import com.thedeanda.javajson.JsonObject;
+import com.thedeanda.javajson.JsonValue;
 
 public class TestJsonArray {
+	private static final Date dt = new Date(1510365107000l);
+	private static final String dts = "2017-11-11T01:51:47.000Z";
 
 	JsonArray array;
 
@@ -419,7 +426,7 @@ public class TestJsonArray {
 	public void testJson() {
 		JsonObject jo = new JsonObject();
 		JsonArray ja = new JsonArray();
-		
+
 		array.add(2);
 		array.add(jo);
 		array.add(ja);
@@ -493,4 +500,118 @@ public class TestJsonArray {
 		assertEquals(0, array.size());
 	}
 
+	@Test
+	public void testObjectAdd() {
+		JsonArray v;
+
+		v = new JsonArray();
+		v.add(new Integer(3));
+		assertEquals(1, v.size());
+		assertTrue(v.isInt(0));
+		assertEquals(3, v.getInt(0));
+
+		v = new JsonArray();
+		v.add(new Float(3.0f));
+		assertEquals(1, v.size());
+		assertTrue(v.isFloat(0));
+		assertEquals(3.0f, v.getFloat(0), 0.01f);
+
+		v = new JsonArray();
+		v.add(new Double(3.0));
+		assertEquals(1, v.size());
+		assertTrue(v.isDouble(0));
+		assertEquals(3.0, v.getDouble(0), 0.01);
+
+		v = new JsonArray();
+		v.add(new Long(3));
+		assertEquals(1, v.size());
+		assertTrue(v.isLong(0));
+		assertEquals(3, v.getLong(0), 0.01);
+
+		v = new JsonArray();
+		v.add(Boolean.TRUE);
+		assertEquals(1, v.size());
+		assertTrue(v.isBoolean(0));
+		assertEquals(true, v.getBoolean(0));
+
+		v = new JsonArray();
+		v.add(Boolean.FALSE);
+		assertEquals(1, v.size());
+		assertTrue(v.isBoolean(0));
+		assertEquals(false, v.getBoolean(0));
+
+		v = new JsonArray();
+		v.add((Object) "s");
+		assertEquals(1, v.size());
+		assertTrue(v.isString(0));
+		assertEquals("s", v.getString(0));
+
+		JsonArray ja = new JsonArray();
+		v = new JsonArray();
+		v.add((Object) ja);
+		assertEquals(1, v.size());
+		assertTrue(v.isJsonArray(0));
+		assertEquals(ja, v.getJsonArray(0));
+
+		JsonObject jo = new JsonObject();
+		v = new JsonArray();
+		v.add((Object) jo);
+		assertEquals(1, v.size());
+		assertTrue(v.isJsonObject(0));
+		assertEquals(jo, v.getJsonObject(0));
+
+		v = new JsonArray();
+		v.add((Object) dt);
+		assertEquals(1, v.size());
+		assertTrue(v.isString(0));
+		assertEquals(dts, v.getString(0));
+
+		try {
+			v = new JsonArray();
+			v.add(new Object());
+			assertEquals(1, v.size());
+			fail("expecting error");
+		} catch (Exception e) {
+
+		}
+		
+		v = new JsonArray();
+		v.add((Object)null);
+		assertEquals(1, v.size());
+		assertFalse(v.isString(0));
+		assertEquals(null, v.getJsonObject(0));
+		assertEquals(null, v.getString(0));
+		
+		JsonValue jv = new JsonValue(3);
+		v = new JsonArray();
+		v.add(jv);
+		assertEquals(1, v.size());
+		assertTrue(v.isString(0));
+		assertTrue(v.isInt(0));
+		assertEquals(null, v.getJsonObject(0));
+		assertEquals("3", v.getString(0));
+		assertEquals(3, v.getInt(0));
+	}
+	
+	@Test
+	public void testIterator() {
+		Iterator<JsonValue> it = array.iterator();
+		
+		assertNotNull(it);
+		assertFalse(it.hasNext());
+		
+		array.add(true);
+		
+		it = array.iterator();
+		assertNotNull(it);
+		assertTrue(it.hasNext());
+		assertEquals(true, it.next().getBoolean());
+		assertFalse(it.hasNext());
+	}
+	
+	@Test
+	public void testAddChar() {
+		array.add('c');
+		assertEquals("c", array.getString(0));
+	}
 }

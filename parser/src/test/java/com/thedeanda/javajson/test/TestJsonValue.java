@@ -1,10 +1,8 @@
 package com.thedeanda.javajson.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -14,6 +12,8 @@ import com.thedeanda.javajson.JsonObject;
 import com.thedeanda.javajson.JsonValue;
 
 public class TestJsonValue {
+	private static final Date dt = new Date(1510365107000l);
+	private static final String dts = "2017-11-11T01:51:47.000Z";
 
 	@Test
 	public void testIsMethodsBasic() throws Exception {
@@ -359,6 +359,59 @@ public class TestJsonValue {
 
 		v = new JsonValue(new JsonArray());
 		assertFalse(v.isString());
+	}
 
+	@Test
+	public void testObjectConctructor() {
+		JsonValue v;
+
+		v = new JsonValue(new Integer(3));
+		assertEquals(JsonNativeType.INTEGER, v.getNativeType());
+		assertEquals(3, v.getInt());
+
+		v = new JsonValue(new Float(3.0f));
+		assertEquals(JsonNativeType.FLOAT, v.getNativeType());
+		assertEquals(3.0f, v.getFloat(), 0.01f);
+
+		v = new JsonValue(new Double(3.0));
+		assertEquals(JsonNativeType.DOUBLE, v.getNativeType());
+		assertEquals(3.0, v.getDouble(), 0.01);
+
+		v = new JsonValue(new Long(3));
+		assertEquals(JsonNativeType.LONG, v.getNativeType());
+		assertEquals(3, v.getLong(), 0.01);
+
+		v = new JsonValue(Boolean.TRUE);
+		assertEquals(JsonNativeType.BOOLEAN, v.getNativeType());
+		assertEquals(true, v.getBoolean());
+
+		v = new JsonValue(Boolean.FALSE);
+		assertEquals(JsonNativeType.BOOLEAN, v.getNativeType());
+		assertEquals(false, v.getBoolean());
+
+		v = new JsonValue((Object) "s");
+		assertEquals(JsonNativeType.STRING, v.getNativeType());
+		assertEquals("s", v.getString());
+
+		JsonArray ja = new JsonArray();
+		v = new JsonValue((Object) ja);
+		assertEquals(JsonNativeType.JSON_ARRAY, v.getNativeType());
+		assertEquals(ja, v.getJsonArray());
+
+		JsonObject jo = new JsonObject();
+		v = new JsonValue((Object) jo);
+		assertEquals(JsonNativeType.JSON_OBJECT, v.getNativeType());
+		assertEquals(jo, v.getJsonObject());
+
+		v = new JsonValue((Object) dt);
+		assertEquals(JsonNativeType.STRING, v.getNativeType());
+		assertEquals(dts, v.getString());
+
+		try {
+			v = new JsonValue(new Object());
+			fail("expecting error");
+		} catch (Exception e) {
+
+		}
 	}
 }
