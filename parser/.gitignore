@@ -6,3 +6,5 @@
 /doc/
 /build.properties
 /build/
+/javajson-parser.iml
+/target/
