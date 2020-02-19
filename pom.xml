@@ -9,6 +9,20 @@
 	<packaging>pom</packaging>
 	<name>JavaJson Project</name>
 	<description>JavaJson Project</description>
+	
+	<distributionManagement>
+		<repository>
+			<id>release-local</id>
+			<name>libs-release-local</name>
+			<url>http://artifactory.thedeanda.com/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots-local</id>
+			<name>libs-snapshot-local</name>
+			<url>http://artifactory.thedeanda.com/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 	<modules>
 		<module>parser</module>
 <!-- 		<module>mapper</module> -->

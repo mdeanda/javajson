@@ -17,6 +17,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots-local</id>
+			<name>libs-snapshot-local</name>
+			<url>http://artifactory.thedeanda.com/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
