@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.thedeanda</groupId>
 	<artifactId>javajson-parser</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	
 	<packaging>jar</packaging>
 	<name>JavaJson Parser</name>
@@ -18,6 +18,11 @@
 	</properties>
 
 	<distributionManagement>
+		<repository>
+			<id>release-local</id>
+			<name>libs-release-local</name>
+			<url>http://artifactory.thedeanda.com/artifactory/libs-release-local</url>
+		</repository>
 		<snapshotRepository>
 			<id>snapshots-local</id>
 			<name>libs-snapshot-local</name>
