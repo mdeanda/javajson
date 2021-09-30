@@ -23,7 +23,7 @@ public class Main {
 	}
 
 	private static String readFile() throws Exception {
-		InputStream is = Main.class.getResourceAsStream("samplefile.json");
+		InputStream is = Main.class.getResourceAsStream("/speedtest/samplefile.json");
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line;
 		StringBuilder sb = new StringBuilder();

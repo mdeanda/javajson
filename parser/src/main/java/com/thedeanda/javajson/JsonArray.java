@@ -238,6 +238,13 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 			throw new IndexOutOfBoundsException();
 	}
 
+	public JsonValue getJsonValue(int index) {
+		if (index >= 0 && index < list.size())
+			return list.get(index);
+		else
+			throw new IndexOutOfBoundsException();
+	}
+
 	/**
 	 * @throws ClassCastException
 	 *             if the value cannot be converted to a double
