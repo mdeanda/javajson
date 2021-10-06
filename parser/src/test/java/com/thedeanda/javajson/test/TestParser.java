@@ -8,6 +8,33 @@ import com.thedeanda.javajson.JsonObject;
 
 public class TestParser extends TestCase {
 
+	public void testParseMultipleKeys() throws JsonException {
+		String input = "{a:'aa', b:'bb', c:'cc'}";
+		JsonObject json = JsonObject.parse(input);
+		assertEquals("aa", json.getString("a"));
+		assertEquals("bb", json.getString("b"));
+		assertEquals("cc", json.getString("c"));
+	}
+
+	public void testParseMultipleKeys2Levels() throws JsonException {
+		String input = "{a:'aa', b:{bb:'bb'}, c:'cc'}";
+		JsonObject json = JsonObject.parse(input);
+		assertEquals("aa", json.getString("a"));
+		JsonObject b = json.getJsonObject("b");
+		assertNotNull(b);
+		assertEquals("bb", b.getString("bb"));
+		assertEquals("cc", json.getString("c"));
+	}
+
+	public void testParseSimpleArray() throws JsonException {
+		String input = "['a', 'b', \"c\"]";
+		JsonArray json = JsonArray.parse(input);
+		assertEquals(3, json.size());
+		assertEquals("a", json.getString(0));
+		assertEquals("b", json.getString(1));
+		assertEquals("c", json.getString(2));
+	}
+
 	public void testParseNumbers() throws Exception {
 		String input;
 		JsonObject json;

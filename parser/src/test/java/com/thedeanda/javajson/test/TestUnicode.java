@@ -11,7 +11,7 @@ import com.thedeanda.javajson.JsonObject;
 
 public class TestUnicode extends TestCase {
 
-	private static final String PATH = "src/test/java/com/thedeanda/javajson/test/";
+	private static final String PATH = "/languages/";
 
 	private static final String[] files = { "chinese_gb2312", "japanese_eucjp" };
 
@@ -32,11 +32,11 @@ public class TestUnicode extends TestCase {
 
 	public void testUnicode() throws Exception {
 		for (int i = 0; i < files.length; i++) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(PATH
+			BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(PATH
 					+ files[i] + ".txt"), "UTF-8"));
 			String expected = br.readLine();
 
-			Reader is = new InputStreamReader(new FileInputStream(PATH
+			Reader is = new InputStreamReader(getClass().getResourceAsStream(PATH
 					+ files[i] + ".json"), "UTF-8");
 			JsonObject obj = JsonObject.parse(is);
 			System.out.println(expected);

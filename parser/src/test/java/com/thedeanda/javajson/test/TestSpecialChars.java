@@ -1,13 +1,15 @@
 package com.thedeanda.javajson.test;
 
+import com.thedeanda.javajson.JsonObject;
+import org.junit.jupiter.api.Test;
+
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.thedeanda.javajson.JsonObject;
-
-public class TestSpecialChars extends TestCase {
+public class TestSpecialChars {
 
 	private List<TestValue> tests = new LinkedList<TestValue>();
 
@@ -26,15 +28,17 @@ public class TestSpecialChars extends TestCase {
 						"unicode in \\u#### form"));
 	}
 
+	@Test
 	public void testToStringThenParse() throws Exception {
 		for (TestValue value : tests) {
 			JsonObject json = new JsonObject();
 			json.put("a", value.java);
 			json = JsonObject.parse(json.toString());
-			assertEquals(value.message, value.java, json.getString("a"));
+			assertEquals(value.java, json.getString("a"), value.message);
 		}
 	}
 
+	@Test
 	public void testParseValueDoubleQuotesToStringAndBack() throws Exception {
 		for (TestValue value : tests) {
 			String input = "{\"a\":\"" + value.json + "\"}";
@@ -42,10 +46,11 @@ public class TestSpecialChars extends TestCase {
 			JsonObject json = JsonObject.parse(input);
 			System.out.println("after: " + json.toString());
 			json = JsonObject.parse(json.toString());
-			assertEquals(value.message, value.java, json.getString("a"));
+			assertEquals(value.java, json.getString("a"), value.message);
 		}
 	}
 
+	@Test
 	public void testParseValueDoubleQuotes() throws Exception {
 		String input;
 		JsonObject json;
@@ -53,10 +58,11 @@ public class TestSpecialChars extends TestCase {
 		for (TestValue value : tests) {
 			input = "{\"a\":\"" + value.json + "\"}";
 			json = JsonObject.parse(input);
-			assertEquals(value.message, value.java, json.getString("a"));
+			assertEquals(value.java, json.getString("a"), value.message);
 		}
 	}
 
+	@Test
 	public void testParseKeyDoubleQuotes() throws Exception {
 		String input;
 		JsonObject json;
@@ -64,30 +70,32 @@ public class TestSpecialChars extends TestCase {
 		for (TestValue value : tests) {
 			input = "{\"" + value.json + "\":true}";
 			json = JsonObject.parse(input);
-			assertTrue(value.message, json.hasKey(value.java));
-			assertTrue(value.message, json.isBoolean(value.java));
-			assertTrue(value.message, json.getBoolean(value.java));
+			assertTrue(json.hasKey(value.java), value.message);
+			assertTrue(json.isBoolean(value.java), value.message);
+			assertTrue(json.getBoolean(value.java), value.message);
 		}
 	}
 
+	@Test
 	public void testParseValueSingleQuotes() throws Exception {
 		// add "x" + to avoid separate bug
 		for (TestValue value : tests) {
 			String input = "{\"aaa\":'x" + value.json + "'}";
 			System.out.println("input: " + input + ", " + value.java);
 			JsonObject json = JsonObject.parse(input);
-			assertEquals(value.message, "x" + value.java, json.getString("aaa"));
+			assertEquals("x" + value.java, json.getString("aaa"), value.message);
 		}
 	}
 
+	@Test
 	public void testParseKeySingleQuotes() throws Exception {
 		// add "x" + to avoid separate bug
 		for (TestValue value : tests) {
 			String input = "{'x" + value.json + "':true}";
 			JsonObject json = JsonObject.parse(input);
-			assertTrue(value.message, json.hasKey("x" + value.java));
-			assertTrue(value.message, json.isBoolean("x" + value.java));
-			assertTrue(value.message, json.getBoolean("x" + value.java));
+			assertTrue(json.hasKey("x" + value.java), value.message);
+			assertTrue(json.isBoolean("x" + value.java), value.message);
+			assertTrue(json.getBoolean("x" + value.java), value.message);
 		}
 	}
 

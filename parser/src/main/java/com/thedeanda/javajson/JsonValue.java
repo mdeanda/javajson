@@ -1,5 +1,7 @@
 package com.thedeanda.javajson;
 
+import com.thedeanda.javajson.parser.ParserUtils;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,8 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-
-import com.thedeanda.javajson.parser.ASTstring;
 
 public class JsonValue implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -135,7 +135,9 @@ public class JsonValue implements Serializable {
 
 	private void init() {
 		if (rawString != null) {
-			stringVal = ASTstring.fixString(rawString);
+			//TODO: redo this
+			stringVal = ParserUtils.fixString(rawString);
+			//stringVal = rawString;
 			rawString = null;
 		}
 	}

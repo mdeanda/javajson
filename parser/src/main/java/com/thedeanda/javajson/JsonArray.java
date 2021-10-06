@@ -1,19 +1,12 @@
 package com.thedeanda.javajson;
 
+import com.thedeanda.javajson.parser.*;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import com.thedeanda.javajson.parser.ASTparse;
-import com.thedeanda.javajson.parser.JsonParser;
-import com.thedeanda.javajson.parser.ParseException;
-import com.thedeanda.javajson.parser.TokenMgrError;
+import java.util.*;
 
 public class JsonArray implements Iterable<JsonValue>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,27 +19,23 @@ public class JsonArray implements Iterable<JsonValue>, Serializable {
 
 	/** Parses a string to a json object. */
 	public static JsonArray parse(Reader reader) throws JsonException {
-		try {
-			JsonParser parser = new JsonParser(reader);
-			ASTparse root = (ASTparse) parser.parse();
-			return root.getJsonArray();
-		} catch (ParseException pe) {
-			throw new JsonException(pe);
-		} catch (TokenMgrError error) {
-			throw new JsonException(error);
-		}
+		JsonParser parser = new JsonParser(reader);
+		return parse(parser);
 	}
 
 	/** Parses a string to a json object. */
 	public static JsonArray parse(InputStream is) throws JsonException {
+		JsonParser parser = new JsonParser(is, "UTF8");
+		return parse(parser);
+	}
+
+	public static JsonArray parse(JsonParser parser) throws JsonException {
 		try {
-			JsonParser parser = new JsonParser(is);
 			ASTparse root = (ASTparse) parser.parse();
-			return root.getJsonArray();
-		} catch (ParseException pe) {
+			JsonParserVisitor visitor = new ParserVisitor();
+			return (JsonArray) root.jjtAccept(visitor, null);
+		} catch (ParseException|TokenMgrException pe) {
 			throw new JsonException(pe);
-		} catch (TokenMgrError error) {
-			throw new JsonException(error);
 		}
 	}
 

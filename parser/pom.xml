@@ -51,21 +51,54 @@
 			<version>5.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 	</dependencies>
 	
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javacc-maven-plugin</artifactId>
-				<version>2.6</version>
+				<groupId>com.helger.maven</groupId>
+				<artifactId>ph-javacc-maven-plugin</artifactId>
+				<version>4.1.4</version>
 				<executions>
 					<execution>
-						<id>jjtree-javacc</id>
+						<id>jjc1</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>javacc</goal>
+						</goals>
+						<configuration>
+							<jdkVersion>1.8</jdkVersion>
+							<sourceDirectory>src/main/java/org/javacc/parser</sourceDirectory>
+							<outputDirectory>${project.build.directory}/generated-sources/javacc1</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>jjt2</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>javacc</goal>
+						</goals>
+						<configuration>
+							<jdkVersion>1.8</jdkVersion>
+							<sourceDirectory>src/main/java/org/javacc/utils</sourceDirectory>
+							<outputDirectory>${project.build.directory}/generated-sources/javacc2</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>jjt1</id>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>jjtree-javacc</goal>
 						</goals>
+						<configuration>
+							<jdkVersion>1.8</jdkVersion>
+							<sourceDirectory>src/main/java/org/javacc/jjtree</sourceDirectory>
+							<excludes>
+								<exclude>**/parser/**</exclude>
+							</excludes>
+							<outputDirectory>${project.build.directory}/generated-sources/jjtree1</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

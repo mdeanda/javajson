@@ -1,8 +1,9 @@
 options {
    MULTI=true;
-   NODE_EXTENDS="com.thedeanda.javajson.parser.MyNode";
+   //NODE_EXTENDS="com.thedeanda.javajson.parser.MyNode";
    STATIC = false;
    JAVA_UNICODE_ESCAPE = true;
+   VISITOR = true;
 }
 
 PARSER_BEGIN(JsonParser)
@@ -135,13 +136,25 @@ void value() :
 }
 {
   (
-    string() | number() | object() | array()
+    string()
   |
-    t=<TRUE_LITERAL> { jjtThis.val = t.image; }
+    number()
   |
-    t=<FALSE_LITERAL> { jjtThis.val = t.image; }
+    object()
   |
-    t=<NULL_LITERAL> { jjtThis.val = t.image; }
+    array()
+  |
+    t=<TRUE_LITERAL> {
+        jjtThis.jjtSetValue(Boolean.TRUE);
+    }
+  |
+    t=<FALSE_LITERAL> {
+        jjtThis.jjtSetValue(Boolean.TRUE);
+    }
+  |
+    t=<NULL_LITERAL> {
+        jjtThis.jjtSetValue(null);
+    }
   )
 }
 
@@ -151,11 +164,17 @@ void key() :
 }
 {
   (
-    t=<KEY_LITERAL> { jjtThis.val = t.image; }
+    t=<KEY_LITERAL> {
+        jjtThis.jjtSetValue(t.image);
+    }
   |
-    t=<STRING_LITERAL> { jjtThis.val = t.image; }
+    t=<STRING_LITERAL> {
+        jjtThis.jjtSetValue(ParserUtils.fixString(t.image));
+    }
   |
-    t=<STRING_LITERAL_SINGLE_QUOTES> { jjtThis.val = t.image; }
+    t=<STRING_LITERAL_SINGLE_QUOTES> {
+        jjtThis.jjtSetValue(ParserUtils.fixString(t.image));
+    }
   )
 }
 
@@ -165,9 +184,13 @@ void string() :
 }
 {
   (
-    t=<STRING_LITERAL> { jjtThis.val = t.image; }
+    t=<STRING_LITERAL> {
+        jjtThis.jjtSetValue(ParserUtils.fixString(t.image));
+    }
   |
-    t=<STRING_LITERAL_SINGLE_QUOTES> { jjtThis.val = t.image; }
+    t=<STRING_LITERAL_SINGLE_QUOTES> {
+        jjtThis.jjtSetValue(ParserUtils.fixString(t.image));
+    }
   )
 }
 
@@ -177,8 +200,12 @@ void number() :
 }
 {
   (
-    t=<INTEGER_LITERAL> { jjtThis.val = t.image; }
+    t=<INTEGER_LITERAL> {
+        jjtThis.jjtSetValue(Long.parseLong(t.image));
+    }
   |
-    t=<FLOATING_POINT_LITERAL> { jjtThis.val = t.image; }
+    t=<FLOATING_POINT_LITERAL> {
+        jjtThis.jjtSetValue(Double.parseDouble(t.image));
+    }
   )
 }

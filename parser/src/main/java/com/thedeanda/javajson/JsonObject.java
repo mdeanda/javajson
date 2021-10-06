@@ -1,25 +1,12 @@
 package com.thedeanda.javajson;
 
+import com.thedeanda.javajson.parser.*;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.thedeanda.javajson.parser.ASTparse;
-import com.thedeanda.javajson.parser.JsonParser;
-import com.thedeanda.javajson.parser.ParseException;
-import com.thedeanda.javajson.parser.TokenMgrError;
+import java.util.*;
 
 /**
  * Simpler implementation of Json that throws less exceptions. For all the
@@ -39,27 +26,24 @@ public class JsonObject implements Iterable<String>, Serializable {
 
 	/** Parses a string to a json object. */
 	public static JsonObject parse(Reader reader) throws JsonException {
-		try {
-			JsonParser parser = new JsonParser(reader);
-			ASTparse root = (ASTparse) parser.parse();
-			return root.getJsonObject();
-		} catch (ParseException pe) {
-			throw new JsonException(pe);
-		} catch (TokenMgrError error) {
-			throw new JsonException(error);
-		}
+		JsonParser parser = new JsonParser(reader);
+		return parse(parser);
 	}
 
 	/** Parses a string to a json object. */
 	public static JsonObject parse(InputStream is) throws JsonException {
+		JsonParser parser = new JsonParser(is, "UTF-8");
+		return parse(parser);
+	}
+
+	private static JsonObject parse(JsonParser parser) throws JsonException {
 		try {
-			JsonParser parser = new JsonParser(is);
 			ASTparse root = (ASTparse) parser.parse();
-			return root.getJsonObject();
-		} catch (ParseException pe) {
+			JsonParserVisitor visitor = new ParserVisitor();
+			Object output = root.jjtAccept(visitor, null);
+			return (JsonObject) output;
+		} catch (ParseException|TokenMgrException pe) {
 			throw new JsonException(pe);
-		} catch (TokenMgrError error) {
-			throw new JsonException(error);
 		}
 	}
 
