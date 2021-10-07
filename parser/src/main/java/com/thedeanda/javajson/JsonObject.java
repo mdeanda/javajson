@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -32,7 +33,7 @@ public class JsonObject implements Iterable<String>, Serializable {
 
 	/** Parses a string to a json object. */
 	public static JsonObject parse(InputStream is) throws JsonException {
-		JsonParser parser = new JsonParser(is, "UTF-8");
+		JsonParser parser = new JsonParser(is, Charset.forName("UTF8"));
 		return parse(parser);
 	}
 

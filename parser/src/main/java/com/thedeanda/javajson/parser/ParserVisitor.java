@@ -3,15 +3,11 @@ package com.thedeanda.javajson.parser;
 import com.thedeanda.javajson.JsonArray;
 import com.thedeanda.javajson.JsonObject;
 import com.thedeanda.javajson.JsonValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class ParserVisitor implements JsonParserVisitor {
-    private static final Logger log = LoggerFactory.getLogger(ParserVisitor.class);
-
     private Stack<ParserState> stack = new Stack<>();
 
     @Override
